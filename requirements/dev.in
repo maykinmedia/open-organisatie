@@ -1,0 +1,17 @@
+-c ci.txt
+-r ci.txt
+
+# Helpers
+bump-my-version
+gitpython
+
+# Code formatting
+ruff
+
+# Debug tooling
+django-debug-toolbar
+django-extensions
+
+# Documentation
+sphinx
+sphinx_rtd_theme

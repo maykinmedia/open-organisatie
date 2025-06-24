@@ -1,0 +1,13 @@
+-c base.txt
+-r base.txt
+
+# Dependencies only relevant for (unit) testing
+# If you need to use Jenkins, consider switching to pytest and publish JUnit test
+# results that way. django-jenkins is not compatible with modern django and python versions
+coverage
+django-webtest
+factory-boy
+freezegun
+pyquery  # integrates with webtest
+# vcrpy  # 'mocking' http requests
+tblib

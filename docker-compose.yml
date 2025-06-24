@@ -1,0 +1,46 @@
+# Inspired by https://docs.docker.com/compose/django/
+services:
+  db:
+    # NOTE: No persistance storage configured.
+    # Using v14 to prevent schema permissions. See also docker-init-db.sql.
+    # See: https://hub.docker.com/_/postgres/
+    image: postgres:${PG_VERSION:-17}
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init_db.sql
+
+  web:
+    build: .
+    image: maykinmedia/openorganisatie:latest
+    environment:
+      - DJANGO_SETTINGS_MODULE=openorganisatie.conf.docker
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-scl%uga+2ji^oa)1_*bdm^40dpn4*+gw83mw3a5=6l4(k%by&}
+      - DB_NAME=openorganisatie
+      - DB_USER=openorganisatie
+      - DB_HOST=db
+      # Only allow all hosts for development/testing purposes!
+      - ALLOWED_HOSTS=*
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+# See: src/openorganisatie/conf/docker.py
+# Optional containers below:
+#  elasticsearch:
+#    # NOTE: No persistance storage configured.
+#    # See: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+#    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+#    container_name: elasticsearch
+#    environment:
+#      - discovery.type=single-node
+#      - cluster.routing.allocation.disk.threshold_enabled=false
+#    ports:
+#      - 9200:9200
+#  redis:
+#    # NOTE: No persistance storage configured.
+#    # See: https://hub.docker.com/_/redis/
+#    image: redis
+#    ports:
+#        - 6379:6379
