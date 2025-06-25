@@ -99,6 +99,7 @@ django==5.2.3
     #   django-phonenumber-field
     #   django-redis
     #   django-rosetta
+    #   django-scim2
     #   django-solo
     #   django-two-factor-auth
     #   maykin-2fa
@@ -155,6 +156,10 @@ django-redis==6.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
 django-rosetta==0.10.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+django-scim2==0.19.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -363,6 +368,11 @@ roman-numerals-py==3.1.0
     # via sphinx
 ruff==0.12.0
     # via -r requirements/dev.in
+scim2-filter-parser==0.7.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-scim2
 sentry-sdk==2.30.0
     # via
     #   -c requirements/ci.txt
@@ -372,6 +382,11 @@ six==1.17.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   python-dateutil
+sly==0.5
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   scim2-filter-parser
 smmap==5.0.2
     # via gitdb
 sniffio==1.3.1

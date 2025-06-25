@@ -41,6 +41,7 @@ django==5.2.3
     #   django-phonenumber-field
     #   django-redis
     #   django-rosetta
+    #   django-scim2
     #   django-solo
     #   django-two-factor-auth
     #   maykin-2fa
@@ -72,6 +73,8 @@ django-phonenumber-field==8.1.0
 django-redis==6.0.0
     # via -r requirements/base.in
 django-rosetta==0.10.2
+    # via -r requirements/base.in
+django-scim2==0.19.1
     # via -r requirements/base.in
 django-solo==2.4.0
     # via mozilla-django-oidc-db
@@ -127,8 +130,12 @@ requests==2.32.4
     # via
     #   django-rosetta
     #   mozilla-django-oidc
+scim2-filter-parser==0.7.0
+    # via django-scim2
 sentry-sdk==2.30.0
     # via -r requirements/base.in
+sly==0.5
+    # via scim2-filter-parser
 sqlparse==0.5.3
     # via django
 typing-extensions==4.14.0

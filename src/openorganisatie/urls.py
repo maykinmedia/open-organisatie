@@ -24,6 +24,7 @@ admin.site.site_header = "openorganisatie admin"
 admin.site.site_title = "openorganisatie admin"
 admin.site.index_title = "openorganisatie dashboard"
 
+
 # URL routing
 
 urlpatterns = [
@@ -57,6 +58,7 @@ urlpatterns = [
     ),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html"), name="root"),
+    path("scim/v2/", include(("openorganisatie.scim.urls", "scim"), namespace="scim")),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run

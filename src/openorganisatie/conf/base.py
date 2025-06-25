@@ -108,6 +108,10 @@ INSTALLED_APPS = [
     "ordered_model",
     "django_admin_index",
     "django.contrib.admin",
+    "django_scim",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_extensions",
     # OIDC applications.
     "django_jsonform",
     "solo",
@@ -124,6 +128,7 @@ INSTALLED_APPS = [
     # Project applications.
     "openorganisatie.accounts",
     "openorganisatie.utils",
+    "openorganisatie.scim",
 ]
 
 MIDDLEWARE = [
@@ -140,6 +145,13 @@ MIDDLEWARE = [
     # should be last according to docs
     "axes.middleware.AxesMiddleware",
 ]
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
+}
 
 ROOT_URLCONF = "openorganisatie.urls"
 
@@ -168,6 +180,20 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "openorganisatie.wsgi.application"
+
+#
+# SCIM
+#
+SCIM_SERVICE_PROVIDER = {
+    "NETLOC": "localhost",
+    "AUTHENTICATION_SCHEMES": [
+        {
+            "type": "oauth2",
+            "name": "OAuth 2",
+            "description": "Oauth 2 implemented with bearer token",
+        },
+    ],
+}
 
 # Translations
 LOCALE_PATHS = (DJANGO_PROJECT_DIR / "conf" / "locale",)
