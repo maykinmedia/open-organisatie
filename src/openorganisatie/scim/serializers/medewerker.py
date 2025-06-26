@@ -2,8 +2,13 @@ from rest_framework import serializers
 
 from ..models.medewerker import Medewerker
 
+SCIM_USER_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0:User"
+
 
 class MedewerkerSCIMSerializer(serializers.ModelSerializer):
+    schemas = serializers.ListField(
+        child=serializers.CharField(), default=[SCIM_USER_SCHEMA_URI], read_only=True
+    )
     medewerker_id = serializers.CharField(required=False, allow_blank=True)
     userName = serializers.EmailField(source="emailadres")
     name = serializers.DictField(child=serializers.CharField(), required=False)
@@ -35,6 +40,7 @@ class MedewerkerSCIMSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return {
+            "schemas": [SCIM_USER_SCHEMA_URI],
             "id": str(instance.pk),
             "medewerker_id": instance.medewerker_id,
             "userName": instance.emailadres,

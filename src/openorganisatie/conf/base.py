@@ -142,6 +142,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "hijack.middleware.HijackUserMiddleware",
+    "openorganisatie.utils.scim_middleware.SCIMTokenAuthMiddleware",
+    "django_scim.middleware.SCIMAuthCheckMiddleware",
     # should be last according to docs
     "axes.middleware.AxesMiddleware",
 ]
@@ -184,6 +186,20 @@ WSGI_APPLICATION = "openorganisatie.wsgi.application"
 #
 # SCIM
 #
+# SCIM_USER_MODEL = "scim.Medewerker"
+# SCIM_USER_UNIQUE_ID_FIELD = "medewerker_id"
+# SCIM_USER_USERNAME_FIELD = "emailadres"
+# SCIM_USER_ACTIVE_FIELD = "actief"
+# SCIM_ID_FIELD = "id"
+# SCIM_USER_ADAPTER = "scim.adapters.CustomUserAdapter"
+
+# SCIM_AUTHENTICATION_CLASSES = ["rest_framework.authentication.TokenAuthentication"]
+
+# SCIM_PERMISSION_CLASSES = ["rest_framework.permissions.IsAuthenticated"]
+DJANGO_SCIM_ADAPTERS = {
+    "User": "scim.adapters.MedewerkerAdapter",
+}
+SCIM_USER_ADAPTER = "scim.adapters.MedewerkerAdapter"
 SCIM_SERVICE_PROVIDER = {
     "NETLOC": "localhost",
     "AUTHENTICATION_SCHEMES": [
