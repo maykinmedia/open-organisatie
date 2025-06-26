@@ -1,15 +1,7 @@
 from django.urls import include, path
 from django.views.generic import TemplateView
 
-from rest_framework.routers import DefaultRouter
-
 from openorganisatie.scim.views import MedewerkerUsersView
-
-from .viewsets.medewerker import SCIMUserViewSet
-
-router = DefaultRouter()
-
-router.register(r"Users", SCIMUserViewSet, basename="user")
 
 app_name = "scim"
 

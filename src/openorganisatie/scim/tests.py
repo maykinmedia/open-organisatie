@@ -1,83 +1,91 @@
+import json
+
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 
-from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APITestCase
 
-from .models.medewerker import Medewerker
-
-User = get_user_model()
+from openorganisatie.scim.models.medewerker import Medewerker
 
 
-class SCIMUserAPITests(APITestCase):
+class SCIMUsersViewTests(APITestCase):
     def setUp(self):
-        self.test_user = User.objects.create_user(
-            username="testuser", password="testpass123"
+        self.user = get_user_model().objects.create_user(
+            username="admin", email="admin@example.com", password="adminpass"
         )
-        token, _ = Token.objects.get_or_create(user=self.test_user)
+        self.token = Token.objects.create(user=self.user)
+        self.url = "/scim/v2/Users"
 
-        self.client = APIClient()
-
-        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
-
-        self.medewerker = Medewerker.objects.create(
-            medewerker_id="12345",
-            voornaam="Jan",
-            achternaam="Jansen",
-            emailadres="jan.jansen@example.com",
-            functie="Developer",
-            telefoonnummer="0123456789",
-            geslachtsaanduiding=True,
-            actief=True,
-        )
-        self.list_url = reverse("scim:user-list")
-
-    def test_list_users(self):
-        response = self.client.get(self.list_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        results = response.data.get("results", response.data)
-        self.assertEqual(len(results), 1)
-
-    def test_retrieve_user(self):
-        url = reverse("scim:user-detail", args=[self.medewerker.pk])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["userName"], self.medewerker.emailadres)
-
-    def test_create_user(self):
-        payload = {
-            "medewerker_id": "54321",
-            "userName": "new.user@example.com",
-            "name": {"givenName": "New", "familyName": "User"},
+        self.payload = {
+            "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+            "userName": "jane.doe@example.com",
+            "externalId": "external-123",
+            "name": {"givenName": "Jane", "familyName": "Doe"},
+            "emails": [{"value": "jane.doe@example.com", "primary": True}],
             "active": True,
-            "phoneNumbers": [{"value": "0987654321", "type": "work"}],
         }
-        response = self.client.post(self.list_url, payload, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Medewerker.objects.count(), 2)
-        new_user = Medewerker.objects.get(emailadres="new.user@example.com")
-        self.assertEqual(new_user.voornaam, "New")
-        self.assertEqual(new_user.telefoonnummer, "0987654321")
+
+    def _auth_headers(self):
+        return {
+            "HTTP_AUTHORIZATION": f"Token {self.token.key}",
+            "content_type": "application/json",
+        }
+
+    def test_create_user_with_token_auth(self):
+        response = self.client.post(
+            self.url, data=json.dumps(self.payload), **self._auth_headers()
+        )
+        self.assertEqual(response.status_code, 201)
+        response_json = json.loads(response.content)
+        self.assertIn("id", response_json)
+        self.assertEqual(response_json["userName"], "jane.doe@example.com")
+        self.resource_id = response_json["id"]
+
+        medewerker = Medewerker.objects.filter(
+            emailadres="jane.doe@example.com"
+        ).first()
+        self.assertIsNotNone(medewerker)
+        self.assertEqual(medewerker.voornaam, "Jane")
+        self.assertEqual(medewerker.achternaam, "Doe")
+
+    def test_read_user(self):
+        self.test_create_user_with_token_auth()
+        medewerker = Medewerker.objects.get(emailadres="jane.doe@example.com")
+
+        response = self.client.get(
+            f"{self.url}/{medewerker.uuid}", **self._auth_headers()
+        )
+        self.assertEqual(response.status_code, 200)
+        response_json = json.loads(response.content)
+        self.assertEqual(response_json["userName"], "jane.doe@example.com")
+        self.assertEqual(response_json["name"]["givenName"], "Jane")
 
     def test_update_user(self):
-        url = reverse("scim:user-detail", args=[self.medewerker.pk])
-        payload = {
-            "userName": "updated.email@example.com",
-            "name": {"givenName": "JanUpdated", "familyName": "JansenUpdated"},
-            "active": False,
-            "phoneNumbers": [{"value": "111222333", "type": "work"}],
-        }
-        response = self.client.put(url, payload, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.medewerker.refresh_from_db()
-        self.assertEqual(self.medewerker.emailadres, "updated.email@example.com")
-        self.assertEqual(self.medewerker.voornaam, "JanUpdated")
-        self.assertEqual(self.medewerker.actief, False)
-        self.assertEqual(self.medewerker.telefoonnummer, "111222333")
+        self.test_create_user_with_token_auth()
+        medewerker = Medewerker.objects.get(emailadres="jane.doe@example.com")
+
+        update_payload = self.payload.copy()
+        update_payload["name"]["givenName"] = "Janet"
+
+        response = self.client.put(
+            f"{self.url}/{medewerker.uuid}",
+            data=json.dumps(update_payload),
+            **self._auth_headers(),
+        )
+        self.assertEqual(response.status_code, 200)
+        medewerker.refresh_from_db()
+        self.assertEqual(medewerker.voornaam, "Janet")
 
     def test_delete_user(self):
-        url = reverse("scim:user-detail", args=[self.medewerker.pk])
-        response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(Medewerker.objects.filter(pk=self.medewerker.pk).exists())
+        self.test_create_user_with_token_auth()
+        medewerker = Medewerker.objects.get(emailadres="jane.doe@example.com")
+
+        response = self.client.delete(
+            f"{self.url}/{medewerker.uuid}", **self._auth_headers()
+        )
+        self.assertEqual(response.status_code, 204)
+
+        # Confirm deletion
+        self.assertFalse(
+            Medewerker.objects.filter(emailadres="jane.doe@example.com").exists()
+        )

@@ -8,7 +8,6 @@ class MedewerkerAdapter(SCIMUser):
     id_field = "uuid"
 
     def delete(self):
-        # Use the correct ID field (uuid) instead of default 'id'
         self.model.objects.filter(**{self.id_field: self.id}).delete()
 
     @property
@@ -21,12 +20,10 @@ class MedewerkerAdapter(SCIMUser):
 
     @property
     def groups(self):
-        # No groups support for this model, return empty list
         return []
 
     @property
     def meta(self):
-        # Add timestamps if your model has them; adjust field names as necessary
         created = getattr(self.obj, "created_at", None)
         updated = getattr(self.obj, "updated_at", None)
         return {
@@ -54,6 +51,7 @@ class MedewerkerAdapter(SCIMUser):
         }
 
     def from_dict(self, d):
+        self.obj.medewerker_id = d.get("externalId", self.obj.medewerker_id)
         self.obj.voornaam = d.get("name", {}).get("givenName", "")
         self.obj.achternaam = d.get("name", {}).get("familyName", "")
 
