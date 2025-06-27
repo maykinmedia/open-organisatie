@@ -68,3 +68,5 @@ class MedewerkerAdapter(SCIMUser):
             self.obj.actief = active
 
         self.obj.functie = d.get("functie", self.obj.functie)
+
+        self.obj.save()
