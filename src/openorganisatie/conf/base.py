@@ -196,12 +196,15 @@ WSGI_APPLICATION = "openorganisatie.wsgi.application"
 # SCIM_AUTHENTICATION_CLASSES = ["rest_framework.authentication.TokenAuthentication"]
 
 # SCIM_PERMISSION_CLASSES = ["rest_framework.permissions.IsAuthenticated"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app",
+]
 DJANGO_SCIM_ADAPTERS = {
     "User": "scim.adapters.MedewerkerAdapter",
 }
 SCIM_USER_ADAPTER = "scim.adapters.MedewerkerAdapter"
 SCIM_SERVICE_PROVIDER = {
-    "NETLOC": "localhost",
+    "NETLOC": "https://996d-31-223-172-253.ngrok-free.app/scim/v2/Users",
     "AUTHENTICATION_SCHEMES": [
         {
             "type": "oauth2",
@@ -210,7 +213,6 @@ SCIM_SERVICE_PROVIDER = {
         },
     ],
 }
-
 # Translations
 LOCALE_PATHS = (DJANGO_PROJECT_DIR / "conf" / "locale",)
 
