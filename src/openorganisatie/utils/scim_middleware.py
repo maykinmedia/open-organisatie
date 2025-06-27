@@ -1,13 +1,14 @@
 from django.http import JsonResponse
 
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+
+from .bearer import BearerTokenAuthentication
 
 
 class SCIMTokenAuthMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        self.auth = TokenAuthentication()
+        self.auth = BearerTokenAuthentication()
 
     def __call__(self, request):
         if request.path.startswith("/scim/"):

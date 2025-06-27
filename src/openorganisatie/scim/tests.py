@@ -27,7 +27,7 @@ class SCIMUsersViewTests(APITestCase):
 
     def _auth_headers(self):
         return {
-            "HTTP_AUTHORIZATION": f"Token {self.token.key}",
+            "HTTP_AUTHORIZATION": f"Bearer {self.token.key}",
             "content_type": "application/json",
         }
 
