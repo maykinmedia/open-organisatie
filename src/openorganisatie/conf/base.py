@@ -144,6 +144,7 @@ MIDDLEWARE = [
     "hijack.middleware.HijackUserMiddleware",
     "openorganisatie.utils.scim_middleware.SCIMTokenAuthMiddleware",
     "django_scim.middleware.SCIMAuthCheckMiddleware",
+    "openorganisatie.utils.scim_patch.SanitizeScimPatchMiddleware",
     # should be last according to docs
     "axes.middleware.AxesMiddleware",
 ]

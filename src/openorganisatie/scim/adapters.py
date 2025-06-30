@@ -1,4 +1,3 @@
-import json
 import logging
 
 from django_scim.adapters import SCIMUser
@@ -13,7 +12,6 @@ class MedewerkerAdapter(SCIMUser):
     id_field = "uuid"
 
     def delete(self, *args, **kwargs):
-        print("SCIM DELETE received with UUID:", self.id)
         self.model.objects.filter(**{self.id_field: self.id}).delete()
 
     @property
@@ -40,10 +38,6 @@ class MedewerkerAdapter(SCIMUser):
         }
 
     def to_dict(self):
-        logger.warning(
-            "SCIM to_dict output: %s",
-            json.dumps({"active": self.obj.actief, "type": str(type(self.obj.actief))}),
-        )
         return {
             "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
             "id": str(self.obj.uuid),
@@ -87,18 +81,26 @@ class MedewerkerAdapter(SCIMUser):
             self.obj.telefoonnummer = phone_numbers[0].get("value", "")
 
         active = d.get("active")
-        if isinstance(active, bool):
+        if active is not None:
             self.obj.actief = active
-        elif isinstance(active, str):
-            self.obj.actief = active.strip().lower() == "true"
-        elif active is None:
-            pass  # leave self.obj.actief unchanged
-        else:
-            logger.warning(
-                f"Unexpected type for 'active': {type(active)} — setting to False"
-            )
-            self.obj.actief = False
 
         self.obj.functie = d.get("functie", self.obj.functie)
+
+        self.obj.save()
+
+    def handle_operations(self, operations):
+        for op in operations:
+            operation = op["op"].lower()
+            path = (op.get("path") or "").lower()
+            value = op.get("value")
+
+            if operation in ("replace", "add"):
+                if path == "active":
+                    self.obj.actief = bool(value)
+                elif path == "externalid":
+                    self.obj.medewerker_id = value
+            elif operation == "remove":
+                if path == "externalid":
+                    self.obj.medewerker_id = ""
 
         self.obj.save()

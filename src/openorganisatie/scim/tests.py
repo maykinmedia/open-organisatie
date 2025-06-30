@@ -85,7 +85,6 @@ class SCIMUsersViewTests(APITestCase):
         )
         self.assertEqual(response.status_code, 204)
 
-        # Confirm deletion
         self.assertFalse(
             Medewerker.objects.filter(emailadres="jane.doe@example.com").exists()
         )

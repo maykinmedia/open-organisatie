@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import path
 from django.views.generic import TemplateView
 
 from openorganisatie.scim.views import MedewerkerUsersView
@@ -9,5 +9,4 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="master.html"), name="root"),
     path("Users", MedewerkerUsersView.as_view(), name="users"),
     path("Users/<uuid:uuid>", MedewerkerUsersView.as_view(), name="users"),
-    path("", include(("django_scim.urls", "scim"), namespace="scim")),
 ]
