@@ -6,7 +6,6 @@ from ..models.medewerker import Medewerker
 @admin.register(Medewerker)
 class MedewerkerAdmin(admin.ModelAdmin):
     list_display = (
-        "medewerker_id",
         "voornaam",
         "achternaam",
         "emailadres",
@@ -14,5 +13,6 @@ class MedewerkerAdmin(admin.ModelAdmin):
         "telefoonnummer",
         "actief",
     )
+    readonly_fields = ("azure_oid",)
     search_fields = ("voornaam", "achternaam", "emailadres", "functie")
     list_filter = ("actief",)

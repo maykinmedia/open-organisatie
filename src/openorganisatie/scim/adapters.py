@@ -1,15 +1,11 @@
-import logging
-
 from django_scim.adapters import SCIMUser
 
 from .models.medewerker import Medewerker
 
-logger = logging.getLogger(__name__)
-
 
 class MedewerkerAdapter(SCIMUser):
     model = Medewerker
-    id_field = "uuid"
+    id_field = "azure_oid"
 
     def delete(self, *args, **kwargs):
         self.model.objects.filter(**{self.id_field: self.id}).delete()
@@ -26,22 +22,11 @@ class MedewerkerAdapter(SCIMUser):
     def groups(self):
         return []
 
-    @property
-    def meta(self):
-        created = getattr(self.obj, "created_at", None)
-        updated = getattr(self.obj, "updated_at", None)
-        return {
-            "resourceType": self.resource_type,
-            "created": created.isoformat() if created else None,
-            "lastModified": updated.isoformat() if updated else None,
-            "location": self.location,
-        }
-
     def to_dict(self):
         return {
             "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
-            "id": str(self.obj.uuid),
-            "userName": self.obj.emailadres,
+            "id": str(self.obj.azure_oid),
+            "userName": str(self.obj.azure_oid),
             "name": {
                 "givenName": self.obj.voornaam,
                 "familyName": self.obj.achternaam,
@@ -51,11 +36,11 @@ class MedewerkerAdapter(SCIMUser):
             "emails": self.emails,
             "active": self.obj.actief,
             "groups": self.groups,
-            "meta": self.meta,
         }
 
     def from_dict(self, d):
-        self.obj.medewerker_id = d.get("externalId", self.obj.medewerker_id)
+        self.obj.azure_oid = d.get("userName", self.obj.azure_oid)
+
         name = d.get("name", {})
         if name:
             self.obj.voornaam = name.get("givenName", "")
@@ -73,8 +58,6 @@ class MedewerkerAdapter(SCIMUser):
         emails = d.get("emails", [])
         if emails:
             self.obj.emailadres = emails[0].get("value", "")
-        else:
-            self.obj.emailadres = d.get("userName", self.obj.emailadres)
 
         phone_numbers = d.get("phoneNumbers", [])
         if phone_numbers:
@@ -97,10 +80,10 @@ class MedewerkerAdapter(SCIMUser):
             if operation in ("replace", "add"):
                 if path == "active":
                     self.obj.actief = bool(value)
-                elif path == "externalid":
-                    self.obj.medewerker_id = value
+                elif path == "userName":
+                    self.obj.azure_oid = value
             elif operation == "remove":
-                if path == "externalid":
-                    self.obj.medewerker_id = ""
+                if path == "userName":
+                    self.obj.azure_oid = ""
 
         self.obj.save()
