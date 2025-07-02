@@ -8,7 +8,7 @@ name: Code quality checks
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -19,5 +19,5 @@ jobs:
       python-version: "3.12"
       node-version: "20"
 
-      django-settings-module: "openklant.conf.ci"
+      django-settings-module: "openorganisatie.conf.ci"
       django-secret-key: dummy

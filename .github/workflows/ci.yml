@@ -7,17 +7,16 @@ on:
       - main
       - stable/*
     tags:
-      - '*'
+      - "*"
   pull_request:
   workflow_dispatch:
 
 env:
   IMAGE_NAME: maykinmedia/openorganisatie
   DJANGO_SETTINGS_MODULE: openorganisatie.conf.ci
-  DOCKER_BUILDKIT: '1'
+  DOCKER_BUILDKIT: "1"
 
 jobs:
-
   setup:
     name: Set up the build variables
     runs-on: ubuntu-latest
@@ -71,10 +70,10 @@ jobs:
       - name: Set up backend environment
         uses: maykinmedia/setup-django-backend@v1.3
         with:
-          python-version: '3.12'
-          optimize-postgres: 'yes'
-          pg-service: 'postgres'
-          setup-node: 'yes'
+          python-version: "3.12"
+          optimize-postgres: "yes"
+          pg-service: "postgres"
+          setup-node: "yes"
           # apt-packages: 'gettext postgresql-client'  # the default
           # npm-ci-flags: '--legacy-peer-deps' -> preferably use a .npmrc file
 
@@ -86,7 +85,7 @@ jobs:
         env:
           SECRET_KEY: dummy
           DB_USER: postgres
-          DB_PASSWORD: ''
+          DB_PASSWORD: ""
 
       - name: Publish coverage report
         uses: codecov/codecov-action@v4

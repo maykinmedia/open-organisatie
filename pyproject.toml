@@ -4,6 +4,15 @@ requires-python = "== 3.12"
 [tool.uv.pip]
 emit-index-url = false
 
+# Ruff configuration
+[tool.ruff]
+# Exclude folders and files
+exclude = [
+    "migrations",
+    "static",
+    "media",
+]
+
 [tool.ruff.lint]
 extend-select = [
     "B",   # flake8-bugbear

@@ -17,6 +17,7 @@ maykin-2fa
 maykin-common[axes,mfa]  # other extras: pdf
 mozilla-django-oidc-db
 django-scim2
+django_extensions
 
 # API libraries
 # djangorestframework

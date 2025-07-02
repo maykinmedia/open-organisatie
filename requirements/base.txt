@@ -81,6 +81,7 @@ django==5.2.3
     #   django-axes
     #   django-cors-headers
     #   django-csp
+    #   django-extensions
     #   django-filter
     #   django-formtools
     #   django-hijack
@@ -131,6 +132,8 @@ django-cors-headers==4.7.0
     # via open-api-framework
 django-csp==4.0
     # via open-api-framework
+django-extensions==4.1
+    # via -r requirements/base.in
 django-filter==25.1
     # via
     #   commonground-api-common
