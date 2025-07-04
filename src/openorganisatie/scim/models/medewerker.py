@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from django_scim.models import AbstractSCIMCommonAttributesMixin
 
@@ -39,12 +40,18 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
     actief = models.BooleanField(
         default=True, help_text="Geeft aan of de medewerker momenteel actief is."
     )
+    datum_toegevoegd = models.DateTimeField(
+        default=timezone.now,
+        editable=False,
+        help_text="Datum waarop de medewerker is toegevoegd.",
+    )
+    laatst_gewijzigd = models.DateTimeField(
+        auto_now=True,
+        help_text="Datum waarop de medewerker voor het laatst is gewijzigd.",
+    )
 
     def __str__(self):
         return f"{self.voornaam} {self.achternaam}"
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
 
     def is_active(self):
         return self.actief and not self.datum_uit_dienst

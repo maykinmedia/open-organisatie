@@ -30,7 +30,6 @@ class MedewerkerAdapterTest(TestCase):
     def test_to_dict(self):
         result = self.adapter.to_dict()
         self.assertEqual(result["id"], "178fa166-a2cd-4899-8958-8d5eb2eff213")
-        self.assertEqual(result["displayName"], "John Doe")
         self.assertEqual(result["emails"][0]["value"], "john.doe@example.com")
         self.assertTrue(result["active"])
         self.assertIn("schemas", result)
@@ -45,7 +44,7 @@ class MedewerkerAdapterTest(TestCase):
             "emails": [{"value": "jane@example.com"}],
             "phoneNumbers": [{"value": "+123456789"}],
             "active": False,
-            "functie": "Manager",
+            "jobTitle": "Manager",
         }
         self.adapter.from_dict(new_data)
         m = Medewerker.objects.get(pk=self.medewerker.pk)

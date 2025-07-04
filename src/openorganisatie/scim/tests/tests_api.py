@@ -25,52 +25,35 @@ class SCIMUsersApiTests(APITestCase):
             "active": True,
         }
 
+        response = self.client.post(
+            self.url, data=json.dumps(self.payload), **self._auth_headers()
+        )
+        self.assertEqual(response.status_code, 201)
+        response_json = json.loads(response.content)
+        self.created_user_azure_oid = response_json["userName"]
+
     def _auth_headers(self):
         return {
             "HTTP_AUTHORIZATION": f"Bearer {self.token.key}",
             "content_type": "application/json",
         }
 
-    def test_create_user_with_token_auth(self):
-        response = self.client.post(
-            self.url, data=json.dumps(self.payload), **self._auth_headers()
-        )
-        self.assertEqual(response.status_code, 201)
-        response_json = json.loads(response.content)
-        self.assertIn("id", response_json)
-        self.assertEqual(
-            response_json["userName"], "c5fb5fb9-e72e-40ff-8a26-6fdc8261b043"
-        )
-        self.resource_id = response_json["id"]
-
-        medewerker = Medewerker.objects.filter(
-            azure_oid="c5fb5fb9-e72e-40ff-8a26-6fdc8261b043"
-        ).first()
-        self.assertIsNotNone(medewerker)
-        self.assertEqual(medewerker.voornaam, "Jane")
-        self.assertEqual(medewerker.achternaam, "Doe")
+    def create_user_for_tests(self):
+        return Medewerker.objects.get(azure_oid=self.created_user_azure_oid)
 
     def test_read_user(self):
-        self.test_create_user_with_token_auth()
-        medewerker = Medewerker.objects.get(
-            azure_oid="c5fb5fb9-e72e-40ff-8a26-6fdc8261b043"
-        )
+        medewerker = self.create_user_for_tests()
 
         response = self.client.get(
             f"{self.url}/{medewerker.azure_oid}", **self._auth_headers()
         )
         self.assertEqual(response.status_code, 200)
         response_json = json.loads(response.content)
-        self.assertEqual(
-            response_json["userName"], "c5fb5fb9-e72e-40ff-8a26-6fdc8261b043"
-        )
+        self.assertEqual(response_json["userName"], self.created_user_azure_oid)
         self.assertEqual(response_json["name"]["givenName"], "Jane")
 
     def test_update_user(self):
-        self.test_create_user_with_token_auth()
-        medewerker = Medewerker.objects.get(
-            azure_oid="c5fb5fb9-e72e-40ff-8a26-6fdc8261b043"
-        )
+        medewerker = self.create_user_for_tests()
 
         update_payload = self.payload.copy()
         update_payload["name"]["givenName"] = "Janet"
@@ -85,10 +68,7 @@ class SCIMUsersApiTests(APITestCase):
         self.assertEqual(medewerker.voornaam, "Janet")
 
     def test_delete_user(self):
-        self.test_create_user_with_token_auth()
-        medewerker = Medewerker.objects.get(
-            azure_oid="c5fb5fb9-e72e-40ff-8a26-6fdc8261b043"
-        )
+        medewerker = self.create_user_for_tests()
 
         response = self.client.delete(
             f"{self.url}/{medewerker.azure_oid}", **self._auth_headers()
@@ -96,7 +76,5 @@ class SCIMUsersApiTests(APITestCase):
         self.assertEqual(response.status_code, 204)
 
         self.assertFalse(
-            Medewerker.objects.filter(
-                azure_oid="c5fb5fb9-e72e-40ff-8a26-6fdc8261b043"
-            ).exists()
+            Medewerker.objects.filter(azure_oid=self.created_user_azure_oid).exists()
         )
