@@ -53,5 +53,58 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
     def __str__(self):
         return f"{self.voornaam} {self.achternaam}"
 
+    @property
+    def username(self):
+        return self.azure_oid
+
+    @username.setter
+    def username(self, value):
+        self.azure_oid = value
+
+    @property
+    def first_name(self):
+        return self.voornaam
+
+    @first_name.setter
+    def first_name(self, value):
+        self.voornaam = value
+
+    @property
+    def last_name(self):
+        return self.achternaam
+
+    @last_name.setter
+    def last_name(self, value):
+        self.achternaam = value
+
+    @property
+    def email(self):
+        return self.emailadres
+
+    @email.setter
+    def email(self, value):
+        self.emailadres = value
+
+    @property
     def is_active(self):
-        return self.actief and not self.datum_uit_dienst
+        return self.actief
+
+    @is_active.setter
+    def is_active(self, value):
+        self.actief = value
+
+    @property
+    def date_joined(self):
+        return self.datum_toegevoegd
+
+    @date_joined.setter
+    def date_joined(self, value):
+        self.datum_toegevoegd = value
+
+    @property
+    def last_modified(self):
+        return self.laatst_gewijzigd
+
+    @last_modified.setter
+    def last_modified(self, value):
+        self.laatst_gewijzigd = value
