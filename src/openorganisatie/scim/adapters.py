@@ -15,9 +15,23 @@ class MedewerkerAdapter(SCIMUser):
     def groups(self):
         return []
 
+    @property
+    def phone_numbers(self):
+        if self.obj.phone_number:
+            return [{"value": self.obj.phone_number, "type": "work"}]
+        return []
+
     def to_dict(self):
         d = super().to_dict()
-        d["userName"] = str(self.obj.username)
+
+        d.update(
+            {
+                "userName": str(self.obj.username),
+                "phoneNumbers": self.phone_numbers,
+                "jobTitle": self.obj.job_title,
+            }
+        )
+
         return d
 
     def from_dict(self, d):
@@ -63,6 +77,11 @@ class MedewerkerAdapter(SCIMUser):
                     self.obj.is_active = bool(value)
                 elif path == "username":
                     self.obj.username = value
+                elif path == "phonenumbers":
+                    if isinstance(value, list) and value:
+                        self.obj.phone_number = value[0].get("value", "")
+                elif path == "jobtitle":
+                    self.obj.job_title = value
             elif operation == "remove":
                 if path == "username":
                     self.obj.username = ""
