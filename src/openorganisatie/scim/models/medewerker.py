@@ -5,106 +5,65 @@ from django_scim.models import AbstractSCIMCommonAttributesMixin
 
 
 class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
-    azure_oid = models.UUIDField(
+    username = models.UUIDField(
         unique=True,
         editable=False,
+        verbose_name="Azure Object ID",
         help_text="Unieke Azure Active Directory Object ID van de medewerker.",
     )
-    voornaam = models.CharField(max_length=100, help_text="Voornaam van de medewerker.")
-    achternaam = models.CharField(
-        max_length=100, help_text="Achternaam van de medewerker."
+    first_name = models.CharField(
+        max_length=100, verbose_name="Voornaam", help_text="Voornaam van de medewerker."
     )
-    emailadres = models.EmailField(
-        unique=True, help_text="Uniek e-mailadres van de medewerker."
+    last_name = models.CharField(
+        max_length=100,
+        verbose_name="Achternaam",
+        help_text="Achternaam van de medewerker.",
     )
-    functie = models.CharField(
+    email = models.EmailField(
+        unique=True,
+        verbose_name="E-mailadres",
+        help_text="Uniek e-mailadres van de medewerker.",
+    )
+    job_title = models.CharField(
         max_length=100,
         blank=True,
+        verbose_name="Functie",
         help_text="Functie of functiebenaming van de medewerker (optioneel).",
     )
-    telefoonnummer = models.CharField(
+    phone_number = models.CharField(
         max_length=30,
         blank=True,
+        verbose_name="Telefoonnummer",
         help_text="Telefoonnummer van de medewerker (optioneel).",
     )
-    geslachtsaanduiding = models.BooleanField(
+    gender_indicator = models.BooleanField(
         default=True,
-        help_text="Geslachtsaanduiding: waar of niet waar.???(staat zo in datamodel)",
+        verbose_name="Geslachtsaanduiding",
+        help_text="Geslachtsaanduiding: waar of niet waar.",
     )
-    datum_uit_dienst = models.DateField(
+    termination_date = models.DateField(
         blank=True,
         null=True,
-        help_text="Datum waarop de medewerker uit dienst is gegaan"
-        " (indien van toepassing).",
+        verbose_name="Datum uit dienst",
+        help_text="Datum waarop de medewerker uit dienst is gegaan "
+        "(indien van toepassing).",
     )
-    actief = models.BooleanField(
-        default=True, help_text="Geeft aan of de medewerker momenteel actief is."
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Actief",
+        help_text="Geeft aan of de medewerker momenteel actief is.",
     )
-    datum_toegevoegd = models.DateTimeField(
+    date_joined = models.DateTimeField(
         default=timezone.now,
         editable=False,
+        verbose_name="Datum toegevoegd",
         help_text="Datum waarop de medewerker is toegevoegd.",
     )
-    laatst_gewijzigd = models.DateTimeField(
+    last_modified = models.DateTimeField(
         auto_now=True,
+        verbose_name="Laatst gewijzigd",
         help_text="Datum waarop de medewerker voor het laatst is gewijzigd.",
     )
 
     def __str__(self):
-        return f"{self.voornaam} {self.achternaam}"
-
-    @property
-    def username(self):
-        return self.azure_oid
-
-    @username.setter
-    def username(self, value):
-        self.azure_oid = value
-
-    @property
-    def first_name(self):
-        return self.voornaam
-
-    @first_name.setter
-    def first_name(self, value):
-        self.voornaam = value
-
-    @property
-    def last_name(self):
-        return self.achternaam
-
-    @last_name.setter
-    def last_name(self, value):
-        self.achternaam = value
-
-    @property
-    def email(self):
-        return self.emailadres
-
-    @email.setter
-    def email(self, value):
-        self.emailadres = value
-
-    @property
-    def is_active(self):
-        return self.actief
-
-    @is_active.setter
-    def is_active(self, value):
-        self.actief = value
-
-    @property
-    def date_joined(self):
-        return self.datum_toegevoegd
-
-    @date_joined.setter
-    def date_joined(self, value):
-        self.datum_toegevoegd = value
-
-    @property
-    def last_modified(self):
-        return self.laatst_gewijzigd
-
-    @last_modified.setter
-    def last_modified(self, value):
-        self.laatst_gewijzigd = value
+        return f"{self.first_name} {self.last_name}"

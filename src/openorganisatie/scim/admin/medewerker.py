@@ -6,15 +6,15 @@ from ..models.medewerker import Medewerker
 @admin.register(Medewerker)
 class MedewerkerAdmin(admin.ModelAdmin):
     list_display = (
-        "voornaam",
-        "achternaam",
-        "emailadres",
-        "functie",
-        "telefoonnummer",
-        "actief",
-        "datum_toegevoegd",
-        "laatst_gewijzigd",
+        "first_name",
+        "last_name",
+        "email",
+        "job_title",
+        "phone_number",
+        "is_active",
+        "date_joined",
+        "last_modified",
     )
-    readonly_fields = ("azure_oid", "datum_toegevoegd", "laatst_gewijzigd")
-    search_fields = ("voornaam", "achternaam", "emailadres", "functie")
-    list_filter = ("actief",)
+    readonly_fields = ("username", "date_joined", "last_modified")
+    search_fields = ("first_name", "last_name", "email", "job_title")
+    list_filter = ("is_active",)

@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -14,7 +15,7 @@ class SCIMUsersApiTests(APITestCase):
             username="admin", email="admin@example.com", password="adminpass"
         )
         self.token = Token.objects.create(user=self.user)
-        self.url = "/scim/v2/Users"
+        self.url = reverse("scim:users")
 
         self.payload = {
             "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
@@ -39,13 +40,14 @@ class SCIMUsersApiTests(APITestCase):
         }
 
     def create_user_for_tests(self):
-        return Medewerker.objects.get(azure_oid=self.created_user_azure_oid)
+        return Medewerker.objects.get(username=self.created_user_azure_oid)
 
     def test_read_user(self):
         medewerker = self.create_user_for_tests()
 
         response = self.client.get(
-            f"{self.url}/{medewerker.azure_oid}", **self._auth_headers()
+            reverse("scim:user-detail", kwargs={"uuid": medewerker.username}),
+            **self._auth_headers(),
         )
         self.assertEqual(response.status_code, 200)
         response_json = json.loads(response.content)
@@ -59,22 +61,24 @@ class SCIMUsersApiTests(APITestCase):
         update_payload["name"]["givenName"] = "Janet"
 
         response = self.client.put(
-            f"{self.url}/{medewerker.azure_oid}",
+            reverse("scim:user-detail", kwargs={"uuid": medewerker.username}),
             data=json.dumps(update_payload),
             **self._auth_headers(),
         )
         self.assertEqual(response.status_code, 200)
         medewerker.refresh_from_db()
-        self.assertEqual(medewerker.voornaam, "Janet")
+        self.assertEqual(medewerker.first_name, "Janet")
 
     def test_delete_user(self):
         medewerker = self.create_user_for_tests()
 
         response = self.client.delete(
-            f"{self.url}/{medewerker.azure_oid}", **self._auth_headers()
+            reverse("scim:user-detail", kwargs={"uuid": medewerker.username}),
+            **self._auth_headers(),
         )
+
         self.assertEqual(response.status_code, 204)
 
         self.assertFalse(
-            Medewerker.objects.filter(azure_oid=self.created_user_azure_oid).exists()
+            Medewerker.objects.filter(username=self.created_user_azure_oid).exists()
         )

@@ -5,7 +5,7 @@ from .models.medewerker import Medewerker
 
 class MedewerkerAdapter(SCIMUser):
     model = Medewerker
-    id_field = "azure_oid"
+    id_field = "username"
     url_name = "scim:user-detail"
 
     def delete(self, *args, **kwargs):
@@ -17,24 +17,7 @@ class MedewerkerAdapter(SCIMUser):
 
     def to_dict(self):
         d = super().to_dict()
-
-        d.update(
-            {
-                "id": str(self.obj.azure_oid),
-                "userName": str(self.obj.azure_oid),
-                "name": {
-                    "givenName": self.obj.voornaam,
-                    "familyName": self.obj.achternaam,
-                },
-                "active": self.obj.actief,
-                "emails": [{"value": self.obj.emailadres}],
-                "phoneNumbers": [{"value": self.obj.telefoonnummer}],
-                "jobTitle": self.obj.functie,
-                "meta": self.meta,
-                "groups": self.groups,
-            }
-        )
-
+        d["userName"] = str(self.obj.username)
         return d
 
     def from_dict(self, d):
@@ -42,25 +25,25 @@ class MedewerkerAdapter(SCIMUser):
 
         name = d.get("name", {})
         if name:
-            self.obj.voornaam = name.get("givenName", "")
-            self.obj.achternaam = name.get("familyName", "")
+            self.obj.first_name = name.get("givenName", "")
+            self.obj.last_name = name.get("familyName", "")
         else:
             display_name = d.get("displayName", "")
             if display_name:
                 parts = display_name.split(" ", 1)
-                self.obj.voornaam = parts[0]
+                self.obj.first_name = parts[0]
                 if len(parts) > 1:
-                    self.obj.achternaam = parts[1]
+                    self.obj.last_name = parts[1]
                 else:
-                    self.obj.achternaam = ""
+                    self.obj.last_name = ""
 
         phone_numbers = d.get("phoneNumbers", [])
         if phone_numbers:
-            self.obj.telefoonnummer = phone_numbers[0].get("value", "")
+            self.obj.phone_number = phone_numbers[0].get("value", "")
 
         job_title = d.get("jobTitle")
         if job_title is not None:
-            self.obj.functie = job_title
+            self.obj.job_title = job_title
 
         self.obj.save()
 
@@ -70,13 +53,18 @@ class MedewerkerAdapter(SCIMUser):
             path = op.get("path", "").lower()
             value = op.get("value")
 
+            if path == "active" and isinstance(value, str):
+                val = value.strip().lower()
+                if val in ("true", "false"):
+                    value = val == "true"
+
             if operation in ("replace", "add"):
                 if path == "active":
-                    self.obj.actief = bool(value)
-                elif path == "userName":
-                    self.obj.azure_oid = value
+                    self.obj.is_active = bool(value)
+                elif path == "username":
+                    self.obj.username = value
             elif operation == "remove":
-                if path == "userName":
-                    self.obj.azure_oid = ""
+                if path == "username":
+                    self.obj.username = ""
 
         self.obj.save()
