@@ -1,7 +1,9 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from openorganisatie.scim.models.medewerker import Medewerker
+from openorganisatie.utils.scim_middleware import BearerTokenAuthentication
 
 from ..filterset.medewerker import MedewerkerFilter
 from ..serializers.medewerker import MedewerkerSerializer
@@ -23,3 +25,5 @@ class MedewerkerReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MedewerkerSerializer
     filterset_class = MedewerkerFilter
     lookup_field = "username"
+    authentication_classes = (BearerTokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
