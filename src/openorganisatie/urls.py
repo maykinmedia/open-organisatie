@@ -56,6 +56,10 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    path(
+        "medewerkers/api/",
+        include(("openorganisatie.scim.api.urls", "scim_api"), namespace="scim_api"),
+    ),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="index.html"), name="root"),
     path("scim/v2/", include(("openorganisatie.scim.urls", "scim"), namespace="scim")),

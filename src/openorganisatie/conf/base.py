@@ -115,6 +115,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "django_extensions",
+    "drf_spectacular",
     # OIDC applications.
     "django_jsonform",
     "solo",
@@ -156,7 +157,17 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Open Organisatie",
+    "DESCRIPTION": "Medewerkers",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
 
 ROOT_URLCONF = "openorganisatie.urls"
 
