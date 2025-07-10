@@ -108,6 +108,10 @@ INSTALLED_APPS = [
     "ordered_model",
     "django_admin_index",
     "django.contrib.admin",
+    "django_scim",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "django_extensions",
     # OIDC applications.
     "django_jsonform",
     "solo",
@@ -124,6 +128,7 @@ INSTALLED_APPS = [
     # Project applications.
     "openorganisatie.accounts",
     "openorganisatie.utils",
+    "openorganisatie.scim",
 ]
 
 MIDDLEWARE = [
@@ -137,9 +142,18 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "hijack.middleware.HijackUserMiddleware",
+    "openorganisatie.utils.scim_middleware.SCIMTokenAuthMiddleware",
+    "django_scim.middleware.SCIMAuthCheckMiddleware",
     # should be last according to docs
     "axes.middleware.AxesMiddleware",
 ]
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "utils.bearer.BearerTokenAuthentication",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
+}
 
 ROOT_URLCONF = "openorganisatie.urls"
 
@@ -168,6 +182,27 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "openorganisatie.wsgi.application"
+
+#
+# SCIM
+#
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app",
+]
+DJANGO_SCIM_ADAPTERS = {
+    "User": "scim.adapters.MedewerkerAdapter",
+}
+SCIM_USER_ADAPTER = "scim.adapters.MedewerkerAdapter"
+SCIM_SERVICE_PROVIDER = {
+    "NETLOC": "localhost:8000",
+    "AUTHENTICATION_SCHEMES": [
+        {
+            "type": "oauth2",
+            "name": "OAuth 2",
+            "description": "Oauth 2 implemented with bearer token",
+        },
+    ],
+}
 
 # Translations
 LOCALE_PATHS = (DJANGO_PROJECT_DIR / "conf" / "locale",)

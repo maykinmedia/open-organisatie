@@ -11,3 +11,4 @@ freezegun
 pyquery  # integrates with webtest
 # vcrpy  # 'mocking' http requests
 tblib
+ruff
