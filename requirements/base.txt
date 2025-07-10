@@ -277,7 +277,7 @@ nh3==0.2.21
     # via textile
 notifications-api-common==0.7.3
     # via commonground-api-common
-open-api-framework==0.10.3
+open-api-framework==0.11.0
     # via -r requirements/base.in
 orderedmultidict==1.0.1
     # via furl
@@ -298,9 +298,11 @@ prometheus-client==0.22.1
 prompt-toolkit==3.0.51
     # via click-repl
 psycopg==3.2.9
-    # via -r requirements/base.in
-psycopg2==2.9.10
-    # via open-api-framework
+    # via
+    #   -r requirements/base.in
+    #   open-api-framework
+psycopg-binary==3.2.9
+    # via psycopg
 pycparser==2.22
     # via cffi
 pydantic==2.11.7
