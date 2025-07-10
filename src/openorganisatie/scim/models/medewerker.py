@@ -65,5 +65,9 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
         help_text="Datum waarop de medewerker voor het laatst is gewijzigd.",
     )
 
+    class Meta:
+        verbose_name = "Medewerker"
+        verbose_name_plural = "Medewerkers"
+
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

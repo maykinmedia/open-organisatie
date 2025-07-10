@@ -1,20 +1,36 @@
 from django.db import models
 
+from django_scim.models import AbstractSCIMGroupMixin
 
-class Team(models.Model):
-    naam = models.CharField(max_length=100, unique=True, help_text="Naam van het team.")
-    beschrijving = models.TextField(
-        blank=True, help_text="Optionele beschrijving van het team."
+
+class Team(AbstractSCIMGroupMixin, models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name="Naam",
+        help_text="Naam van het team.",
     )
-    leden = models.ManyToManyField(
+    description = models.TextField(
+        blank=True,
+        verbose_name="Beschrijving",
+        help_text="Optionele beschrijving van het team.",
+    )
+    members = models.ManyToManyField(
         "scim.Medewerker",
         related_name="teams",
         blank=True,
+        verbose_name="Leden",
         help_text="Medewerkers die lid zijn van dit team.",
     )
-    actief = models.BooleanField(
-        default=True, help_text="Geeft aan of het team momenteel actief is."
+    active = models.BooleanField(
+        default=True,
+        verbose_name="Actief",
+        help_text="Geeft aan of het team momenteel actief is.",
     )
 
+    class Meta:
+        verbose_name = "Team"
+        verbose_name_plural = "Teams"
+
     def __str__(self):
-        return self.naam
+        return self.name
