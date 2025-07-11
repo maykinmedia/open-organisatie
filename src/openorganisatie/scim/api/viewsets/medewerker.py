@@ -9,11 +9,11 @@ from ..filterset.medewerker import MedewerkerFilter
 from ..serializers.medewerker import MedewerkerSerializer
 
 
-@extend_schema(tags=["medewerkers"])
+@extend_schema(tags=["Medewerkers"])
 @extend_schema_view(
     list=extend_schema(
         summary="Alle medewerkers opvragen.",
-        description="Alle medewerkers opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
         summary="Een specifieke medewerker opvragen.",
@@ -25,5 +25,6 @@ class MedewerkerReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MedewerkerSerializer
     filterset_class = MedewerkerFilter
     lookup_field = "username"
+    lookup_url_kwarg = "oid"
     authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
