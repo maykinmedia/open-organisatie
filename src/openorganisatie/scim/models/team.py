@@ -22,7 +22,7 @@ class Team(AbstractSCIMGroupMixin, models.Model):
         verbose_name="Leden",
         help_text="Medewerkers die lid zijn van dit team.",
     )
-    active = models.BooleanField(
+    is_active = models.BooleanField(
         default=True,
         verbose_name="Actief",
         help_text="Geeft aan of het team momenteel actief is.",

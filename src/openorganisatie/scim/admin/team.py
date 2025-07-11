@@ -5,9 +5,9 @@ from ..models.team import Team
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ("name", "active")
+    list_display = ("name", "is_active")
     search_fields = ("name", "description")
-    list_filter = ("active",)
+    list_filter = ("is_active",)
     filter_horizontal = ("members",)
 
     def get_queryset(self, request):
