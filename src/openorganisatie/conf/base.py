@@ -105,6 +105,9 @@ INSTALLED_APPS = [
     "two_factor.plugins.webauthn",  # USB key/token support
     "maykin_2fa",
     # Optional applications.
+    "vng_api_common",
+    "zgw_consumers",
+    "simple_certmanager",
     "ordered_model",
     "django_admin_index",
     "django.contrib.admin",
@@ -149,7 +152,7 @@ MIDDLEWARE = [
 ]
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "utils.bearer.BearerTokenAuthentication",
+        "openorganisatie.utils.bearer.BearerTokenAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,

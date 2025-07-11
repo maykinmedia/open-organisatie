@@ -57,7 +57,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     # Simply show the master template.
-    path("", TemplateView.as_view(template_name="master.html"), name="root"),
+    path("", TemplateView.as_view(template_name="index.html"), name="root"),
     path("scim/v2/", include(("openorganisatie.scim.urls", "scim"), namespace="scim")),
 ]
 
