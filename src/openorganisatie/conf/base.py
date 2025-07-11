@@ -164,7 +164,7 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     "TITLE": "Open Organisatie",
     "DESCRIPTION": "Medewerkers",
-    "VERSION": "1.0.0",
+    "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
@@ -400,7 +400,7 @@ FIXTURE_DIRS = (DJANGO_PROJECT_DIR / "fixtures",)
 #
 # Custom settings
 #
-PROJECT_NAME = "openorganisatie"
+PROJECT_NAME = "Open Organisatie"
 ENVIRONMENT = config("ENVIRONMENT", "")
 
 # Displaying environment information
