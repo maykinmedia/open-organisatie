@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: Open Organisatie
+  version: 1.0.0
+  description: Medewerkers
+paths:
+  /medewerkers:
+    get:
+      operationId: medewerkers_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle medewerkers opvragen.
+      parameters:
+      - in: query
+        name: actief
+        schema:
+          type: boolean
+        description: Actief
+      - in: query
+        name: datumToegevoegd
+        schema:
+          type: string
+          format: date
+        description: Datum toegevoegd
+      - in: query
+        name: datumUitDienst
+        schema:
+          type: string
+          format: date
+        description: Datum uit dienst
+      - in: query
+        name: functie
+        schema:
+          type: string
+        description: Functie
+      - in: query
+        name: geslachtsaanduiding
+        schema:
+          type: boolean
+        description: Geslachtsaanduiding
+      - in: query
+        name: laatstGewijzigd
+        schema:
+          type: string
+          format: date
+        description: Laatst gewijzigd
+      - name: limit
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - Medewerkers
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMedewerkerList'
+          description: ''
+  /medewerkers/{oid}:
+    get:
+      operationId: medewerkers_retrieve
+      description: Een specifieke medewerker opvragen.
+      summary: Een specifieke medewerker opvragen.
+      parameters:
+      - in: path
+        name: oid
+        schema:
+          type: string
+          format: uuid
+          title: Azure Object ID
+          description: Unieke Azure Active Directory Object ID van de medewerker.
+        required: true
+      tags:
+      - Medewerkers
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
+          description: ''
+components:
+  schemas:
+    Medewerker:
+      type: object
+      properties:
+        oid:
+          type: string
+          format: uuid
+          readOnly: true
+        voornaam:
+          type: string
+        achternaam:
+          type: string
+        emailadres:
+          type: string
+          format: email
+        functie:
+          type: string
+        telefoonnummer:
+          type: string
+        geslachtsaanduiding:
+          type: boolean
+        datum_uit_dienst:
+          type: string
+          format: date
+          nullable: true
+        actief:
+          type: boolean
+        datum_toegevoegd:
+          type: string
+          format: date-time
+          readOnly: true
+        laatst_gewijzigd:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - achternaam
+      - actief
+      - datum_toegevoegd
+      - emailadres
+      - geslachtsaanduiding
+      - laatst_gewijzigd
+      - oid
+      - voornaam
+    PaginatedMedewerkerList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Medewerker'
+  securitySchemes:
+    tokenAuth:
+      type: http
+      scheme: bearer
+servers:
+- url: /medewerksers/api/
