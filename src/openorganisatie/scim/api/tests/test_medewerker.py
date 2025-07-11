@@ -34,7 +34,7 @@ class MedewerkerAPITests(TestCase):
         medewerker = MedewerkerFactory()
 
         detail_url = reverse(
-            "scim_api:medewerker-detail", kwargs={"username": str(medewerker.username)}
+            "scim_api:medewerker-detail", kwargs={"oid": str(medewerker.username)}
         )
 
         response = self.client.get(detail_url)
@@ -43,8 +43,7 @@ class MedewerkerAPITests(TestCase):
 
         data = response.json()
 
-        self.assertEqual(data["id"], medewerker.pk)
-        self.assertEqual(data["username"], str(medewerker.username))
-        self.assertEqual(data["first_name"], medewerker.first_name)
-        self.assertEqual(data["last_name"], medewerker.last_name)
-        self.assertEqual(data["email"], medewerker.email)
+        self.assertEqual(data["oid"], str(medewerker.username))
+        self.assertEqual(data["voornaam"], medewerker.first_name)
+        self.assertEqual(data["achternaam"], medewerker.last_name)
+        self.assertEqual(data["emailadres"], medewerker.email)
