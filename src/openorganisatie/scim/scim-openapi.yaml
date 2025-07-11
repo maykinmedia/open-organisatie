@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: Open Organisatie
-  version: 1.0.0
-  description: Medewerkers
+  version: 0.1.0
+  description: '......'
 paths:
   /medewerkers:
     get:
