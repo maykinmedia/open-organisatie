@@ -13,7 +13,7 @@ from ..serializers.team import TeamSerializer
 @extend_schema_view(
     list=extend_schema(
         summary="Alle teams opvragen.",
-        description="Alle teams opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
         summary="Een specifieke team opvragen.",

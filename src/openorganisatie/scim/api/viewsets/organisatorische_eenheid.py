@@ -13,7 +13,7 @@ from ..serializers.organisatorische_eenheid import OrganisatorischeEenheidSerial
 @extend_schema_view(
     list=extend_schema(
         summary="Alle Organisatorische eenheden  opvragen.",
-        description="Alle Organisatorische eenheden opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
         summary="Een specifieke Organisatorische eenheid opvragen.",

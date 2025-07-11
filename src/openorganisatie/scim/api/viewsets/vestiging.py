@@ -13,7 +13,7 @@ from ..serializers.vestiging import VestigingSerializer
 @extend_schema_view(
     list=extend_schema(
         summary="Alle vestigingen opvragen.",
-        description="Alle vestigingen opvragen.",
+        description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
         summary="Een specifieke vestiging opvragen.",
