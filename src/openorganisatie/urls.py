@@ -57,7 +57,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path(
-        "medewerkers/api/",
+        f"medewerkers/api/v{settings.SCIM_API_MAJOR_VERSION}/",
         include(("openorganisatie.scim.api.urls", "scim_api"), namespace="scim_api"),
     ),
     # Simply show the master template.

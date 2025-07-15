@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "django_extensions",
     "drf_spectacular",
+    "drf_spectacular_sidecar",
     # OIDC applications.
     "django_jsonform",
     "solo",
@@ -160,11 +161,13 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
+SCIM_API_VERSION = "0.1.0"
+
+SCIM_API_MAJOR_VERSION = SCIM_API_VERSION.split(".")[0]
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Open Organisatie",
     "DESCRIPTION": "......",
-    "VERSION": "0.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",

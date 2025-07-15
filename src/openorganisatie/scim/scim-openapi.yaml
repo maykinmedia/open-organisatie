@@ -164,4 +164,4 @@ components:
       type: http
       scheme: bearer
 servers:
-- url: /medewerksers/api/
+- url: /medewerksers/api/v0
