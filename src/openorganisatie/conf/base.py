@@ -115,6 +115,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "django_extensions",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     # OIDC applications.
     "django_jsonform",
     "solo",
@@ -156,7 +158,22 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
+SCIM_API_VERSION = "0.1.0"
+
+SCIM_API_MAJOR_VERSION = SCIM_API_VERSION.split(".")[0]
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Open Organisatie",
+    "DESCRIPTION": "......",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+}
+
 
 ROOT_URLCONF = "openorganisatie.urls"
 
@@ -389,7 +406,7 @@ FIXTURE_DIRS = (DJANGO_PROJECT_DIR / "fixtures",)
 #
 # Custom settings
 #
-PROJECT_NAME = "openorganisatie"
+PROJECT_NAME = "Open Organisatie"
 ENVIRONMENT = config("ENVIRONMENT", "")
 
 # Displaying environment information
