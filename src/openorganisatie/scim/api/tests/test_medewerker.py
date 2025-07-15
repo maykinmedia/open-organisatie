@@ -47,3 +47,11 @@ class MedewerkerAPITests(TestCase):
         self.assertEqual(data["voornaam"], medewerker.first_name)
         self.assertEqual(data["achternaam"], medewerker.last_name)
         self.assertEqual(data["emailadres"], medewerker.email)
+
+    def test_authentication_required(self):
+        client = APIClient()
+
+        url = reverse("scim_api:medewerker-list")
+        response = client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
