@@ -194,8 +194,10 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 DJANGO_SCIM_ADAPTERS = {
     "User": "scim.adapters.MedewerkerAdapter",
+    "Group": "scim.adapters.GroepenAdapter",
 }
 SCIM_USER_ADAPTER = "scim.adapters.MedewerkerAdapter"
+SCIM_GROUP_ADAPTER = "scim.adapters.GroepenAdapter"
 SCIM_SERVICE_PROVIDER = {
     "NETLOC": "localhost:8000",
     "AUTHENTICATION_SCHEMES": [
