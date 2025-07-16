@@ -1,6 +1,12 @@
-from django_scim.adapters import SCIMUser
+import uuid
+from urllib.parse import urljoin
+
+from django.urls import reverse
+
+from django_scim.adapters import SCIMGroup, SCIMUser
 
 from .models.medewerker import Medewerker
+from .models.team import Team
 
 
 class MedewerkerAdapter(SCIMUser):
@@ -12,8 +18,17 @@ class MedewerkerAdapter(SCIMUser):
         self.model.objects.filter(**{self.id_field: self.id}).delete()
 
     @property
-    def groups(self):
-        return []
+    def id(self):
+        return str(self.obj.username)
+
+    @property
+    def path(self):
+        return reverse(self.url_name, kwargs={"uuid": str(self.obj.username)})
+
+    @property
+    def location(self):
+        base_url = self.request.build_absolute_uri("/scim/v2/")
+        return urljoin(base_url, self.path)
 
     @property
     def phone_numbers(self):
@@ -87,3 +102,49 @@ class MedewerkerAdapter(SCIMUser):
                     self.obj.username = ""
 
         self.obj.save()
+
+
+class GroepenAdapter(SCIMGroup):
+    model = Team
+    url_name = "scim:group-detail"
+    id_field = "scim_external_id"
+
+    @property
+    def members(self):
+        return [
+            {
+                "value": str(user.username),
+                "$ref": MedewerkerAdapter(user, request=self.request).location,
+                "display": f"{user.first_name} {user.last_name}".strip(),
+            }
+            for user in self.obj.user_set.all()
+        ]
+
+    def handle_add(self, path, value, operation):
+        if path.first_path == ("members", None, None):
+            members = value or []
+            ids = [uuid.UUID(member.get("value")) for member in members]
+
+            users = Medewerker.objects.filter(username__in=ids)
+            if len(ids) != users.count():
+                return
+
+            for user in users:
+                self.obj.user_set.add(user)
+        else:
+            raise NotImplementedError
+
+    def handle_remove(self, path, value, operation):
+        if path.first_path == ("members", None, None):
+            members = value or []
+
+            ids = [uuid.UUID(member.get("value")) for member in members]
+
+            users = Medewerker.objects.filter(username__in=ids)
+            if len(ids) != users.count():
+                return
+
+            for user in users:
+                self.obj.user_set.remove(user)
+        else:
+            raise NotImplementedError
