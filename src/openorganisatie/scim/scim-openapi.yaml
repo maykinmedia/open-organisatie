@@ -98,39 +98,6 @@ paths:
         is.
       summary: Alle teams van een specifieke medewerker opvragen.
       parameters:
-      - in: query
-        name: actief
-        schema:
-          type: boolean
-        description: Actief
-      - in: query
-        name: datumToegevoegd
-        schema:
-          type: string
-          format: date
-        description: Datum toegevoegd
-      - in: query
-        name: datumUitDienst
-        schema:
-          type: string
-          format: date
-        description: Datum uit dienst
-      - in: query
-        name: functie
-        schema:
-          type: string
-        description: Functie
-      - in: query
-        name: geslachtsaanduiding
-        schema:
-          type: boolean
-        description: Geslachtsaanduiding
-      - in: query
-        name: laatstGewijzigd
-        schema:
-          type: string
-          format: date
-        description: Laatst gewijzigd
       - name: limit
         required: false
         in: query

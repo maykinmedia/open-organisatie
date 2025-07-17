@@ -38,7 +38,7 @@ class MedewerkerReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
-    @action(detail=True, methods=["get"], url_path="teams")
+    @action(detail=True, methods=["get"], url_path="teams", filter_backends=[])
     def teams(self, request, *args, **kwargs):
         medewerker = self.get_object()
         teams = medewerker.scim_groups.all()
