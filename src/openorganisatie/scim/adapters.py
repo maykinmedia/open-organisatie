@@ -36,6 +36,17 @@ class MedewerkerAdapter(SCIMUser):
             return [{"value": self.obj.phone_number, "type": "work"}]
         return []
 
+    @property
+    def groups(self):
+        return [
+            {
+                "value": str(team.scim_external_id),
+                "$ref": GroepenAdapter(team, request=self.request).location,
+                "display": team.name,
+            }
+            for team in self.obj.scim_groups.all()
+        ]
+
     def to_dict(self):
         d = super().to_dict()
 
