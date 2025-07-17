@@ -1,0 +1,31 @@
+[
+    {
+        "model": "admin_index.appgroup",
+        "fields": {
+            "order": 0,
+            "translations": {
+                "en": "Scim"
+            },
+            "name": "Scim",
+            "slug": "scim",
+            "models": [
+                [
+                    "scim",
+                    "medewerker"
+                ],
+                [
+                    "scim",
+                    "organisatorischeeenheid"
+                ],
+                [
+                    "scim",
+                    "team"
+                ],
+                [
+                    "scim",
+                    "vestiging"
+                ]
+            ]
+        }
+    }
+]
