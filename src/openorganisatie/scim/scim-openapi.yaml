@@ -91,6 +91,77 @@ paths:
               schema:
                 $ref: '#/components/schemas/Medewerker'
           description: ''
+  /medewerkers/{oid}/teams:
+    get:
+      operationId: medewerkers_teams_list
+      description: Geef een lijst terug van alle teams waar de medewerker lid van
+        is.
+      summary: Alle teams van een specifieke medewerker opvragen.
+      parameters:
+      - in: query
+        name: actief
+        schema:
+          type: boolean
+        description: Actief
+      - in: query
+        name: datumToegevoegd
+        schema:
+          type: string
+          format: date
+        description: Datum toegevoegd
+      - in: query
+        name: datumUitDienst
+        schema:
+          type: string
+          format: date
+        description: Datum uit dienst
+      - in: query
+        name: functie
+        schema:
+          type: string
+        description: Functie
+      - in: query
+        name: geslachtsaanduiding
+        schema:
+          type: boolean
+        description: Geslachtsaanduiding
+      - in: query
+        name: laatstGewijzigd
+        schema:
+          type: string
+          format: date
+        description: Laatst gewijzigd
+      - name: limit
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: path
+        name: oid
+        schema:
+          type: string
+          format: uuid
+          title: Azure Object ID
+          description: Unieke Azure Active Directory Object ID van de medewerker.
+        required: true
+      tags:
+      - Medewerkers
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTeamList'
+          description: ''
 components:
   schemas:
     Medewerker:
@@ -159,6 +230,44 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Medewerker'
+    PaginatedTeamList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+    Team:
+      type: object
+      properties:
+        oid:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+        beschrijving:
+          type: string
+      required:
+      - beschrijving
+      - naam
+      - oid
   securitySchemes:
     tokenAuth:
       type: http
