@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 from openorganisatie.scim.models.factories.medewerker import MedewerkerFactory
+from openorganisatie.scim.models.factories.team import TeamFactory
 
 User = get_user_model()
 
@@ -55,3 +56,22 @@ class MedewerkerAPITests(TestCase):
         response = client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_medewerker_teams(self):
+        medewerker = MedewerkerFactory()
+        team1 = TeamFactory(name="Team 1")
+        team2 = TeamFactory(name="Team 2")
+        medewerker.scim_groups.set([team1, team2])
+
+        url = reverse(
+            "scim_api:medewerker-teams", kwargs={"oid": str(medewerker.username)}
+        )
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(len(data), 2)
+        team_names = {team["naam"] for team in data}
+        self.assertIn("Team 1", team_names)
+        self.assertIn("Team 2", team_names)
