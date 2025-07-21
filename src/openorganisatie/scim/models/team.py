@@ -15,13 +15,6 @@ class Team(AbstractSCIMGroupMixin, models.Model):
         verbose_name="Beschrijving",
         help_text="Optionele beschrijving van het team.",
     )
-    user_set = models.ManyToManyField(
-        "scim.Medewerker",
-        related_name="scim_groups",
-        blank=True,
-        verbose_name="Medewerkers",
-        help_text="Medewerkers die lid zijn van dit team.",
-    )
     active = models.BooleanField(
         default=True,
         verbose_name="Actief",
