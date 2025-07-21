@@ -1,5 +1,5 @@
 Open Organisatie Documentation
-=============
+==============================
 
 Getting started
 ---------------
@@ -16,4 +16,5 @@ To get you started, you might find some of these links relevant:
    :maxdepth: 2
    :hidden:
 
-   introduction/index
+   introduction/index   
+   install/index

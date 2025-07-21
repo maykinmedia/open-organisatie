@@ -8,10 +8,14 @@
 import os
 import sys
 
+import django
+from django.utils.translation import activate
+
 sys.path.insert(0, os.path.abspath("../src"))
+os.environ["LOG_REQUESTS"] = "false"
 
 import openorganisatie  # noqa isort:skip
-
+from openorganisatie.setup import setup_env  # noqa isort:skip
 # from objects.setup import setup_env  # noqa isort:skip
 
 # TODO: This needs to be enabled when we want to use autodoc to grab
@@ -19,8 +23,8 @@ import openorganisatie  # noqa isort:skip
 # causes RTD to fail because GDAL is not present in the RTD environment.
 # See: https://github.com/readthedocs/readthedocs-docker-images/issues/114#issuecomment-570566599
 #
-# setup_env()
-# django.setup()
+setup_env()
+django.setup()
 
 # -- Project information -----------------------------------------------------
 
@@ -38,10 +42,10 @@ release = openorganisatie.__version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    # "sphinx.ext.todo",
-    # "sphinx_tabs.tabs",
-    # "recommonmark",
-    # "sphinx_markdown_tables",
+    "sphinx.ext.todo",
+    "sphinx_tabs.tabs",
+    "recommonmark",
+    "sphinx_markdown_tables",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -53,6 +57,12 @@ templates_path = ["_templates"]
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
 language = "en"
+
+
+# Also set the language to English for Django, to make sure that any translatable text
+# is also shown in English (for instance the help texts
+# for setup configuration examples)
+activate("en")
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
