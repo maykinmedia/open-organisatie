@@ -1,7 +1,7 @@
-Who's openorganisatie?
+Who's Open oOrganisatie?
 =========================================
 
-The openorganisatie project was initiated by Maykin.
+The Open Organisatie project was initiated by Maykin.
 
 Maykin currently is the maintainer of the concept API standard, as well as the 
 component itself.

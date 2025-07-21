@@ -24,8 +24,8 @@ import openorganisatie  # noqa isort:skip
 
 # -- Project information -----------------------------------------------------
 
-project = "openorganisatie"
-copyright = "Maykin B.V. 2025"
+project = "Open Organisatie"
+copyright = "Maykin B.V. 2025"  # noqa: A001
 author = openorganisatie.__author__
 
 # The full version, including alpha/beta/rc tags
