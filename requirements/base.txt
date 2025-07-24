@@ -14,6 +14,7 @@ asgiref==3.8.1
     #   django
     #   django-axes
     #   django-cors-headers
+    #   django-structlog
 asn1crypto==1.5.1
     # via webauthn
 attrs==25.3.0
@@ -101,6 +102,7 @@ django==5.2.3
     #   django-setup-configuration
     #   django-simple-certmanager
     #   django-solo
+    #   django-structlog
     #   django-two-factor-auth
     #   django-upgrade-check
     #   djangorestframework
@@ -144,7 +146,9 @@ django-formtools==2.5.1
 django-hijack==3.7.2
     # via -r requirements/base.in
 django-ipware==7.0.1
-    # via django-axes
+    # via
+    #   django-axes
+    #   django-structlog
 django-jsonform==2.23.2
     # via
     #   mozilla-django-oidc-db
@@ -188,6 +192,8 @@ django-solo==2.4.0
     #   mozilla-django-oidc-db
     #   notifications-api-common
     #   zgw-consumers
+django-structlog==9.1.1
+    # via -r requirements/base.in
 django-two-factor-auth==1.17.0
     # via maykin-2fa
 django-upgrade-check==1.1.0
@@ -394,6 +400,8 @@ smartypants==2.0.2
     # via django-markup
 sqlparse==0.5.3
     # via django
+structlog==25.4.0
+    # via django-structlog
 textile==4.0.3
     # via django-markup
 tornado==6.5.1
