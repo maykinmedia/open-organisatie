@@ -55,7 +55,7 @@ LOGGING["loggers"].update(
         # Autoreload logs excessively, turn it down a bit.
         #
         "django.utils.autoreload": {
-            "handlers": ["django"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },
