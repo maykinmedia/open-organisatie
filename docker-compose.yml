@@ -9,6 +9,8 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - open-organisatie-dev
 
   web:
     build: .
@@ -25,6 +27,15 @@ services:
       - 8000:8000
     depends_on:
       - db
+    labels:
+      - app=open-organisatie
+      - service=api
+    networks:
+      - open-organisatie-dev
+
+networks:
+  open-organisatie-dev:
+    name: open-organisatie-dev
 
 # See: src/openorganisatie/conf/docker.py
 # Optional containers below:
