@@ -12,6 +12,11 @@ services:
     networks:
       - open-organisatie-dev
 
+  redis:
+    image: redis
+    networks:
+      - open-organisatie-dev 
+
   web:
     build: .
     image: maykinmedia/openorganisatie:latest
@@ -21,6 +26,8 @@ services:
       - DB_NAME=openorganisatie
       - DB_USER=openorganisatie
       - DB_HOST=db
+      - CACHE_DEFAULT=redis:6379/0
+      - CACHE_AXES=redis:6379/0
       # Only allow all hosts for development/testing purposes!
       - ALLOWED_HOSTS=*
     ports:
