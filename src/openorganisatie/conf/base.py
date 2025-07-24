@@ -10,7 +10,7 @@ import structlog
 from open_api_framework.conf.base import *  # noqa
 from open_api_framework.conf.utils import config
 
-from .utils import config, get_sentry_integrations
+from .utils import get_sentry_integrations
 
 # Build paths inside the project, so further paths can be defined relative to
 # the code root.
