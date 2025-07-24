@@ -1,5 +1,5 @@
-Who's Open oOrganisatie?
-=========================================
+Who's Open Organisatie?
+=======================
 
 The Open Organisatie project was initiated by Maykin.
 

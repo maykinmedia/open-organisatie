@@ -1,6 +1,6 @@
-==================
-openorganisatie
-==================
+================
+Open Organisatie
+================
 
 :Version: 0.1.0
 :Source: https://github.com/maykinmedia/openorganisatie
