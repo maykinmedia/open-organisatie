@@ -55,6 +55,16 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - in: query
+        name: teams
+        schema:
+          type: array
+          items:
+            type: string
+            nullable: true
+        description: Teams
+        explode: true
+        style: form
       tags:
       - Medewerkers
       security:
@@ -157,6 +167,11 @@ components:
           nullable: true
         actief:
           type: boolean
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+          readOnly: true
         datum_toegevoegd:
           type: string
           format: date-time
@@ -173,6 +188,7 @@ components:
       - geslachtsaanduiding
       - laatst_gewijzigd
       - oid
+      - teams
       - voornaam
     PaginatedMedewerkerList:
       type: object

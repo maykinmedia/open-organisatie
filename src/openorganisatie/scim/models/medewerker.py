@@ -53,6 +53,13 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
         verbose_name="Actief",
         help_text="Geeft aan of de medewerker momenteel actief is.",
     )
+    scim_groups = models.ManyToManyField(
+        "scim.Team",
+        related_name="user_set",
+        blank=True,
+        verbose_name="Teams",
+        help_text="Teams van de medewerker.",
+    )
     date_joined = models.DateTimeField(
         default=timezone.now,
         editable=False,

@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from openorganisatie.scim.models import Medewerker
 
+from ..serializers.team import TeamSerializer
+
 
 class MedewerkerSerializer(serializers.ModelSerializer):
     oid = serializers.UUIDField(source="username", read_only=True)
@@ -19,6 +21,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         source="termination_date", required=False, allow_null=True
     )
     actief = serializers.BooleanField(source="is_active")
+    teams = TeamSerializer(source="scim_groups", many=True, read_only=True)
     datum_toegevoegd = serializers.DateTimeField(source="date_joined", read_only=True)
     laatst_gewijzigd = serializers.DateTimeField(source="last_modified", read_only=True)
 
@@ -34,6 +37,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "geslachtsaanduiding",
             "datum_uit_dienst",
             "actief",
+            "teams",
             "datum_toegevoegd",
             "laatst_gewijzigd",
         ]
