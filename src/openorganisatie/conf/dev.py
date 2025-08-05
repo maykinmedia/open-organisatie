@@ -16,6 +16,7 @@ os.environ.setdefault("DB_USER", "openorganisatie")
 os.environ.setdefault("DB_PASSWORD", "openorganisatie")
 
 os.environ.setdefault("ENVIRONMENT", "development")
+os.environ.setdefault("LOG_FORMAT_CONSOLE", "plain_console")
 
 from .base import *  # noqa isort:skip
 
@@ -32,29 +33,29 @@ LOGGING["loggers"].update(
         "openorganisatie": {
             "handlers": ["console"],
             "level": "DEBUG",
-            "propagate": True,
+            "propagate": False,
         },
         "django": {
             "handlers": ["console"],
             "level": "DEBUG",
-            "propagate": True,
+            "propagate": False,
         },
         "django.db.backends": {
-            "handlers": ["django"],
+            "handlers": ["json_file"],
             "level": "DEBUG",
             "propagate": False,
         },
         "performance": {
             "handlers": ["console"],
             "level": "INFO",
-            "propagate": True,
+            "propagate": False,
         },
         #
         # See: https://code.djangoproject.com/ticket/30554
         # Autoreload logs excessively, turn it down a bit.
         #
         "django.utils.autoreload": {
-            "handlers": ["django"],
+            "handlers": ["console"],
             "level": "INFO",
             "propagate": False,
         },

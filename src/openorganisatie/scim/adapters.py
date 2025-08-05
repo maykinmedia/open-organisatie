@@ -3,10 +3,13 @@ from urllib.parse import urljoin
 
 from django.urls import reverse
 
+import structlog
 from django_scim.adapters import SCIMGroup, SCIMUser
 
 from .models.medewerker import Medewerker
 from .models.team import Team
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 class MedewerkerAdapter(SCIMUser):
@@ -15,6 +18,7 @@ class MedewerkerAdapter(SCIMUser):
     url_name = "scim:user-detail"
 
     def delete(self, *args, **kwargs):
+        logger.info("scim_medewerker_deleted", username=self.id)
         self.model.objects.filter(**{self.id_field: self.id}).delete()
 
     @property
@@ -87,6 +91,13 @@ class MedewerkerAdapter(SCIMUser):
 
         self.obj.save()
 
+        logger.info(
+            "add_scim_medewerker",
+            username=str(self.obj.username),
+            first_name=self.obj.first_name,
+            last_name=self.obj.last_name,
+        )
+
     def handle_operations(self, operations):
         for op in operations:
             operation = op["op"].lower()
@@ -113,6 +124,12 @@ class MedewerkerAdapter(SCIMUser):
                     self.obj.username = ""
 
         self.obj.save()
+
+        logger.info(
+            "scim_medewerker_operations_applied",
+            username=str(self.obj.username),
+            operations=operations,
+        )
 
 
 class GroepenAdapter(SCIMGroup):
@@ -142,6 +159,13 @@ class GroepenAdapter(SCIMGroup):
 
             for user in users:
                 self.obj.user_set.add(user)
+
+            logger.info(
+                "scim_group_members_added",
+                team=str(self.obj.name),
+                team_id=str(self.obj.scim_external_id),
+                added_members=[str(user.username) for user in users],
+            )
         else:
             raise NotImplementedError
 
@@ -157,5 +181,12 @@ class GroepenAdapter(SCIMGroup):
 
             for user in users:
                 self.obj.user_set.remove(user)
+
+            logger.info(
+                "scim_group_members_removed",
+                team=str(self.obj.name),
+                team_id=str(self.obj.scim_external_id),
+                removed_members=[str(user.username) for user in users],
+            )
         else:
             raise NotImplementedError

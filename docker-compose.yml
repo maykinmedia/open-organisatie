@@ -9,6 +9,13 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - open-organisatie-dev
+
+  redis:
+    image: redis
+    networks:
+      - open-organisatie-dev 
 
   web:
     build: .
@@ -19,12 +26,23 @@ services:
       - DB_NAME=openorganisatie
       - DB_USER=openorganisatie
       - DB_HOST=db
+      - CACHE_DEFAULT=redis:6379/0
+      - CACHE_AXES=redis:6379/0
       # Only allow all hosts for development/testing purposes!
       - ALLOWED_HOSTS=*
     ports:
       - 8000:8000
     depends_on:
       - db
+    labels:
+      - app=open-organisatie
+      - service=api
+    networks:
+      - open-organisatie-dev
+
+networks:
+  open-organisatie-dev:
+    name: open-organisatie-dev
 
 # See: src/openorganisatie/conf/docker.py
 # Optional containers below:

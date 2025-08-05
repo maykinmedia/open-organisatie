@@ -13,6 +13,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
         # only relevant when using editable/github dependencies, which is discouraged
         # git \
         libpq-dev \
+        # required for (log) routing support in uwsgi
+        libpcre3 \
+        libpcre3-dev \
         shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
 
@@ -59,6 +62,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
         mime-support \
         postgresql-client \
         gettext \
+        libpcre3 \
         shared-mime-info \
         # lxml deps
         # libxslt \
@@ -70,6 +74,7 @@ COPY ./bin/docker_start.sh /start.sh
 # COPY ./bin/celery_worker.sh /celery_worker.sh
 # COPY ./bin/celery_beat.sh /celery_beat.sh
 # COPY ./bin/celery_flower.sh /celery_flower.sh
+COPY ./bin/uwsgi.ini /
 RUN mkdir /app/bin /app/log /app/media
 
 VOLUME ["/app/log", "/app/media"]
