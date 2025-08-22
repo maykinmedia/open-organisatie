@@ -449,7 +449,7 @@ webencodings==0.5.1
     # via bleach
 wrapt==1.17.2
     # via elastic-apm
-zgw-consumers==0.38.1
+zgw-consumers==1.0.0
     # via
     #   commonground-api-common
     #   notifications-api-common

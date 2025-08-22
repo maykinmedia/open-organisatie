@@ -894,7 +894,7 @@ wrapt==1.17.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   elastic-apm
-zgw-consumers==0.38.1
+zgw-consumers==1.0.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
