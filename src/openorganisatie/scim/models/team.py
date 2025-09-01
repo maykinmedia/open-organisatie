@@ -1,9 +1,14 @@
+import uuid
+
 from django.db import models
 
 from django_scim.models import AbstractSCIMGroupMixin
 
 
 class Team(AbstractSCIMGroupMixin, models.Model):
+    uuid = models.UUIDField(
+        unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
+    )
     name = models.CharField(
         max_length=100,
         unique=True,

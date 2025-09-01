@@ -3,6 +3,8 @@ from django.utils import timezone
 
 from django_scim.models import AbstractSCIMCommonAttributesMixin
 
+from ..enums.enums import GenderIndicator
+
 
 class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
     username = models.UUIDField(
@@ -22,13 +24,13 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
     email = models.EmailField(
         unique=True,
         verbose_name="E-mailadres",
-        help_text="Uniek e-mailadres van de medewerker.",
+        help_text="E-mailadres van de medewerker.",
     )
     job_title = models.CharField(
         max_length=100,
         blank=True,
         verbose_name="Functie",
-        help_text="Functie of functiebenaming van de medewerker (optioneel).",
+        help_text="Functie van de medewerker (optioneel).",
     )
     phone_number = models.CharField(
         max_length=30,
@@ -36,10 +38,12 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
         verbose_name="Telefoonnummer",
         help_text="Telefoonnummer van de medewerker (optioneel).",
     )
-    gender_indicator = models.BooleanField(
-        default=True,
+    gender_indicator = models.CharField(
+        choices=GenderIndicator.choices,
+        max_length=10,
+        blank=True,
         verbose_name="Geslachtsaanduiding",
-        help_text="Geslachtsaanduiding: waar of niet waar.",
+        help_text="Geslachtsaanduiding (optioneel).",
     )
     termination_date = models.DateField(
         blank=True,
@@ -59,6 +63,22 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
         blank=True,
         verbose_name="Teams",
         help_text="Teams van de medewerker.",
+    )
+    branch = models.ManyToManyField(
+        "scim.Vestiging",
+        related_name="medewerkers",
+        blank=True,
+        verbose_name="Vestigingen",
+        help_text="Vestigingen waaraan de medewerker gekoppeld is.",
+    )
+    contactpersoon = models.ForeignKey(
+        "scim.Contactpersoon",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="medewerkers",
+        verbose_name="Contactpersoon",
+        help_text="Contactpersoon van de medewerker (optioneel).",
     )
     date_joined = models.DateTimeField(
         default=timezone.now,

@@ -8,7 +8,17 @@ class TeamAdmin(admin.ModelAdmin):
     list_display = ("name", "active", "display_medewerkers")
     search_fields = ("name", "description")
     list_filter = ("active",)
-    readonly_fields = ("display_medewerkers",)
+    readonly_fields = ("display_medewerkers", "uuid")
+
+    fieldsets = (
+        ("Algemene informatie", {"fields": ("uuid", "name", "description", "active")}),
+        (
+            "Medewerkers",
+            {
+                "fields": ("display_medewerkers",),
+            },
+        ),
+    )
 
     def display_medewerkers(self, obj):
         return ", ".join(

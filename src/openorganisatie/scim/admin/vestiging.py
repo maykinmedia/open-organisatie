@@ -5,15 +5,40 @@ from ..models.vestiging import Vestiging
 
 @admin.register(Vestiging)
 class VestigingAdmin(admin.ModelAdmin):
-    list_display = ("name", "organisational_unit", "active")
-    search_fields = ("name", "address")
-    list_filter = ("active", "organisational_unit")
-    filter_horizontal = ("employees",)
+    list_display = ("branchname", "organisational_unit", "branchnumber")
+    search_fields = ("branchname", "address")
+    list_filter = ("organisational_unit",)
+    readonly_fields = ("uuid",)
+
+    fieldsets = (
+        (
+            "Algemene informatie",
+            {
+                "fields": (
+                    "uuid",
+                    "branchnumber",
+                    "branchname",
+                    "short_name",
+                    "country_code",
+                )
+            },
+        ),
+        (
+            "Contactgegevens",
+            {
+                "fields": (
+                    "address",
+                    "correspondence_address",
+                    "postal_address",
+                    "phone_number",
+                )
+            },
+        ),
+        (
+            "Relaties",
+            {"fields": ("organisational_unit",)},
+        ),
+    )
 
     def get_queryset(self, request):
-        return (
-            super()
-            .get_queryset(request)
-            .select_related("organisational_unit")
-            .prefetch_related("employees")
-        )
+        return super().get_queryset(request).select_related("organisational_unit")
