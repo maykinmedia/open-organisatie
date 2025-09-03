@@ -1,26 +1,59 @@
+import uuid
+
 from django.db import models
-from django.utils import timezone
 
 
 class Vestiging(models.Model):
-    name = models.CharField(
+    uuid = models.UUIDField(
+        unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
+    )
+    branchnumber = models.CharField(
+        max_length=50,
+        unique=True,
+        verbose_name="Vestigingsnummer",
+        help_text="Unieke identificatiecode of nummer van de vestiging.",
+    )
+    branchname = models.CharField(
         max_length=100,
         unique=True,
         verbose_name="Naam",
-        help_text="Naam van de vestiging.",
+        help_text="Volledige naam van de vestiging.",
+    )
+    short_name = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Korte naam",
+        help_text="Afkorting of korte naam van de vestiging.",
     )
     address = models.CharField(
         max_length=255,
         blank=True,
         verbose_name="Adres",
-        help_text="Adres van de vestiging (optioneel).",
+        help_text="Fysiek adres van de vestiging (optioneel).",
     )
-    employees = models.ManyToManyField(
-        "scim.Medewerker",
-        related_name="vestigingen",
+    correspondence_address = models.CharField(
+        max_length=255,
         blank=True,
-        verbose_name="Medewerkers",
-        help_text="Medewerkers die aan deze vestiging gekoppeld zijn.",
+        verbose_name="Correspondentieadres",
+        help_text="Adres voor correspondentie (optioneel).",
+    )
+    postal_address = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Post adres",
+        help_text="Post adres van de vestiging (optioneel).",
+    )
+    phone_number = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Telefoonnummer",
+        help_text="Telefoonnummer van de vestiging (optioneel).",
+    )
+    country_code = models.CharField(
+        max_length=2,
+        blank=True,
+        verbose_name="Landcode",
+        help_text="ISO-landcode van de vestiging (bijv. NL, BE).",
     )
     organisational_unit = models.ForeignKey(
         "scim.OrganisatorischeEenheid",
@@ -29,26 +62,10 @@ class Vestiging(models.Model):
         verbose_name="Organisatorische eenheid",
         help_text="De organisatorische eenheid waartoe deze vestiging behoort.",
     )
-    active = models.BooleanField(
-        default=True,
-        verbose_name="Actief",
-        help_text="Geeft aan of de vestiging momenteel actief is.",
-    )
-    date_created = models.DateTimeField(
-        default=timezone.now,
-        editable=False,
-        verbose_name="Datum toegevoegd",
-        help_text="Datum waarop de vestiging is toegevoegd.",
-    )
-    last_modified = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Laatst gewijzigd",
-        help_text="Datum waarop de vestiging voor het laatst is gewijzigd.",
-    )
 
     class Meta:
         verbose_name = "Vestiging"
         verbose_name_plural = "Vestigingen"
 
     def __str__(self):
-        return self.name
+        return self.branchname

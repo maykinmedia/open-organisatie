@@ -1,3 +1,4 @@
+from .contactpersoon import ContactpersoonAdmin
 from .medewerker import MedewerkerAdmin
 from .organisatorische_eenheid import OrganisatorischeEenheidAdmin
 from .team import TeamAdmin
@@ -8,4 +9,5 @@ __all__ = [
     "OrganisatorischeEenheidAdmin",
     "VestigingAdmin",
     "TeamAdmin",
+    "ContactpersoonAdmin",
 ]
