@@ -22,6 +22,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
     )
     actief = serializers.BooleanField(source="is_active")
     teams = TeamSerializer(source="scim_groups", many=True, read_only=True)
+    # TODO: add vestiging serializer
     datum_toegevoegd = serializers.DateTimeField(source="date_joined", read_only=True)
     laatst_gewijzigd = serializers.DateTimeField(source="last_modified", read_only=True)
 

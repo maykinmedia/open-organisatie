@@ -6,12 +6,12 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
-from openorganisatie.scim.models.factories.medewerker import MedewerkerFactory
+from openorganisatie.scim.models.factories.team import TeamFactory
 
 User = get_user_model()
 
 
-class MedewerkerAPITests(TestCase):
+class TeamAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
@@ -20,38 +20,37 @@ class MedewerkerAPITests(TestCase):
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token.key}")
 
-    def test_list_medewerkers(self):
-        url = reverse("scim_api:medewerker-list")
-        MedewerkerFactory.create_batch(2)
+    def test_list_teams(self):
+        url = reverse("scim_api:team-list")
+        TeamFactory.create_batch(3)
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        data = response.json()
-        self.assertEqual(len(data["results"]), 2)
+        data = response.json()["results"]
+        self.assertEqual(len(data), 3)
 
-    def test_read_medewerker_detail(self):
-        medewerker = MedewerkerFactory()
+        for team in data:
+            self.assertIn("oid", team)
+            self.assertIn("naam", team)
+            self.assertIn("beschrijving", team)
+
+    def test_team_detail(self):
+        team = TeamFactory()
 
         detail_url = reverse(
-            "scim_api:medewerker-detail", kwargs={"oid": str(medewerker.username)}
+            "scim_api:team-detail", kwargs={"oid": team.scim_external_id}
         )
-
         response = self.client.get(detail_url)
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()
-
-        self.assertEqual(data["oid"], str(medewerker.username))
-        self.assertEqual(data["voornaam"], medewerker.first_name)
-        self.assertEqual(data["achternaam"], medewerker.last_name)
-        self.assertEqual(data["emailadres"], medewerker.email)
+        self.assertEqual(data["oid"], str(team.scim_external_id))
+        self.assertEqual(data["naam"], team.name)
+        self.assertEqual(data["beschrijving"], team.description)
 
     def test_authentication_required(self):
         client = APIClient()
-
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("scim_api:team-list")
         response = client.get(url)
-
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

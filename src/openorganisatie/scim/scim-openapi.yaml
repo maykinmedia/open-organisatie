@@ -164,44 +164,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Medewerker'
           description: ''
-  /medewerkers/{oid}/teams:
-    get:
-      operationId: medewerkers_teams_list
-      description: Geef een lijst terug van alle teams waar de medewerker lid van
-        is.
-      summary: Alle teams van een specifieke medewerker opvragen.
-      parameters:
-      - name: limit
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
-      - name: offset
-        required: false
-        in: query
-        description: The initial index from which to return the results.
-        schema:
-          type: integer
-      - in: path
-        name: oid
-        schema:
-          type: string
-          format: uuid
-          title: Azure Object ID
-          description: Unieke Azure Active Directory Object ID van de medewerker.
-        required: true
-      tags:
-      - Medewerkers
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedTeamList'
-          description: ''
   /organisatorische-eenheid:
     get:
       operationId: organisatorische_eenheid_list
@@ -296,6 +258,69 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrganisatorischeEenheid'
+          description: ''
+  /teams:
+    get:
+      operationId: teams_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle teams opvragen.
+      parameters:
+      - in: query
+        name: actief
+        schema:
+          type: boolean
+        description: Actief
+      - name: limit
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - Team
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTeamList'
+          description: ''
+  /teams/{oid}:
+    get:
+      operationId: teams_retrieve
+      description: Een specifieke medewerker opvragen.
+      summary: Een specifieke team opvragen.
+      parameters:
+      - in: path
+        name: oid
+        schema:
+          type: string
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        required: true
+      tags:
+      - Team
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
           description: ''
   /vestiging:
     get:
