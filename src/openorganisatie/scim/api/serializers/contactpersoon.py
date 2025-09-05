@@ -4,7 +4,7 @@ from openorganisatie.scim.models.contactpersoon import Contactpersoon
 
 
 class ContactpersoonSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(source="uuid", read_only=True)
+    uuid = serializers.UUIDField(read_only=True)
     naam = serializers.CharField(source="name")
     functie = serializers.CharField(source="function", allow_blank=True, required=False)
     emailadres = serializers.EmailField(
@@ -16,4 +16,4 @@ class ContactpersoonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contactpersoon
-        fields = ["oid", "naam", "functie", "emailadres", "telefoonnummer"]
+        fields = ["uuid", "naam", "functie", "emailadres", "telefoonnummer"]
