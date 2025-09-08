@@ -52,3 +52,39 @@ class ContactpersoonAPITests(TestCase):
         url = reverse("scim_api:contactpersoon-list")
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_naam_filter(self):
+        cp_1 = ContactpersoonFactory(name="Tim")
+        ContactpersoonFactory(name="Bob")
+
+        url = reverse("scim_api:contactpersoon-list")
+
+        response = self.client.get(url, {"naam": "Tim"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(cp_1.uuid))
+
+    def test_functie_filter(self):
+        cp_1 = ContactpersoonFactory(function="Manager")
+        ContactpersoonFactory(function="Developer")
+
+        url = reverse("scim_api:contactpersoon-list")
+
+        response = self.client.get(url, {"functie": "Manager"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertCountEqual(
+            [cp["uuid"] for cp in response.data["results"]],
+            [str(cp_1.uuid)],
+        )
+
+    def test_combined_naam_functie_filter(self):
+        cp_1 = ContactpersoonFactory(name="Tim", function="Developer")
+        ContactpersoonFactory(name="Bob", function="Manager")
+
+        url = reverse("scim_api:contactpersoon-list")
+
+        response = self.client.get(url, {"naam": "Tim", "functie": "Developer"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(cp_1.uuid))
