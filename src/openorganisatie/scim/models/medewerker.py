@@ -80,6 +80,12 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
         verbose_name="Contactpersoon",
         help_text="Contactpersoon van de medewerker (optioneel).",
     )
+    app_roles = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="App-rollen",
+        help_text="App-rollen van de medewerker in Entra ID, opgeslagen als een lijst van dicts.",
+    )
     date_joined = models.DateTimeField(
         default=timezone.now,
         editable=False,

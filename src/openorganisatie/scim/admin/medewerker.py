@@ -25,6 +25,7 @@ class MedewerkerAdmin(admin.ModelAdmin):
             "Algemene informatie",
             {
                 "fields": (
+                    "app_roles",
                     "username",
                     "first_name",
                     "last_name",

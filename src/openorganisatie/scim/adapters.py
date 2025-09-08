@@ -41,6 +41,16 @@ class MedewerkerAdapter(SCIMUser):
         return []
 
     @property
+    def roles(self):
+        return [
+            {
+                "value": r.get("value"),
+                "display": r.get("display") or r.get("value"),
+            }
+            for r in (self.obj.app_roles or [])
+        ]
+
+    @property
     def groups(self):
         return [
             {
@@ -59,6 +69,7 @@ class MedewerkerAdapter(SCIMUser):
                 "userName": str(self.obj.username),
                 "phoneNumbers": self.phone_numbers,
                 "jobTitle": self.obj.job_title,
+                "roles": self.roles,
             }
         )
 
@@ -88,6 +99,18 @@ class MedewerkerAdapter(SCIMUser):
         job_title = d.get("jobTitle")
         if job_title is not None:
             self.obj.job_title = job_title
+
+        roles = d.get("roles", [])
+
+        if roles:
+            self.obj.app_roles = []
+            for role in roles:
+                self.obj.app_roles.append(
+                    {
+                        "value": role.get("value"),
+                        "display": role.get("display") or role.get("value"),
+                    }
+                )
 
         self.obj.save()
 
@@ -128,7 +151,6 @@ class MedewerkerAdapter(SCIMUser):
         logger.info(
             "scim_medewerker_operations_applied",
             username=str(self.obj.username),
-            operations=operations,
         )
 
 
