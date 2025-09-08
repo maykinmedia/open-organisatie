@@ -520,37 +520,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contactpersoon'
-    OrganisatorischeEenheid:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        identificatie:
-          type: string
-        naam:
-          type: string
-        type_organisatie:
-          type: string
-        verkorte_naam:
-          type: string
-        beschrijving:
-          type: string
-        emailadres:
-          type: string
-          format: email
-        telefoonnummer:
-          type: string
-        einddatum:
-          type: string
-          format: date
-          nullable: true
-      required:
-      - identificatie
-      - naam
-      - type_organisatie
-      - uuid
     PaginatedMedewerkerList:
       type: object
       required:
