@@ -100,12 +100,6 @@ paths:
         schema:
           type: boolean
         description: Geslachtsaanduiding
-      - in: query
-        name: laatstGewijzigd
-        schema:
-          type: string
-          format: date
-        description: Laatst gewijzigd
       - name: limit
         required: false
         in: query
@@ -648,7 +642,10 @@ components:
           type: string
         beschrijving:
           type: string
+        actief:
+          type: boolean
       required:
+      - actief
       - beschrijving
       - naam
       - oid

@@ -46,3 +46,26 @@ class TeamAPITests(APITestCase):
         url = reverse("scim_api:team-list")
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_filter_naam(self):
+        team1 = TeamFactory(name="Finance Team")
+        TeamFactory(name="HR Team")
+
+        url = reverse("scim_api:team-list")
+        response = self.client.get(url, {"naam": "finance"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["naam"], team1.name)
+
+    def test_filter_actief(self):
+        team1 = TeamFactory(active=True)
+        TeamFactory(active=False)
+
+        url = reverse("scim_api:team-list")
+        response = self.client.get(url, {"actief": "true"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["actief"], team1.active)

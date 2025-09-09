@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import date, datetime
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.utils.timezone import make_aware
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -111,8 +112,8 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
 
     def test_filter_datum_toegevoegd(self):
-        m1 = MedewerkerFactory(date_joined=date(2025, 1, 1))
-        MedewerkerFactory(date_joined=date(2026, 1, 1))
+        m1 = MedewerkerFactory(date_joined=make_aware(datetime(2025, 1, 1)))
+        MedewerkerFactory(date_joined=make_aware(datetime(2026, 1, 1)))
 
         url = reverse("scim_api:medewerker-list")
         response = self.client.get(url, {"datum_toegevoegd": "2025-01-01"})
@@ -120,17 +121,4 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(
             response.data["results"][0]["datum_toegevoegd"], m1.date_joined.isoformat()
-        )
-
-    def test_filter_laatst_gewijzigd(self):
-        m1 = MedewerkerFactory(last_modified=date(2025, 2, 1))
-        MedewerkerFactory(last_modified=date(2026, 2, 1))
-
-        url = reverse("scim_api:medewerker-list")
-        response = self.client.get(url, {"laatst_gewijzigd": "2025-02-01"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["laatst_gewijzigd"],
-            m1.last_modified.isoformat(),
         )
