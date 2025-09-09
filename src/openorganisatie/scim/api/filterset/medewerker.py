@@ -18,6 +18,7 @@ class MedewerkerFilter(django_filters.FilterSet):
     teams = django_filters.ModelMultipleChoiceFilter(
         field_name="scim_groups__scim_external_id",
         queryset=Team.objects.all(),
+        to_field_name="scim_external_id",
         label="Teams",
     )
     datum_toegevoegd = django_filters.DateFilter(

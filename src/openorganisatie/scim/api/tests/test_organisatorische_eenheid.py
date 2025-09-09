@@ -1,29 +1,21 @@
 from datetime import date
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 from django.urls import reverse
 
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 from openorganisatie.scim.models.factories.organisatorische_eenheid import (
     OrganisatorischeEenheidFactory,
 )
 
+from .api_testcase import APITestCase
+
 User = get_user_model()
 
 
-class OrganisatorischeEenheidAPITests(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create_user(
-            username="testuser", password="password123"
-        )
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token.key}")
-
+class OrganisatorischeEenheidAPITests(APITestCase):
     def test_list_organisatorische_eenheden(self):
         url = reverse("scim_api:organisatorischeeenheid-list")
         OrganisatorischeEenheidFactory.create_batch(2)

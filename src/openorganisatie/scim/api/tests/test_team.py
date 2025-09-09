@@ -1,25 +1,17 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 from django.urls import reverse
 
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
 from openorganisatie.scim.models.factories.team import TeamFactory
 
+from .api_testcase import APITestCase
+
 User = get_user_model()
 
 
-class TeamAPITests(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create_user(
-            username="testuser", password="password123"
-        )
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token.key}")
-
+class TeamAPITests(APITestCase):
     def test_list_teams(self):
         url = reverse("scim_api:team-list")
         TeamFactory.create_batch(3)
