@@ -4,6 +4,69 @@ info:
   version: 0.1.0
   description: '......'
 paths:
+  /contactpersoon:
+    get:
+      operationId: contactpersoon_list
+      description: Deze lijst kan gefilterd worden met query-string parameters.
+      summary: Alle contactpersonen opvragen.
+      parameters:
+      - in: query
+        name: functie
+        schema:
+          type: string
+        description: Functie
+      - name: limit
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - Contactpersonen
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContactpersoonList'
+          description: ''
+  /contactpersoon/{uuid}:
+    get:
+      operationId: contactpersoon_retrieve
+      description: Een specifieke contactpersoon opvragen via UUID.
+      summary: Een specifieke contactpersoon opvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Contactpersonen
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
+          description: ''
   /medewerkers:
     get:
       operationId: medewerkers_list
@@ -141,6 +204,25 @@ paths:
           description: ''
 components:
   schemas:
+    Contactpersoon:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        naam:
+          type: string
+        functie:
+          type: string
+        emailadres:
+          type: string
+          format: email
+        telefoonnummer:
+          type: string
+      required:
+      - naam
+      - uuid
     Medewerker:
       type: object
       properties:
@@ -190,6 +272,29 @@ components:
       - oid
       - teams
       - voornaam
+    PaginatedContactpersoonList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contactpersoon'
     PaginatedMedewerkerList:
       type: object
       required:

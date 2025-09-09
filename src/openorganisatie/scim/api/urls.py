@@ -8,12 +8,14 @@ from drf_spectacular.views import (
 from vng_api_common import routers
 
 from .schema import custom_settings
+from .viewsets.contactpersoon import ContactpersoonReadOnlyViewSet
 from .viewsets.medewerker import MedewerkerReadOnlyViewSet
 
 app_name = "scim_api"
 
 router = routers.DefaultRouter()
 router.register("medewerkers", MedewerkerReadOnlyViewSet)
+router.register("contactpersoon", ContactpersoonReadOnlyViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
