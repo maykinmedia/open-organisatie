@@ -26,7 +26,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         for org in data["results"]:
             self.assertIn("uuid", org)
             self.assertIn("naam", org)
-            self.assertIn("type_organisatie", org)
+            self.assertIn("typeOrganisatie", org)
 
     def test_read_organisatorische_eenheid_detail(self):
         org = OrganisatorischeEenheidFactory()
@@ -43,7 +43,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(data["uuid"], str(org.uuid))
         self.assertEqual(data["identificatie"], org.identifier)
         self.assertEqual(data["naam"], org.name)
-        self.assertEqual(data["type_organisatie"], org.organization_type)
+        self.assertEqual(data["typeOrganisatie"], org.organization_type)
 
     def test_authentication_required(self):
         client = APIClient()
@@ -57,9 +57,10 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"identificatie": "12345"})
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["identificatie"], org1.identifier)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["identificatie"], org1.identifier)
 
     def test_naam_filter(self):
         org1 = OrganisatorischeEenheidFactory(name="ORG1")
@@ -67,31 +68,32 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"naam": "Org1"})
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["naam"], org1.name)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["naam"], org1.name)
 
     def test_type_organisatie_filter(self):
         org1 = OrganisatorischeEenheidFactory(organization_type="Type1")
         OrganisatorischeEenheidFactory(organization_type="Type2")
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"type_organisatie": "Type1"})
+        response = self.client.get(url, {"typeOrganisatie": "Type1"})
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["type_organisatie"], org1.organization_type
-        )
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["typeOrganisatie"], org1.organization_type)
 
     def test_verkorte_naam_filter(self):
         org1 = OrganisatorischeEenheidFactory(short_name="FIN")
         OrganisatorischeEenheidFactory(short_name="HR")
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"verkorte_naam": "FIN"})
+        response = self.client.get(url, {"verkorteNaam": "FIN"})
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["verkorte_naam"], org1.short_name)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["verkorteNaam"], org1.short_name)
 
     def test_beschrijving_filter(self):
         org1 = OrganisatorischeEenheidFactory(description="Finance divisie")
@@ -99,9 +101,10 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"beschrijving": "Finance divisie"})
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["beschrijving"], org1.description)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["beschrijving"], org1.description)
 
     def test_emailadres_filter(self):
         org1 = OrganisatorischeEenheidFactory(email_address="finance@example.com")
@@ -109,9 +112,11 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"emailadres": "finance@example.com"})
+
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["emailadres"], org1.email_address)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["emailadres"], org1.email_address)
 
     def test_telefoonnummer_filter(self):
         org1 = OrganisatorischeEenheidFactory(phone_number="0612345678")
@@ -119,11 +124,11 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"telefoonnummer": "0612345678"})
+
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["telefoonnummer"], org1.phone_number
-        )
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["telefoonnummer"], org1.phone_number)
 
     def test_einddatum_filter(self):
         org1 = OrganisatorischeEenheidFactory(end_date=date(2025, 1, 1))
@@ -131,8 +136,8 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"einddatum": "2025-01-01"})
+
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["einddatum"], org1.end_date.isoformat()
-        )
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["einddatum"], org1.end_date.isoformat())

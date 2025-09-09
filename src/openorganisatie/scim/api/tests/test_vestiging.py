@@ -37,7 +37,7 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(data["naam"], vestiging.branchname)
         self.assertEqual(data["landcode"], vestiging.country_code)
 
-        org_data = data["organisatorische_eenheid"]
+        org_data = data["organisatorischeEenheid"]
         self.assertEqual(org_data["uuid"], str(vestiging.organisational_unit.uuid))
         self.assertEqual(org_data["naam"], vestiging.organisational_unit.name)
 
@@ -55,7 +55,7 @@ class VestigingAPITests(APITestCase):
         VestigingFactory(organisational_unit=org2)
 
         url = (
-            f"{reverse('scim_api:vestiging-list')}?organisatorische_eenheid={org1.uuid}"
+            f"{reverse('scim_api:vestiging-list')}?organisatorischeEenheid={org1.uuid}"
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -91,10 +91,11 @@ class VestigingAPITests(APITestCase):
         VestigingFactory(short_name="RTM")
 
         url = reverse("scim_api:vestiging-list")
-        response = self.client.get(url, {"korte_naam": "AMS"})
+        response = self.client.get(url, {"korteNaam": "AMS"})
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["korte_naam"], v1.short_name)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["korteNaam"], v1.short_name)
 
     def test_adres_filter(self):
         v1 = VestigingFactory(address="Straat 1")

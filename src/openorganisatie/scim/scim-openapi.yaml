@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Open Organisatie
+  title: Open Organisatie API
   version: 0.1.0
   description: '......'
 paths:
@@ -15,21 +15,21 @@ paths:
         schema:
           type: string
         description: Functie
-      - name: limit
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
       - in: query
         name: naam
         schema:
           type: string
         description: Naam
-      - name: offset
+      - name: page
         required: false
         in: query
-        description: The initial index from which to return the results.
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
         schema:
           type: integer
       tags:
@@ -40,6 +40,9 @@ paths:
         '200':
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContactpersoonList'
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/PaginatedContactpersoonList'
           description: ''
@@ -64,6 +67,9 @@ paths:
         '200':
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Contactpersoon'
           description: ''
@@ -100,16 +106,16 @@ paths:
         schema:
           type: boolean
         description: Geslachtsaanduiding
-      - name: limit
+      - name: page
         required: false
         in: query
-        description: Het aantal resultaten terug te geven per pagina.
+        description: Een pagina binnen de gepagineerde set resultaten.
         schema:
           type: integer
-      - name: offset
+      - name: pageSize
         required: false
         in: query
-        description: The initial index from which to return the results.
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
         schema:
           type: integer
       - in: query
@@ -130,6 +136,9 @@ paths:
         '200':
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMedewerkerList'
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/PaginatedMedewerkerList'
           description: ''
@@ -155,6 +164,9 @@ paths:
         '200':
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Medewerker'
           description: ''
@@ -185,21 +197,21 @@ paths:
         schema:
           type: string
         description: Identificatie
-      - name: limit
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
       - in: query
         name: naam
         schema:
           type: string
         description: Naam
-      - name: offset
+      - name: page
         required: false
         in: query
-        description: The initial index from which to return the results.
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
         schema:
           type: integer
       - in: query
@@ -227,6 +239,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedOrganisatorischeEenheidList'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganisatorischeEenheidList'
           description: ''
   /organisatorische-eenheid/{uuid}:
     get:
@@ -252,6 +267,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrganisatorischeEenheid'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
           description: ''
   /teams:
     get:
@@ -264,21 +282,21 @@ paths:
         schema:
           type: boolean
         description: Actief
-      - name: limit
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
       - in: query
         name: naam
         schema:
           type: string
         description: Naam
-      - name: offset
+      - name: page
         required: false
         in: query
-        description: The initial index from which to return the results.
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
         schema:
           type: integer
       tags:
@@ -289,6 +307,9 @@ paths:
         '200':
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTeamList'
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/PaginatedTeamList'
           description: ''
@@ -313,6 +334,9 @@ paths:
         '200':
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Team'
           description: ''
@@ -342,29 +366,29 @@ paths:
         schema:
           type: string
         description: Landcode
-      - name: limit
-        required: false
-        in: query
-        description: Het aantal resultaten terug te geven per pagina.
-        schema:
-          type: integer
       - in: query
         name: naam
         schema:
           type: string
         description: Naam
-      - name: offset
-        required: false
-        in: query
-        description: The initial index from which to return the results.
-        schema:
-          type: integer
       - in: query
         name: organisatorischeEenheid
         schema:
           type: string
           format: uuid
         description: Organisatorische eenheid (UUID)
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
       - in: query
         name: postadres
         schema:
@@ -390,6 +414,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedVestigingList'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVestigingList'
           description: ''
   /vestiging/{uuid}:
     get:
@@ -412,6 +439,9 @@ paths:
         '200':
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
+            application/problem+json:
               schema:
                 $ref: '#/components/schemas/Vestiging'
           description: ''
@@ -456,7 +486,7 @@ components:
           type: string
         geslachtsaanduiding:
           type: boolean
-        datum_uit_dienst:
+        datumUitDienst:
           type: string
           format: date
           nullable: true
@@ -475,11 +505,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/Contactpersoon'
           readOnly: true
-        datum_toegevoegd:
+        datumToegevoegd:
           type: string
           format: date-time
           readOnly: true
-        laatst_gewijzigd:
+        laatstGewijzigd:
           type: string
           format: date-time
           readOnly: true
@@ -487,10 +517,10 @@ components:
       - achternaam
       - actief
       - contactpersoon
-      - datum_toegevoegd
+      - datumToegevoegd
       - emailadres
       - geslachtsaanduiding
-      - laatst_gewijzigd
+      - laatstGewijzigd
       - oid
       - teams
       - vestiging
@@ -506,9 +536,9 @@ components:
           type: string
         naam:
           type: string
-        type_organisatie:
+        typeOrganisatie:
           type: string
-        verkorte_naam:
+        verkorteNaam:
           type: string
         beschrijving:
           type: string
@@ -524,7 +554,7 @@ components:
       required:
       - identificatie
       - naam
-      - type_organisatie
+      - typeOrganisatie
       - uuid
     PaginatedContactpersoonList:
       type: object
@@ -539,12 +569,12 @@ components:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
+          example: http://api.example.org/accounts/?page=4
         previous:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
+          example: http://api.example.org/accounts/?page=2
         results:
           type: array
           items:
@@ -562,12 +592,12 @@ components:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
+          example: http://api.example.org/accounts/?page=4
         previous:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
+          example: http://api.example.org/accounts/?page=2
         results:
           type: array
           items:
@@ -585,12 +615,12 @@ components:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
+          example: http://api.example.org/accounts/?page=4
         previous:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
+          example: http://api.example.org/accounts/?page=2
         results:
           type: array
           items:
@@ -608,12 +638,12 @@ components:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
+          example: http://api.example.org/accounts/?page=4
         previous:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
+          example: http://api.example.org/accounts/?page=2
         results:
           type: array
           items:
@@ -631,12 +661,12 @@ components:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
+          example: http://api.example.org/accounts/?page=4
         previous:
           type: string
           nullable: true
           format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
+          example: http://api.example.org/accounts/?page=2
         results:
           type: array
           items:
@@ -652,7 +682,7 @@ components:
           type: string
         naam:
           type: string
-        korte_naam:
+        korteNaam:
           type: string
         adres:
           type: string
@@ -697,7 +727,7 @@ components:
           type: string
         naam:
           type: string
-        korte_naam:
+        korteNaam:
           type: string
         adres:
           type: string
@@ -709,13 +739,13 @@ components:
           type: string
         landcode:
           type: string
-        organisatorische_eenheid:
+        organisatorischeEenheid:
           allOf:
           - $ref: '#/components/schemas/OrganisatorischeEenheid'
           readOnly: true
       required:
       - naam
-      - organisatorische_eenheid
+      - organisatorischeEenheid
       - uuid
       - vestigingsnummer
   securitySchemes:
@@ -723,4 +753,4 @@ components:
       type: http
       scheme: bearer
 servers:
-- url: /medewerksers/api/v0
+- url: /medewerkers/api/v0

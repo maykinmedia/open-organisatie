@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from openorganisatie.scim.models.vestiging import Vestiging
-from openorganisatie.utils.scim_middleware import BearerTokenAuthentication
+from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..filterset.vestiging import VestigingFilter
 from ..serializers.vestiging import VestigingSerializer

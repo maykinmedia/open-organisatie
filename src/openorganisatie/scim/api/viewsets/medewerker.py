@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from openorganisatie.scim.models.medewerker import Medewerker
-from openorganisatie.utils.scim_middleware import BearerTokenAuthentication
+from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..filterset.medewerker import MedewerkerFilter
 from ..serializers.medewerker import MedewerkerSerializer
