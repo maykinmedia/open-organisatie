@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from rest_framework import status
@@ -10,8 +9,6 @@ from openorganisatie.scim.models.factories.organisatorische_eenheid import (
 from openorganisatie.scim.models.factories.vestiging import VestigingFactory
 
 from .api_testcase import APITestCase
-
-User = get_user_model()
 
 
 class VestigingAPITests(APITestCase):

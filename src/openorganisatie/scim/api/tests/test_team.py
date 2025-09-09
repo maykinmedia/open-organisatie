@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from rest_framework import status
@@ -7,8 +6,6 @@ from rest_framework.test import APIClient
 from openorganisatie.scim.models.factories.team import TeamFactory
 
 from .api_testcase import APITestCase
-
-User = get_user_model()
 
 
 class TeamAPITests(APITestCase):

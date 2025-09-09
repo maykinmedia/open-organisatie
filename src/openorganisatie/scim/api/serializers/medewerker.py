@@ -2,7 +2,9 @@ from rest_framework import serializers
 
 from openorganisatie.scim.models import Medewerker
 
+from ..serializers.contactpersoon import ContactpersoonSerializer
 from ..serializers.team import TeamSerializer
+from ..serializers.vestiging import SubVestigingSerializer
 
 
 class MedewerkerSerializer(serializers.ModelSerializer):
@@ -22,7 +24,8 @@ class MedewerkerSerializer(serializers.ModelSerializer):
     )
     actief = serializers.BooleanField(source="is_active")
     teams = TeamSerializer(source="scim_groups", many=True, read_only=True)
-    # TODO: add vestiging serializer
+    vestiging = SubVestigingSerializer(read_only=True)
+    contactpersoon = ContactpersoonSerializer(read_only=True)
     datum_toegevoegd = serializers.DateTimeField(source="date_joined", read_only=True)
     laatst_gewijzigd = serializers.DateTimeField(source="last_modified", read_only=True)
 
@@ -39,6 +42,8 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "datum_uit_dienst",
             "actief",
             "teams",
+            "vestiging",
+            "contactpersoon",
             "datum_toegevoegd",
             "laatst_gewijzigd",
         ]

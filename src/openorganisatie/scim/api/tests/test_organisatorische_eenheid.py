@@ -1,6 +1,5 @@
 from datetime import date
 
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from rest_framework import status
@@ -11,8 +10,6 @@ from openorganisatie.scim.models.factories.organisatorische_eenheid import (
 )
 
 from .api_testcase import APITestCase
-
-User = get_user_model()
 
 
 class OrganisatorischeEenheidAPITests(APITestCase):

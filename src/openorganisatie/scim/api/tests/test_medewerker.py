@@ -1,6 +1,5 @@
 from datetime import date, datetime
 
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.timezone import make_aware
 
@@ -11,8 +10,6 @@ from openorganisatie.scim.models.factories.medewerker import MedewerkerFactory
 from openorganisatie.scim.models.factories.team import TeamFactory
 
 from .api_testcase import APITestCase
-
-User = get_user_model()
 
 
 class MedewerkerAPITests(APITestCase):

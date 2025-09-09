@@ -467,6 +467,14 @@ components:
           items:
             $ref: '#/components/schemas/Team'
           readOnly: true
+        vestiging:
+          allOf:
+          - $ref: '#/components/schemas/SubVestiging'
+          readOnly: true
+        contactpersoon:
+          allOf:
+          - $ref: '#/components/schemas/Contactpersoon'
+          readOnly: true
         datum_toegevoegd:
           type: string
           format: date-time
@@ -478,12 +486,14 @@ components:
       required:
       - achternaam
       - actief
+      - contactpersoon
       - datum_toegevoegd
       - emailadres
       - geslachtsaanduiding
       - laatst_gewijzigd
       - oid
       - teams
+      - vestiging
       - voornaam
     OrganisatorischeEenheid:
       type: object
@@ -631,6 +641,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Vestiging'
+    SubVestiging:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        vestigingsnummer:
+          type: string
+        naam:
+          type: string
+        korte_naam:
+          type: string
+        adres:
+          type: string
+        correspondentieadres:
+          type: string
+        postadres:
+          type: string
+        telefoonnummer:
+          type: string
+        landcode:
+          type: string
+      required:
+      - naam
+      - uuid
+      - vestigingsnummer
     Team:
       type: object
       properties:
