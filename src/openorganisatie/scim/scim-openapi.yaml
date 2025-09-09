@@ -202,6 +202,200 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedTeamList'
           description: ''
+  /organisatorische-eenheid:
+    get:
+      operationId: organisatorische_eenheid_list
+      description: Deze lijst kan gefilterd worden met query-string parameters.
+      summary: Alle organisatorische eenheden opvragen.
+      parameters:
+      - in: query
+        name: beschrijving
+        schema:
+          type: string
+        description: Beschrijving
+      - in: query
+        name: einddatum
+        schema:
+          type: string
+          format: date
+        description: Einddatum
+      - in: query
+        name: emailadres
+        schema:
+          type: string
+        description: E-mailadres
+      - in: query
+        name: identificatie
+        schema:
+          type: string
+        description: Identificatie
+      - name: limit
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: query
+        name: telefoonnummer
+        schema:
+          type: string
+        description: Telefoonnummer
+      - in: query
+        name: typeOrganisatie
+        schema:
+          type: string
+        description: Type organisatie
+      - in: query
+        name: verkorteNaam
+        schema:
+          type: string
+        description: Verkorte naam
+      tags:
+      - Organisatorische Eenheden
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganisatorischeEenheidList'
+          description: ''
+  /organisatorische-eenheid/{uuid}:
+    get:
+      operationId: organisatorische_eenheid_retrieve
+      description: Een specifieke organisatorische eenheid opvragen aan de hand van
+        de identificatie.
+      summary: Een specifieke organisatorische eenheid opvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Organisatorische Eenheden
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
+          description: ''
+  /vestiging:
+    get:
+      operationId: vestiging_list
+      description: Deze lijst kan gefilterd worden met query-string parameters.
+      summary: Alle vestigingen opvragen.
+      parameters:
+      - in: query
+        name: adres
+        schema:
+          type: string
+        description: Adres
+      - in: query
+        name: correspondentieadres
+        schema:
+          type: string
+        description: Correspondentieadres
+      - in: query
+        name: korteNaam
+        schema:
+          type: string
+        description: Korte naam
+      - in: query
+        name: landcode
+        schema:
+          type: string
+        description: Landcode
+      - name: limit
+        required: false
+        in: query
+        description: Het aantal resultaten terug te geven per pagina.
+        schema:
+          type: integer
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: query
+        name: organisatorischeEenheid
+        schema:
+          type: string
+          format: uuid
+        description: Organisatorische eenheid (UUID)
+      - in: query
+        name: postadres
+        schema:
+          type: string
+        description: Postadres
+      - in: query
+        name: telefoonnummer
+        schema:
+          type: string
+        description: Telefoonnummer
+      - in: query
+        name: vestigingsnummer
+        schema:
+          type: string
+        description: Vestigingsnummer
+      tags:
+      - Vestigingen
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVestigingList'
+          description: ''
+  /vestiging/{uuid}:
+    get:
+      operationId: vestiging_retrieve
+      description: Een specifieke vestiging opvragen aan de hand van het vestigingsnummer.
+      summary: Een specifieke vestiging opvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Vestigingen
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
+          description: ''
 components:
   schemas:
     Contactpersoon:
@@ -272,6 +466,37 @@ components:
       - oid
       - teams
       - voornaam
+    OrganisatorischeEenheid:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        identificatie:
+          type: string
+        naam:
+          type: string
+        type_organisatie:
+          type: string
+        verkorte_naam:
+          type: string
+        beschrijving:
+          type: string
+        emailadres:
+          type: string
+          format: email
+        telefoonnummer:
+          type: string
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - identificatie
+      - naam
+      - type_organisatie
+      - uuid
     PaginatedContactpersoonList:
       type: object
       required:
@@ -318,6 +543,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Medewerker'
+    PaginatedOrganisatorischeEenheidList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisatorischeEenheid'
     PaginatedTeamList:
       type: object
       required:
@@ -341,6 +589,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Team'
+    PaginatedVestigingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vestiging'
     Team:
       type: object
       properties:
@@ -356,6 +627,38 @@ components:
       - beschrijving
       - naam
       - oid
+    Vestiging:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        vestigingsnummer:
+          type: string
+        naam:
+          type: string
+        korte_naam:
+          type: string
+        adres:
+          type: string
+        correspondentieadres:
+          type: string
+        postadres:
+          type: string
+        telefoonnummer:
+          type: string
+        landcode:
+          type: string
+        organisatorische_eenheid:
+          allOf:
+          - $ref: '#/components/schemas/OrganisatorischeEenheid'
+          readOnly: true
+      required:
+      - naam
+      - organisatorische_eenheid
+      - uuid
+      - vestigingsnummer
   securitySchemes:
     tokenAuth:
       type: http

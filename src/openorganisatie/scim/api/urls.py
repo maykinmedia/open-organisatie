@@ -10,12 +10,16 @@ from vng_api_common import routers
 from .schema import custom_settings
 from .viewsets.contactpersoon import ContactpersoonReadOnlyViewSet
 from .viewsets.medewerker import MedewerkerReadOnlyViewSet
+from .viewsets.organisatorische_eenheid import OrganisatorischeEenheidReadOnlyViewSet
+from .viewsets.vestiging import VestigingReadOnlyViewSet
 
 app_name = "scim_api"
 
 router = routers.DefaultRouter()
 router.register("medewerkers", MedewerkerReadOnlyViewSet)
 router.register("contactpersoon", ContactpersoonReadOnlyViewSet)
+router.register("vestiging", VestigingReadOnlyViewSet)
+router.register("organisatorische-eenheid", OrganisatorischeEenheidReadOnlyViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
