@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from openorganisatie.scim.models.contactpersoon import Contactpersoon
-from openorganisatie.utils.scim_middleware import BearerTokenAuthentication
+from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..filterset.contactpersoon import ContactpersoonFilter
 from ..serializers.contactpersoon import ContactpersoonSerializer

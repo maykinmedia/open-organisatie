@@ -9,6 +9,7 @@ import sentry_sdk
 import structlog
 from open_api_framework.conf.base import *  # noqa
 from open_api_framework.conf.utils import config
+from vng_api_common.conf.api import BASE_REST_FRAMEWORK  # noqa: F401
 
 from .utils import get_sentry_integrations
 
@@ -156,26 +157,38 @@ MIDDLEWARE = [
     # should be last according to docs
     "axes.middleware.AxesMiddleware",
 ]
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "openorganisatie.utils.bearer.BearerTokenAuthentication",
-    ],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 10,
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-}
-SCIM_API_VERSION = "0.1.0"
 
+SCIM_API_VERSION = "0.1.0"
 SCIM_API_MAJOR_VERSION = SCIM_API_VERSION.split(".")[0]
 
+REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
+
+REST_FRAMEWORK["DEFAULT_VERSION"] = "0"
+REST_FRAMEWORK["PAGE_SIZE"] = 100
+
+REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"]
+) + ("openorganisatie.utils.renderers.ProblemJSONRenderer",)
+
+REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "drf_spectacular.openapi.AutoSchema"
+
+REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (
+    "vng_api_common.pagination.DynamicPageSizePagination"
+)
+REST_FRAMEWORK["EXCEPTION_HANDLER"] = "vng_api_common.views.exception_handler"
+
+
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Open Organisatie",
+    "TITLE": "Open Organisatie API",
     "DESCRIPTION": "......",
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
     "REDOC_DIST": "SIDECAR",
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
+    ],
 }
 
 
