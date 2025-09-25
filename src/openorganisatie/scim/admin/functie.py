@@ -14,12 +14,14 @@ class FunctieAdmin(admin.ModelAdmin):
     list_filter = ("functie_type", "begin_datum", "eind_datum")
     search_fields = ("functie_omschrijving", "functie_type__naam")
     ordering = ("-begin_datum",)
+    readonly_fields = ("uuid",)
 
     fieldsets = (
         (
             None,
             {
                 "fields": (
+                    "uuid",
                     "functie_omschrijving",
                     "functie_type",
                 )

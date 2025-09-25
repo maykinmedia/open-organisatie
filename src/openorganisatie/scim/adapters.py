@@ -1,4 +1,3 @@
-import uuid
 from urllib.parse import urljoin
 
 from django.urls import reverse
@@ -48,7 +47,7 @@ class UserAdapter(SCIMUser):
                 "$ref": GroupAdapter(team, request=self.request).location,
                 "display": team.name,
             }
-            for team in self.obj.scim_groups.all()
+            for team in self.obj.groups.all()
         ]
 
     def to_dict(self):
@@ -56,6 +55,7 @@ class UserAdapter(SCIMUser):
 
         d.update(
             {
+                "scimExternalId": str(self.obj.scim_external_id),
                 "userName": str(self.obj.username),
                 "phoneNumbers": self.phone_numbers,
                 "jobTitle": self.obj.job_title,
@@ -151,7 +151,7 @@ class GroupAdapter(SCIMGroup):
     def handle_add(self, path, value, operation):
         if path.first_path == ("members", None, None):
             members = value or []
-            ids = [uuid.UUID(member.get("value")) for member in members]
+            ids = [member.get("value") for member in members]
 
             users = User.objects.filter(scim_external_id__in=ids)
             if len(ids) != users.count():
@@ -173,7 +173,7 @@ class GroupAdapter(SCIMGroup):
         if path.first_path == ("members", None, None):
             members = value or []
 
-            ids = [uuid.UUID(member.get("value")) for member in members]
+            ids = [member.get("value") for member in members]
 
             users = User.objects.filter(scim_external_id__in=ids)
             if len(ids) != users.count():

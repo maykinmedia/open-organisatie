@@ -30,9 +30,6 @@ class VestigingFilter(django_filters.FilterSet):
     landcode = django_filters.CharFilter(
         field_name="country_code", lookup_expr="iexact", label="Landcode"
     )
-    organisatorische_eenheid = django_filters.UUIDFilter(
-        field_name="organisational_unit__uuid", label="Organisatorische eenheid (UUID)"
-    )
 
     class Meta:
         model = Vestiging

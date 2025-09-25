@@ -6,9 +6,9 @@ from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
 
-from ..adapters import GroepenAdapter, MedewerkerAdapter
-from ..models.medewerker import Medewerker
-from ..models.team import Team
+from ..adapters import GroupAdapter, UserAdapter
+from ..models.group import Group
+from ..models.user import User
 
 
 class MedewerkerAdapterTest(TestCase):
@@ -18,8 +18,9 @@ class MedewerkerAdapterTest(TestCase):
         )
         self.token = Token.objects.create(user=self.user)
 
-        self.medewerker = Medewerker.objects.create(
-            username="178fa166-a2cd-4899-8958-8d5eb2eff213",
+        self.medewerker = User.objects.create(
+            scim_external_id=str(uuid.uuid4()),
+            username="Test@test.nl",
             first_name="John",
             last_name="Doe",
             email="john.doe@example.com",
@@ -27,17 +28,18 @@ class MedewerkerAdapterTest(TestCase):
         )
 
         self.detail_url = reverse(
-            "scim:user-detail", kwargs={"uuid": self.medewerker.username}
+            "scim:user-detail", kwargs={"uuid": self.medewerker.scim_external_id}
         )
 
         factory = RequestFactory()
         request = factory.get(self.detail_url)
 
-        self.adapter = MedewerkerAdapter(self.medewerker, request=request)
+        self.adapter = UserAdapter(self.medewerker, request=request)
 
     def test_to_dict(self):
         result = self.adapter.to_dict()
-        self.assertEqual(result["userName"], "178fa166-a2cd-4899-8958-8d5eb2eff213")
+        self.assertEqual(result["scimExternalId"], self.medewerker.scim_external_id)
+        self.assertEqual(result["userName"], "Test@test.nl")
         self.assertEqual(result["emails"][0]["value"], "john.doe@example.com")
         self.assertTrue(result["active"])
         self.assertIn("schemas", result)
@@ -55,7 +57,7 @@ class MedewerkerAdapterTest(TestCase):
             "jobTitle": "Manager",
         }
         self.adapter.from_dict(new_data)
-        m = Medewerker.objects.get(pk=self.medewerker.pk)
+        m = User.objects.get(pk=self.medewerker.pk)
         self.assertEqual(str(m.username), "c5fb5fb9-e72e-40ff-8a26-6fdc8261b043")
         self.assertEqual(m.first_name, "Jane")
         self.assertEqual(m.last_name, "Smith")
@@ -67,7 +69,7 @@ class MedewerkerAdapterTest(TestCase):
     def test_handle_operations_replace_active(self):
         ops = [{"op": "replace", "path": "active", "value": False}]
         self.adapter.handle_operations(ops)
-        m = Medewerker.objects.get(username=self.medewerker.username)
+        m = User.objects.get(username=self.medewerker.username)
         self.assertFalse(m.is_active)
 
 
@@ -78,21 +80,25 @@ class Path:
 
 class GroepenAdapterTest(TestCase):
     def setUp(self):
-        self.user1 = Medewerker.objects.create(
+        self.user1 = User.objects.create(
+            scim_external_id=str(uuid.uuid4()),
             username=str(uuid.uuid4()),
             first_name="Kees",
             last_name="Smit",
             email="Kees@test.com",
             is_active=True,
         )
-        self.user2 = Medewerker.objects.create(
+        self.user2 = User.objects.create(
+            scim_external_id=str(uuid.uuid4()),
             username=str(uuid.uuid4()),
             first_name="Bob",
             last_name="Smit",
             email="bob@test.com",
             is_active=True,
         )
-        self.team = Team.objects.create(name="Test Team", scim_external_id=uuid.uuid4())
+        self.team = Group.objects.create(
+            name="Test Team", scim_external_id=uuid.uuid4()
+        )
         self.team.user_set.add(self.user1)
 
         factory = RequestFactory()
@@ -100,11 +106,11 @@ class GroepenAdapterTest(TestCase):
             reverse("scim:group-detail", kwargs={"uuid": self.team.scim_external_id})
         )
 
-        self.adapter = GroepenAdapter(self.team)
+        self.adapter = GroupAdapter(self.team)
         self.adapter.request = self.request
 
     def test_handle_add_valid_members(self):
-        member_data = [{"value": str(self.user2.username)}]
+        member_data = [{"value": str(self.user2.scim_external_id)}]
         path = Path(("members", None, None))
 
         self.adapter.handle_add(path, member_data, operation=None)
@@ -118,7 +124,7 @@ class GroepenAdapterTest(TestCase):
         self.assertEqual(self.team.user_set.count(), 1)
 
     def test_handle_remove_valid_members(self):
-        member_data = [{"value": str(self.user1.username)}]
+        member_data = [{"value": str(self.user1.scim_external_id)}]
         path = Path(("members", None, None))
 
         self.adapter.handle_remove(path, member_data, operation=None)

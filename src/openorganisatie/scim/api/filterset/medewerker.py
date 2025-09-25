@@ -16,9 +16,9 @@ class MedewerkerFilter(django_filters.FilterSet):
     )
     actief = django_filters.BooleanFilter(field_name="is_active", label="Actief")
     teams = django_filters.ModelMultipleChoiceFilter(
-        field_name="scim_groups__scim_external_id",
+        field_name="teams__uuid",
         queryset=Team.objects.all(),
-        to_field_name="scim_external_id",
+        to_field_name="uuid",
         label="Teams",
     )
     datum_toegevoegd = django_filters.DateFilter(

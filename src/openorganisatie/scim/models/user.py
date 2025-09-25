@@ -9,7 +9,7 @@ class User(AbstractSCIMUserMixin, models.Model):
         editable=False,
         max_length=100,
         verbose_name="User principle name",
-        help_text="Unieke Azure Active Directory Object ID van de medewerker.",
+        help_text="User principle name van de medewerker.",
     )
     first_name = models.CharField(
         max_length=100, verbose_name="Voornaam", help_text="Voornaam van de medewerker."
