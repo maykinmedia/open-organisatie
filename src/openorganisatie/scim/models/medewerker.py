@@ -1,17 +1,21 @@
+import uuid
+
 from django.db import models
 from django.utils import timezone
-
-from django_scim.models import AbstractSCIMCommonAttributesMixin
 
 from ..enums.enums import GenderIndicator
 
 
-class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
-    username = models.UUIDField(
+class Medewerker(models.Model):
+    uuid = models.UUIDField(
         unique=True,
-        editable=False,
-        verbose_name="Azure Object ID",
-        help_text="Unieke Azure Active Directory Object ID van de medewerker.",
+        default=uuid.uuid4,
+        help_text="Unieke resource identifier (UUID4)",
+    )
+    medewerker_id = models.CharField(
+        unique=True,
+        max_length=50,
+        help_text="ID van de medewerker.",
     )
     first_name = models.CharField(
         max_length=100, verbose_name="Voornaam", help_text="Voornaam van de medewerker."
@@ -25,12 +29,6 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
         unique=True,
         verbose_name="E-mailadres",
         help_text="E-mailadres van de medewerker.",
-    )
-    job_title = models.CharField(
-        max_length=100,
-        blank=True,
-        verbose_name="Functie",
-        help_text="Functie van de medewerker (optioneel).",
     )
     phone_number = models.CharField(
         max_length=30,
@@ -52,33 +50,26 @@ class Medewerker(AbstractSCIMCommonAttributesMixin, models.Model):
         help_text="Datum waarop de medewerker uit dienst is gegaan "
         "(indien van toepassing).",
     )
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name="Actief",
-        help_text="Geeft aan of de medewerker momenteel actief is.",
-    )
-    scim_groups = models.ManyToManyField(
+    teams = models.ManyToManyField(
         "scim.Team",
-        related_name="user_set",
+        related_name="medewerker",
         blank=True,
         verbose_name="Teams",
         help_text="Teams van de medewerker.",
     )
-    branch = models.ManyToManyField(
-        "scim.Vestiging",
+    organisatorische_eenheden = models.ManyToManyField(
+        "scim.OrganisatorischeEenheid",
         related_name="medewerkers",
         blank=True,
-        verbose_name="Vestigingen",
-        help_text="Vestigingen waaraan de medewerker gekoppeld is.",
+        verbose_name="Organisatorische Eenheden",
+        help_text="Organisatorische eenheden waartoe de medewerker behoort.",
     )
-    contactpersoon = models.ForeignKey(
-        "scim.Contactpersoon",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+    functies = models.ManyToManyField(
+        "scim.Functie",
         related_name="medewerkers",
-        verbose_name="Contactpersoon",
-        help_text="Contactpersoon van de medewerker (optioneel).",
+        blank=True,
+        verbose_name="Functies",
+        help_text="Functies van de medewerker.",
     )
     date_joined = models.DateTimeField(
         default=timezone.now,

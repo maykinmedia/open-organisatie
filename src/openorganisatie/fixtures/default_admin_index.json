@@ -11,6 +11,27 @@
             "models": [
                 [
                     "scim",
+                    "user"
+                ],
+                [
+                    "scim",
+                    "group"
+                ]
+            ]
+        }
+    },
+    {
+        "model": "admin_index.appgroup",
+        "fields": {
+            "order": 1,
+            "translations": {
+                "en": "Organisation"
+            },
+            "name": "Organisatie",
+            "slug": "Organisatie",
+            "models": [
+                [
+                    "scim",
                     "medewerker"
                 ],
                 [
@@ -24,6 +45,18 @@
                 [
                     "scim",
                     "vestiging"
+                ],
+                [
+                    "scim",
+                    "contactpersoon"
+                ],
+                [
+                    "scim",
+                    "functie"
+                ],
+                [
+                    "scim",
+                    "functietype"
                 ]
             ]
         }

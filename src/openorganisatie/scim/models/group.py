@@ -5,7 +5,7 @@ from django.db import models
 from django_scim.models import AbstractSCIMGroupMixin
 
 
-class Team(AbstractSCIMGroupMixin, models.Model):
+class Group(AbstractSCIMGroupMixin, models.Model):
     uuid = models.UUIDField(
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
@@ -20,24 +20,15 @@ class Team(AbstractSCIMGroupMixin, models.Model):
         verbose_name="Beschrijving",
         help_text="Optionele beschrijving van het team.",
     )
-    branch = models.ManyToManyField(
-        "scim.Vestiging",
-        related_name="team",
-        blank=True,
-        verbose_name="Vestigingen",
-        help_text="Vestigingen waaraan de medewerker gekoppeld is.",
-    )
-    functie = models.ManyToManyField(
-        "scim.Functie",
-        related_name="teams",
-        blank=True,
-        verbose_name="Functies",
-        help_text="Functies die binnen dit team actief zijn.",
+    active = models.BooleanField(
+        default=True,
+        verbose_name="Actief",
+        help_text="Geeft aan of het team momenteel actief is.",
     )
 
     class Meta:
-        verbose_name = "Team"
-        verbose_name_plural = "Teams"
+        verbose_name = "Group"
+        verbose_name_plural = "Groups"
 
     def __str__(self):
         return self.name

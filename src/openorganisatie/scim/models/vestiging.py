@@ -55,13 +55,6 @@ class Vestiging(models.Model):
         verbose_name="Landcode",
         help_text="ISO-landcode van de vestiging (bijv. NL, BE).",
     )
-    organisational_unit = models.ForeignKey(
-        "scim.OrganisatorischeEenheid",
-        on_delete=models.CASCADE,
-        related_name="vestigingen",
-        verbose_name="Organisatorische eenheid",
-        help_text="De organisatorische eenheid waartoe deze vestiging behoort.",
-    )
 
     class Meta:
         verbose_name = "Vestiging"

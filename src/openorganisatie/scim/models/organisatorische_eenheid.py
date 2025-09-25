@@ -55,6 +55,20 @@ class OrganisatorischeEenheid(models.Model):
         verbose_name="Einddatum",
         help_text="Optionele einddatum waarop de organisatorische eenheid wordt opgeheven of stopt te bestaan.",
     )
+    branch = models.ManyToManyField(
+        "scim.Vestiging",
+        related_name="organisatorische_eenheid",
+        blank=True,
+        verbose_name="Vestigingen",
+        help_text="Vestigingen waaraan de medewerker gekoppeld is.",
+    )
+    functie = models.ManyToManyField(
+        "scim.Functie",
+        related_name="organisatorische_eenheden",
+        blank=True,
+        verbose_name="Functies",
+        help_text="Functies binnen deze organisatorische eenheid.",
+    )
 
     class Meta:
         verbose_name = "Organisatorische Eenheid"

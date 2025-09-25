@@ -7,33 +7,32 @@ class Contactpersoon(models.Model):
     uuid = models.UUIDField(
         unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
     )
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        verbose_name="Naam",
-        help_text="Naam van het team.",
+    medewerker = models.ForeignKey(
+        "scim.Medewerker", on_delete=models.CASCADE, related_name="contactpersoon_roles"
     )
-    function = models.TextField(
+    team = models.ForeignKey(
+        "scim.Team",
+        on_delete=models.CASCADE,
+        related_name="contactpersonen",
+        null=True,
         blank=True,
-        verbose_name="Beschrijving",
-        help_text="Optionele beschrijving van het team.",
     )
-    email_address = models.EmailField(
-        max_length=254,
+    organisatorische_eenheid = models.ForeignKey(
+        "scim.OrganisatorischeEenheid",
+        on_delete=models.CASCADE,
+        related_name="contactpersonen",
+        null=True,
         blank=True,
-        verbose_name="E-mailadres",
-        help_text="Contact e-mailadres van de organisatorische eenheid.",
-    )
-    phone_number = models.CharField(
-        max_length=50,
-        blank=True,
-        verbose_name="Telefoonnummer",
-        help_text="Contact telefoonnummer van de organisatorische eenheid.",
     )
 
     class Meta:
         verbose_name = "Contactpersoon"
-        verbose_name_plural = "Contactpersoon"
+        verbose_name_plural = "Contactpersonen"
+        unique_together = ("medewerker", "team", "organisatorische_eenheid")
 
     def __str__(self):
-        return self.name
+        if self.team:
+            return f"{self.medewerker} - Team {self.team.name}"
+        elif self.organisatorische_eenheid:
+            return f"{self.medewerker} - OE {self.organisatorische_eenheid.name}"
+        return str(self.medewerker)

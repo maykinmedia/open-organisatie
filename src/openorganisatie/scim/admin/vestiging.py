@@ -5,9 +5,8 @@ from ..models.vestiging import Vestiging
 
 @admin.register(Vestiging)
 class VestigingAdmin(admin.ModelAdmin):
-    list_display = ("branchname", "organisational_unit", "branchnumber")
+    list_display = ("branchname", "branchnumber")
     search_fields = ("branchname", "address")
-    list_filter = ("organisational_unit",)
     readonly_fields = ("uuid",)
 
     fieldsets = (
@@ -34,11 +33,4 @@ class VestigingAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        (
-            "Relaties",
-            {"fields": ("organisational_unit",)},
-        ),
     )
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).select_related("organisational_unit")

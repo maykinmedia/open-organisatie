@@ -5,18 +5,22 @@ from ..models.team import Team
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ("name", "active", "display_medewerkers")
+    list_display = ("name", "display_medewerkers")
     search_fields = ("name", "description")
-    list_filter = ("active",)
     readonly_fields = ("display_medewerkers", "uuid")
+    filter_horizontal = ("branch", "functie")
 
     fieldsets = (
-        ("Algemene informatie", {"fields": ("uuid", "name", "description", "active")}),
+        ("Algemene informatie", {"fields": ("uuid", "name", "description")}),
         (
             "Medewerkers",
             {
                 "fields": ("display_medewerkers",),
             },
+        ),
+        (
+            "Relaties",
+            {"fields": ("branch", "functie")},
         ),
     )
 
@@ -24,8 +28,11 @@ class TeamAdmin(admin.ModelAdmin):
         return ", ".join(
             [
                 f"{medewerker.first_name} {medewerker.last_name}"
-                for medewerker in obj.user_set.all()
+                for medewerker in obj.medewerker.all()
             ]
         )
 
     display_medewerkers.short_description = "Medewerkers"
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("branch", "functie")
