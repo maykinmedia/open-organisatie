@@ -23,6 +23,9 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
     einddatum = serializers.DateField(
         source="end_date", allow_null=True, required=False
     )
+    hoofd_organisatorische_eenheid = serializers.UUIDField(
+        source="parent_organisation.uuid", read_only=True, required=False
+    )
 
     class Meta:
         model = OrganisatorischeEenheid
@@ -36,4 +39,5 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
             "emailadres",
             "telefoonnummer",
             "einddatum",
+            "hoofd_organisatorische_eenheid",
         ]
