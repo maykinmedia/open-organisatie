@@ -1,51 +1,52 @@
 from django.contrib import admin
 
-from ..models.medewerker import Medewerker
+from ..models.user import User
 
 
-@admin.register(Medewerker)
-class MedewerkerAdmin(admin.ModelAdmin):
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
     list_display = (
         "first_name",
         "last_name",
         "email",
+        "job_title",
         "phone_number",
+        "is_active",
         "date_joined",
         "last_modified",
     )
-    readonly_fields = ("medewerker_id", "date_joined", "last_modified")
+    readonly_fields = ("username", "scim_external_id", "date_joined", "last_modified")
     search_fields = ("first_name", "last_name", "email", "job_title")
-    filter_horizontal = ("teams", "functies", "organisatorische_eenheden")
+    list_filter = ("is_active",)
+    filter_horizontal = ("groups",)
 
     fieldsets = (
+        (
+            "SCIM informatie",
+            {"fields": ("scim_external_id",)},
+        ),
         (
             "Algemene informatie",
             {
                 "fields": (
-                    "medewerker_id",
+                    "username",
                     "first_name",
                     "last_name",
                     "email",
                     "phone_number",
-                    "gender_indicator",
+                    "job_title",
                 )
             },
         ),
         (
             "Relaties",
-            {
-                "fields": (
-                    "teams",
-                    "organisatorische_eenheden",
-                    "functies",
-                )
-            },
+            {"fields": ("groups",)},
         ),
         (
             "Status",
             {
                 "fields": (
-                    "termination_date",
+                    "is_active",
                     "date_joined",
                     "last_modified",
                 )
@@ -54,8 +55,4 @@ class MedewerkerAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        return (
-            super()
-            .get_queryset(request)
-            .prefetch_related("teams", "organisatorische_eenheden", "functies")
-        )
+        return super().get_queryset(request).prefetch_related("groups")

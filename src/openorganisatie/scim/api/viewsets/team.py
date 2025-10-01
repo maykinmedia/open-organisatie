@@ -24,7 +24,6 @@ class TeamReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
     filterset_class = TeamFilter
-    lookup_field = "scim_external_id"
-    lookup_url_kwarg = "oid"
+    lookup_field = "uuid"
     authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)

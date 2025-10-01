@@ -24,7 +24,6 @@ class MedewerkerReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Medewerker.objects.all()
     serializer_class = MedewerkerSerializer
     filterset_class = MedewerkerFilter
-    lookup_field = "username"
-    lookup_url_kwarg = "oid"
+    lookup_field = "uuid"
     authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)

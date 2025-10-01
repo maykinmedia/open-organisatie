@@ -4,8 +4,6 @@ import factory
 
 from openorganisatie.scim.models import Vestiging
 
-from .organisatorische_eenheid import OrganisatorischeEenheidFactory
-
 
 class VestigingFactory(factory.django.DjangoModelFactory):
     uuid = factory.LazyFunction(uuid.uuid4)
@@ -17,7 +15,6 @@ class VestigingFactory(factory.django.DjangoModelFactory):
     postal_address = factory.Faker("postcode")
     phone_number = factory.Faker("phone_number")
     country_code = factory.Faker("country_code")
-    organisational_unit = factory.SubFactory(OrganisatorischeEenheidFactory)
 
     class Meta:
         model = Vestiging

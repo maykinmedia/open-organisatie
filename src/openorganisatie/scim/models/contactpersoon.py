@@ -1,39 +1,49 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Contactpersoon(models.Model):
     uuid = models.UUIDField(
-        unique=True, default=uuid.uuid4, help_text="Unieke resource identifier (UUID4)"
-    )
-    name = models.CharField(
-        max_length=100,
         unique=True,
-        verbose_name="Naam",
-        help_text="Naam van het team.",
+        default=uuid.uuid4,
+        help_text=_("Unieke resource identifier (UUID4)"),
     )
-    function = models.TextField(
-        blank=True,
-        verbose_name="Beschrijving",
-        help_text="Optionele beschrijving van het team.",
+    medewerker = models.ForeignKey(
+        "scim.Medewerker",
+        on_delete=models.CASCADE,
+        related_name="contactpersoon_roles",
+        verbose_name=_("Medewerker"),
+        help_text=_("De medewerker die aan deze rol gekoppeld is."),
     )
-    email_address = models.EmailField(
-        max_length=254,
+    team = models.ForeignKey(
+        "scim.Team",
+        on_delete=models.CASCADE,
+        related_name="contactpersonen",
+        null=True,
         blank=True,
-        verbose_name="E-mailadres",
-        help_text="Contact e-mailadres van de organisatorische eenheid.",
+        verbose_name=_("Team"),
+        help_text=_("Team waaraan de medewerker gekoppeld is."),
     )
-    phone_number = models.CharField(
-        max_length=50,
+    organisatorische_eenheid = models.ForeignKey(
+        "scim.OrganisatorischeEenheid",
+        on_delete=models.CASCADE,
+        related_name="contactpersonen",
+        null=True,
         blank=True,
-        verbose_name="Telefoonnummer",
-        help_text="Contact telefoonnummer van de organisatorische eenheid.",
+        verbose_name=_("Organisatorische Eenheid"),
+        help_text=_("Organisatorische eenheid waaraan de medewerker gekoppeld is."),
     )
 
     class Meta:
-        verbose_name = "Contactpersoon"
-        verbose_name_plural = "Contactpersoon"
+        verbose_name = _("Contactpersoon")
+        verbose_name_plural = _("Contactpersonen")
+        unique_together = ("medewerker", "team", "organisatorische_eenheid")
 
     def __str__(self):
-        return self.name
+        if self.team:
+            return f"{self.medewerker} - Team {self.team.name}"
+        elif self.organisatorische_eenheid:
+            return f"{self.medewerker} - OE {self.organisatorische_eenheid.name}"
+        return str(self.medewerker)

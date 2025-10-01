@@ -9,6 +9,7 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
     search_fields = ("name", "description", "short_name", "organization_type")
     list_filter = ("organization_type",)
     readonly_fields = ("uuid",)
+    filter_horizontal = ("branches", "functies")
 
     fieldsets = (
         (
@@ -21,6 +22,7 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
                     "short_name",
                     "organization_type",
                     "description",
+                    "end_date",
                 )
             },
         ),
@@ -28,5 +30,11 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
             "Contactgegevens",
             {"fields": ("email_address", "phone_number")},
         ),
-        ("Status", {"fields": ("end_date",)}),
+        (
+            "Relaties",
+            {"fields": ("branches", "functies")},
+        ),
     )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("branches", "functies")

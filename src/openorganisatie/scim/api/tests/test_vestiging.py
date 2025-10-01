@@ -3,9 +3,6 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from openorganisatie.scim.models.factories.organisatorische_eenheid import (
-    OrganisatorischeEenheidFactory,
-)
 from openorganisatie.scim.models.factories.vestiging import VestigingFactory
 
 from .api_testcase import APITestCase
@@ -37,32 +34,11 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(data["naam"], vestiging.branchname)
         self.assertEqual(data["landcode"], vestiging.country_code)
 
-        org_data = data["organisatorischeEenheid"]
-        self.assertEqual(org_data["uuid"], str(vestiging.organisational_unit.uuid))
-        self.assertEqual(org_data["naam"], vestiging.organisational_unit.name)
-
     def test_authentication_required(self):
         client = APIClient()
         url = reverse("scim_api:vestiging-list")
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_vestiging_filter_by_organisatie(self):
-        org1 = OrganisatorischeEenheidFactory(identifier="OE001", name="Finance")
-        org2 = OrganisatorischeEenheidFactory(identifier="OE002", name="HR")
-
-        vest1 = VestigingFactory(organisational_unit=org1)
-        VestigingFactory(organisational_unit=org2)
-
-        url = (
-            f"{reverse('scim_api:vestiging-list')}?organisatorischeEenheid={org1.uuid}"
-        )
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        data = response.json()["results"]
-        self.assertEqual(len(data), 1)
-        self.assertEqual(data[0]["vestigingsnummer"], vest1.branchnumber)
 
     def test_vestigingsnummer_filter(self):
         v1 = VestigingFactory(branchnumber="123")

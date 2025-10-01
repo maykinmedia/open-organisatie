@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django_scim.models import AbstractSCIMGroupMixin
 
 
-class Team(AbstractSCIMGroupMixin, models.Model):
+class Group(AbstractSCIMGroupMixin, models.Model):
     uuid = models.UUIDField(
         unique=True,
         default=uuid.uuid4,
@@ -23,24 +23,15 @@ class Team(AbstractSCIMGroupMixin, models.Model):
         verbose_name=_("Beschrijving"),
         help_text=_("Optionele beschrijving van het team."),
     )
-    branches = models.ManyToManyField(
-        "scim.Vestiging",
-        related_name="teams",
-        blank=True,
-        verbose_name=_("Vestigingen"),
-        help_text=_("Vestigingen waaraan de medewerker gekoppeld is."),
-    )
-    functies = models.ManyToManyField(
-        "scim.Functie",
-        related_name="teams",
-        blank=True,
-        verbose_name=_("Functies"),
-        help_text=_("Functies die binnen dit team actief zijn."),
+    active = models.BooleanField(
+        default=True,
+        verbose_name=_("Actief"),
+        help_text=_("Geeft aan of het team momenteel actief is."),
     )
 
     class Meta:
-        verbose_name = _("Team")
-        verbose_name_plural = _("Teams")
+        verbose_name = "Group"
+        verbose_name_plural = "Groups"
 
     def __str__(self):
         return self.name

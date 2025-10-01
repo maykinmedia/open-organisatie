@@ -5,12 +5,39 @@ from ..models import Contactpersoon
 
 @admin.register(Contactpersoon)
 class ContactpersoonAdmin(admin.ModelAdmin):
-    list_display = ("name", "function", "email_address", "phone_number", "uuid")
-    search_fields = ("name", "email_address", "phone_number")
-    list_filter = ("function",)
+    list_display = (
+        "uuid",
+        "medewerker",
+        "get_team",
+        "get_organisatorische_eenheid",
+    )
+    list_filter = (
+        "team",
+        "organisatorische_eenheid",
+    )
+    search_fields = (
+        "medewerker__first_name",
+        "medewerker__last_name",
+        "team__name",
+        "organisatorische_eenheid__name",
+    )
     readonly_fields = ("uuid",)
 
-    fieldsets = (
-        ("Algemene informatie", {"fields": ("uuid", "name", "function")}),
-        ("Contactgegevens", {"fields": ("email_address", "phone_number")}),
-    )
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("team", "organisatorische_eenheid", "medewerker")
+        )
+
+    def get_team(self, obj):
+        return obj.team.name if obj.team else "-"
+
+    get_team.short_description = "Team"
+
+    def get_organisatorische_eenheid(self, obj):
+        return (
+            obj.organisatorische_eenheid.name if obj.organisatorische_eenheid else "-"
+        )
+
+    get_organisatorische_eenheid.short_description = "Organisatorische Eenheid"

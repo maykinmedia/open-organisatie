@@ -14,12 +14,11 @@ paths:
         name: functie
         schema:
           type: string
-        description: Functie
       - in: query
-        name: naam
+        name: medewerker
         schema:
           type: string
-        description: Naam
+          format: uuid
       - name: page
         required: false
         in: query
@@ -32,6 +31,11 @@ paths:
         description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
         schema:
           type: integer
+      - in: query
+        name: team
+        schema:
+          type: string
+          format: uuid
       tags:
       - Contactpersonen
       security:
@@ -124,7 +128,7 @@ paths:
           type: array
           items:
             type: string
-            nullable: true
+            format: uuid
         description: Teams
         explode: true
         style: form
@@ -142,19 +146,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedMedewerkerList'
           description: ''
-  /medewerkers/{oid}:
+  /medewerkers/{uuid}:
     get:
       operationId: medewerkers_retrieve
       description: Een specifieke medewerker opvragen.
       summary: Een specifieke medewerker opvragen.
       parameters:
       - in: path
-        name: oid
+        name: uuid
         schema:
           type: string
           format: uuid
-          title: Azure Object ID
-          description: Unieke Azure Active Directory Object ID van de medewerker.
+          description: Unieke resource identifier (UUID4)
         required: true
       tags:
       - Medewerkers
@@ -313,18 +316,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedTeamList'
           description: ''
-  /teams/{oid}:
+  /teams/{uuid}:
     get:
       operationId: teams_retrieve
       description: Een specifieke medewerker opvragen.
       summary: Een specifieke team opvragen.
       parameters:
       - in: path
-        name: oid
+        name: uuid
         schema:
           type: string
-          description: A string that is an identifier for the resource as defined
-            by the provisioning client.
+          format: uuid
+          description: Unieke resource identifier (UUID4)
         required: true
       tags:
       - Team
@@ -371,12 +374,6 @@ paths:
         schema:
           type: string
         description: Naam
-      - in: query
-        name: organisatorischeEenheid
-        schema:
-          type: string
-          format: uuid
-        description: Organisatorische eenheid (UUID)
       - name: page
         required: false
         in: query
@@ -454,24 +451,29 @@ components:
           type: string
           format: uuid
           readOnly: true
-        naam:
+        medewerker:
           type: string
-        functie:
+          readOnly: true
+        team:
           type: string
-        emailadres:
+          readOnly: true
+        organisatorischeEenheid:
           type: string
-          format: email
-        telefoonnummer:
-          type: string
+          readOnly: true
       required:
-      - naam
+      - medewerker
+      - organisatorischeEenheid
+      - team
       - uuid
     Medewerker:
       type: object
       properties:
-        oid:
+        uuid:
           type: string
           format: uuid
+          readOnly: true
+        medewerkerId:
+          type: string
           readOnly: true
         voornaam:
           type: string
@@ -480,8 +482,6 @@ components:
         emailadres:
           type: string
           format: email
-        functie:
-          type: string
         telefoonnummer:
           type: string
         geslachtsaanduiding:
@@ -490,8 +490,6 @@ components:
           type: string
           format: date
           nullable: true
-        actief:
-          type: boolean
         teams:
           type: array
           items:
@@ -515,14 +513,14 @@ components:
           readOnly: true
       required:
       - achternaam
-      - actief
       - contactpersoon
       - datumToegevoegd
       - emailadres
       - geslachtsaanduiding
       - laatstGewijzigd
-      - oid
+      - medewerkerId
       - teams
+      - uuid
       - vestiging
       - voornaam
     OrganisatorischeEenheid:
@@ -701,7 +699,7 @@ components:
     Team:
       type: object
       properties:
-        oid:
+        uuid:
           type: string
           format: uuid
           readOnly: true
@@ -709,13 +707,10 @@ components:
           type: string
         beschrijving:
           type: string
-        actief:
-          type: boolean
       required:
-      - actief
       - beschrijving
       - naam
-      - oid
+      - uuid
     Vestiging:
       type: object
       properties:
