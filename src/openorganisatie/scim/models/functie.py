@@ -1,31 +1,41 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Functie(models.Model):
     uuid = models.UUIDField(
         unique=True,
         default=uuid.uuid4,
-        help_text="Unieke resource identifier (UUID4) voor deze functie.",
+        help_text=_("Unieke resource identifier (UUID4) voor deze functie."),
     )
     functie_omschrijving = models.CharField(
-        max_length=255, help_text="Korte omschrijving of titel van de functie."
+        max_length=255,
+        help_text=_("Korte omschrijving of titel van de functie."),
+        verbose_name=_("Functie omschrijving"),
     )
-    begin_datum = models.DateField(help_text="De datum waarop de functie ingaat.")
+    begin_datum = models.DateField(
+        help_text=_("De datum waarop de functie ingaat."),
+        verbose_name=_("Begindatum"),
+    )
     eind_datum = models.DateField(
-        blank=True, null=True, help_text="De datum waarop de functie eindigt."
+        blank=True,
+        null=True,
+        help_text=_("De datum waarop de functie eindigt."),
+        verbose_name=_("Einddatum"),
     )
     functie_type = models.ForeignKey(
         "scim.FunctieType",
         on_delete=models.CASCADE,
         related_name="functies",
-        help_text="Het type functie dat hieraan gekoppeld is.",
+        help_text=_("Het type functie dat hieraan gekoppeld is."),
+        verbose_name=_("Functietype"),
     )
 
     class Meta:
-        verbose_name = "Functie"
-        verbose_name_plural = "Functies"
+        verbose_name = _("Functie")
+        verbose_name_plural = _("Functies")
 
     def __str__(self):
         return self.functie_omschrijving
