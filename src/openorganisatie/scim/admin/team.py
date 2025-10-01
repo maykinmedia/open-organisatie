@@ -8,7 +8,7 @@ class TeamAdmin(admin.ModelAdmin):
     list_display = ("name", "display_medewerkers")
     search_fields = ("name", "description")
     readonly_fields = ("display_medewerkers", "uuid")
-    filter_horizontal = ("branch", "functie")
+    filter_horizontal = ("branch", "functies")
 
     fieldsets = (
         ("Algemene informatie", {"fields": ("uuid", "name", "description")}),
@@ -20,7 +20,7 @@ class TeamAdmin(admin.ModelAdmin):
         ),
         (
             "Relaties",
-            {"fields": ("branch", "functie")},
+            {"fields": ("branch", "functies")},
         ),
     )
 
@@ -28,11 +28,11 @@ class TeamAdmin(admin.ModelAdmin):
         return ", ".join(
             [
                 f"{medewerker.first_name} {medewerker.last_name}"
-                for medewerker in obj.medewerker.all()
+                for medewerker in obj.medewerkers.all()
             ]
         )
 
     display_medewerkers.short_description = "Medewerkers"
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related("branch", "functie")
+        return super().get_queryset(request).prefetch_related("branch", "functies")

@@ -23,6 +23,13 @@ class ContactpersoonAdmin(admin.ModelAdmin):
     )
     readonly_fields = ("uuid",)
 
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("team", "organisatorische_eenheid", "medewerker")
+        )
+
     def get_team(self, obj):
         return obj.team.name if obj.team else "-"
 

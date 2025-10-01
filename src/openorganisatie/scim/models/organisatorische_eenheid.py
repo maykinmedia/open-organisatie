@@ -57,16 +57,15 @@ class OrganisatorischeEenheid(models.Model):
     )
     branch = models.ManyToManyField(
         "scim.Vestiging",
-        related_name="organisatorische_eenheid",
+        related_name="organisatorische_eenheden",
         blank=True,
         verbose_name="Vestigingen",
         help_text="Vestigingen waaraan de medewerker gekoppeld is.",
     )
-    functie = models.ManyToManyField(
+    functies = models.ManyToManyField(
         "scim.Functie",
         related_name="organisatorische_eenheden",
         blank=True,
-        verbose_name="Functies",
         help_text="Functies binnen deze organisatorische eenheid.",
     )
 

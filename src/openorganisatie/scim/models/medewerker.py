@@ -52,7 +52,7 @@ class Medewerker(models.Model):
     )
     teams = models.ManyToManyField(
         "scim.Team",
-        related_name="medewerker",
+        related_name="medewerkers",
         blank=True,
         verbose_name="Teams",
         help_text="Teams van de medewerker.",
