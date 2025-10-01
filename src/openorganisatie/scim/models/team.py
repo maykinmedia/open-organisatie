@@ -23,7 +23,7 @@ class Team(AbstractSCIMGroupMixin, models.Model):
         verbose_name=_("Beschrijving"),
         help_text=_("Optionele beschrijving van het team."),
     )
-    branch = models.ManyToManyField(
+    branches = models.ManyToManyField(
         "scim.Vestiging",
         related_name="teams",
         blank=True,

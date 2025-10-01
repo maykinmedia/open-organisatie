@@ -58,7 +58,7 @@ class OrganisatorischeEenheid(models.Model):
             "Optionele einddatum waarop de organisatorische eenheid wordt opgeheven of stopt te bestaan."
         ),
     )
-    branch = models.ManyToManyField(
+    branches = models.ManyToManyField(
         "scim.Vestiging",
         related_name="organisatorische_eenheden",
         blank=True,

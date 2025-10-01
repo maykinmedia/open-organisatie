@@ -12,7 +12,7 @@ from .api_testcase import APITestCase
 
 class ContactpersoonAPITests(APITestCase):
     def test_list_contactpersonen(self):
-        ContactpersoonFactory.create_batch(2)  # creates with unique medewerkers
+        ContactpersoonFactory.create_batch(2)
         url = reverse("scim_api:contactpersoon-list")
 
         response = self.client.get(url)
@@ -50,7 +50,7 @@ class ContactpersoonAPITests(APITestCase):
     def test_medewerker_filter(self):
         medewerker_1 = MedewerkerFactory()
         cp_1 = ContactpersoonFactory(medewerker=medewerker_1)
-        ContactpersoonFactory()  # unrelated contactpersoon
+        ContactpersoonFactory()
 
         url = reverse("scim_api:contactpersoon-list")
         response = self.client.get(url, {"medewerker": str(medewerker_1.uuid)})
@@ -61,7 +61,7 @@ class ContactpersoonAPITests(APITestCase):
     def test_team_filter(self):
         team_1 = TeamFactory()
         cp_1 = ContactpersoonFactory(team=team_1)
-        ContactpersoonFactory()  # another unrelated contactpersoon
+        ContactpersoonFactory()
 
         url = reverse("scim_api:contactpersoon-list")
         response = self.client.get(url, {"team": str(team_1.uuid)})
@@ -73,7 +73,7 @@ class ContactpersoonAPITests(APITestCase):
         medewerker_1 = MedewerkerFactory()
         team_1 = TeamFactory()
         cp_1 = ContactpersoonFactory(medewerker=medewerker_1, team=team_1)
-        ContactpersoonFactory()  # unrelated contactpersoon
+        ContactpersoonFactory()
 
         url = reverse("scim_api:contactpersoon-list")
         response = self.client.get(

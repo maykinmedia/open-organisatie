@@ -9,7 +9,7 @@ from openorganisatie.scim.models import Medewerker
 
 class MedewerkerFactory(factory.django.DjangoModelFactory):
     uuid = factory.LazyFunction(uuid.uuid4)
-    medewerker_id = factory.Faker("first_name")
+    medewerker_id = factory.Sequence(lambda n: f"medewerker_{n}")
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     email = factory.LazyAttribute(
