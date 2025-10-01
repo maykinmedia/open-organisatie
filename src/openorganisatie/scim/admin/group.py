@@ -8,10 +8,13 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ("name", "active", "display_users")
     search_fields = ("name", "description")
     list_filter = ("active",)
-    readonly_fields = ("display_users", "uuid")
+    readonly_fields = ("display_users", "scim_external_id")
 
     fieldsets = (
-        ("Algemene informatie", {"fields": ("uuid", "name", "description", "active")}),
+        (
+            "Algemene informatie",
+            {"fields": ("scim_external_id", "name", "description", "active")},
+        ),
         (
             "Users",
             {
