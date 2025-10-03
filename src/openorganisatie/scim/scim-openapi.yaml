@@ -87,12 +87,12 @@ paths:
         name: actief
         schema:
           type: boolean
-        description: Actief
+        description: Geeft aan of het team momenteel actief is.
       - in: query
         name: naam
         schema:
           type: string
-        description: Naam
+        description: Naam van het team.
       - name: page
         required: false
         in: query
@@ -422,24 +422,18 @@ paths:
         name: actief
         schema:
           type: boolean
-        description: Actief
+        description: Geeft aan of de medewerker momenteel actief is.
       - in: query
         name: datumToegevoegd
         schema:
           type: string
           format: date
-        description: Datum toegevoegd
-      - in: query
-        name: datumUitDienst
-        schema:
-          type: string
-          format: date
-        description: Datum uit dienst
+        description: Datum waarop de medewerker is toegevoegd.
       - in: query
         name: functie
         schema:
           type: string
-        description: Functie
+        description: Functie van de medewerker (optioneel).
       - in: query
         name: groups
         schema:
@@ -447,7 +441,7 @@ paths:
           items:
             type: string
             nullable: true
-        description: Groups
+        description: Groups van de user.
         explode: true
         style: form
       - name: page
@@ -632,13 +626,18 @@ components:
           type: string
           format: uuid
           readOnly: true
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
         naam:
           type: string
+          description: Naam van het team.
         beschrijving:
           type: string
+          description: Optionele beschrijving van het team.
         isActive:
           type: boolean
           readOnly: true
+          description: Geeft aan of het team momenteel actief is.
       required:
       - beschrijving
       - isActive
@@ -948,39 +947,51 @@ components:
           type: string
           format: uuid
           readOnly: true
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
         username:
           type: string
           readOnly: true
+          description: User principal name van de medewerker.
         voornaam:
           type: string
           readOnly: true
+          description: Voornaam van de medewerker.
         achternaam:
           type: string
           readOnly: true
+          description: Achternaam van de medewerker.
         emailadres:
           type: string
           format: email
           readOnly: true
+          description: E-mailadres van de medewerker.
         telefoonnummer:
           type: string
+          description: Telefoonnummer van de medewerker (optioneel).
         titel:
           type: string
+          description: Functie van de medewerker (optioneel).
         isActive:
           type: boolean
           readOnly: true
+          description: Geeft aan of de medewerker momenteel actief is.
         groups:
           type: array
           items:
             $ref: '#/components/schemas/Group'
           readOnly: true
+          description: Groups van de user.
         datumToegevoegd:
           type: string
           format: date-time
           readOnly: true
+          description: Datum waarop de medewerker is toegevoegd.
         laatstGewijzigd:
           type: string
           format: date-time
           readOnly: true
+          description: Datum waarop de medewerker voor het laatst is gewijzigd.
       required:
       - achternaam
       - datumToegevoegd

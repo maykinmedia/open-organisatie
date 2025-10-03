@@ -14,7 +14,7 @@ from .api_testcase import APITestCase
 
 
 class UserAPITests(APITestCase):
-    def test_list_userss(self):
+    def test_list_users(self):
         url = reverse("scim_api:user-list")
         UserFactory.create_batch(2)
 
