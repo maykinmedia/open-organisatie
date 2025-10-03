@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 from rest_framework import status
@@ -209,3 +210,33 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertIn(str(child1a.uuid), children_root1)
         self.assertIn(str(child1b.uuid), children_root1)
         self.assertIn(str(child2a.uuid), children_root2)
+
+    def test_prevent_cycle_in_parent(self):
+        parent = OrganisatorischeEenheidFactory()
+        child = OrganisatorischeEenheidFactory(parent_organisation=parent)
+
+        parent.parent_organisation = child
+        with self.assertRaises(ValidationError) as val:
+            parent.clean()
+        self.assertIn(
+            "parent_organisation",
+            val.exception.message_dict,
+        )
+        self.assertIn(
+            "Een organisatorische eenheid kan geen kind als bovenliggende eenheid hebben.",
+            val.exception.message_dict["parent_organisation"][0],
+        )
+
+    def test_prevent_self_parenting(self):
+        org = OrganisatorischeEenheidFactory()
+        org.parent_organisation = org
+        with self.assertRaises(ValidationError) as val:
+            org.clean()
+        self.assertIn(
+            "parent_organisation",
+            val.exception.message_dict,
+        )
+        self.assertIn(
+            "Een organisatorische eenheid kan niet naar zichzelf verwijzen.",
+            val.exception.message_dict["parent_organisation"][0],
+        )

@@ -38,8 +38,4 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        return (
-            super()
-            .get_queryset(request)
-            .prefetch_related("branches", "functies", "parent_organisation")
-        )
+        return super().get_queryset(request).prefetch_related("branches", "functies")

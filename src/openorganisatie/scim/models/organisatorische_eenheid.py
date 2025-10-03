@@ -91,7 +91,6 @@ class OrganisatorischeEenheid(models.Model):
         return self.name
 
     def clean(self):
-        super().clean()
         if self.parent_organisation and self.parent_organisation == self:
             raise ValidationError(
                 {
@@ -100,3 +99,14 @@ class OrganisatorischeEenheid(models.Model):
                     )
                 }
             )
+        parent = self.parent_organisation
+        while parent:
+            if parent == self:
+                raise ValidationError(
+                    {
+                        "parent_organisation": _(
+                            "Een organisatorische eenheid kan geen kind als bovenliggende eenheid hebben."
+                        )
+                    }
+                )
+            parent = parent.parent_organisation
