@@ -19,8 +19,24 @@ from ..serializers.organisatorische_eenheid import OrganisatorischeEenheidSerial
         summary="Een specifieke organisatorische eenheid opvragen.",
         description="Een specifieke organisatorische eenheid opvragen aan de hand van de identificatie.",
     ),
+    create=extend_schema(
+        summary="Nieuwe organisatorische eenheid aanmaken.",
+        description="Voeg een nieuwe organisatorische eenheid toe aan het systeem.",
+    ),
+    update=extend_schema(
+        summary="Organisatorische eenheid volledig bijwerken.",
+        description="Werk alle gegevens van een organisatorische eenheid bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Organisatorische eenheid gedeeltelijk bijwerken.",
+        description="Werk enkele gegevens van een organisatorische eenheid bij.",
+    ),
+    destroy=extend_schema(
+        summary="Organisatorische eenheid verwijderen.",
+        description="Verwijder een specifieke organisatorische eenheid.",
+    ),
 )
-class OrganisatorischeEenheidReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+class OrganisatorischeEenheidViewSet(viewsets.ModelViewSet):
     queryset = OrganisatorischeEenheid.objects.all()
     serializer_class = OrganisatorischeEenheidSerializer
     filterset_class = OrganisatorischeEenheidFilter

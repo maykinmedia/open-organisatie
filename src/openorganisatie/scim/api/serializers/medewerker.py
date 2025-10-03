@@ -4,7 +4,6 @@ from openorganisatie.scim.models import Medewerker
 
 from ..serializers.contactpersoon import ContactpersoonSerializer
 from ..serializers.team import TeamSerializer
-from ..serializers.vestiging import SubVestigingSerializer
 
 
 class MedewerkerSerializer(serializers.ModelSerializer):
@@ -21,7 +20,6 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         source="termination_date", required=False, allow_null=True
     )
     teams = TeamSerializer(many=True, read_only=True)
-    vestiging = SubVestigingSerializer(read_only=True)
     contactpersoon = ContactpersoonSerializer(read_only=True)
     datum_toegevoegd = serializers.DateTimeField(source="date_joined", read_only=True)
     laatst_gewijzigd = serializers.DateTimeField(source="last_modified", read_only=True)
@@ -38,7 +36,6 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "geslachtsaanduiding",
             "datum_uit_dienst",
             "teams",
-            "vestiging",
             "contactpersoon",
             "datum_toegevoegd",
             "laatst_gewijzigd",

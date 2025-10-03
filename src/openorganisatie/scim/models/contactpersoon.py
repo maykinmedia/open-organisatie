@@ -17,33 +17,36 @@ class Contactpersoon(models.Model):
         verbose_name=_("Medewerker"),
         help_text=_("De medewerker die aan deze rol gekoppeld is."),
     )
-    team = models.ForeignKey(
+    teams = models.ManyToManyField(
         "scim.Team",
-        on_delete=models.CASCADE,
         related_name="contactpersonen",
-        null=True,
         blank=True,
-        verbose_name=_("Team"),
-        help_text=_("Team waaraan de medewerker gekoppeld is."),
+        verbose_name=_("Teams"),
+        help_text=_("Teams waaraan de medewerker gekoppeld is."),
     )
-    organisatorische_eenheid = models.ForeignKey(
+    organisatorische_eenheden = models.ManyToManyField(
         "scim.OrganisatorischeEenheid",
-        on_delete=models.CASCADE,
         related_name="contactpersonen",
-        null=True,
         blank=True,
-        verbose_name=_("Organisatorische Eenheid"),
-        help_text=_("Organisatorische eenheid waaraan de medewerker gekoppeld is."),
+        verbose_name=_("Organisatorische Eenheden"),
+        help_text=_("Organisatorische eenheden waaraan de medewerker gekoppeld is."),
     )
 
     class Meta:
         verbose_name = _("Contactpersoon")
         verbose_name_plural = _("Contactpersonen")
-        unique_together = ("medewerker", "team", "organisatorische_eenheid")
 
     def __str__(self):
-        if self.team:
-            return f"{self.medewerker} - Team {self.team.name}"
-        elif self.organisatorische_eenheid:
-            return f"{self.medewerker} - OE {self.organisatorische_eenheid.name}"
-        return str(self.medewerker)
+        parts = []
+        if self.teams.exists():
+            parts.append("Teams: " + ", ".join([t.name for t in self.teams.all()]))
+        if self.organisatorische_eenheden.exists():
+            parts.append(
+                "OE: "
+                + ", ".join([oe.name for oe in self.organisatorische_eenheden.all()])
+            )
+        return (
+            f"{self.medewerker} - " + " | ".join(parts)
+            if parts
+            else str(self.medewerker)
+        )

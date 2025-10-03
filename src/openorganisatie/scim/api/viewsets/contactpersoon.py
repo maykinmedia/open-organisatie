@@ -19,8 +19,24 @@ from ..serializers.contactpersoon import ContactpersoonSerializer
         summary="Een specifieke contactpersoon opvragen.",
         description="Een specifieke contactpersoon opvragen via UUID.",
     ),
+    create=extend_schema(
+        summary="Nieuwe contactpersoon aanmaken.",
+        description="Voeg een nieuwe contactpersoon toe aan het systeem.",
+    ),
+    update=extend_schema(
+        summary="Contactpersoon volledig bijwerken.",
+        description="Werk alle gegevens van een contactpersoon bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Contactpersoon gedeeltelijk bijwerken.",
+        description="Werk enkele gegevens van een contactpersoon bij.",
+    ),
+    destroy=extend_schema(
+        summary="Contactpersoon verwijderen.",
+        description="Verwijder een specifieke contactpersoon.",
+    ),
 )
-class ContactpersoonReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+class ContactpersoonViewSet(viewsets.ModelViewSet):
     queryset = Contactpersoon.objects.all()
     serializer_class = ContactpersoonSerializer
     filterset_class = ContactpersoonFilter

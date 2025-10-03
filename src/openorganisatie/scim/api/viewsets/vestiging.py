@@ -19,8 +19,24 @@ from ..serializers.vestiging import VestigingSerializer
         summary="Een specifieke vestiging opvragen.",
         description="Een specifieke vestiging opvragen aan de hand van het vestigingsnummer.",
     ),
+    create=extend_schema(
+        summary="Nieuwe vestiging aanmaken.",
+        description="Voeg een nieuwe vestiging toe aan het systeem.",
+    ),
+    update=extend_schema(
+        summary="Vestiging volledig bijwerken.",
+        description="Werk alle gegevens van een vestiging bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Vestiging gedeeltelijk bijwerken.",
+        description="Werk enkele gegevens van een vestiging bij.",
+    ),
+    destroy=extend_schema(
+        summary="Vestiging verwijderen.",
+        description="Verwijder een specifieke vestiging.",
+    ),
 )
-class VestigingReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+class VestigingViewSet(viewsets.ModelViewSet):
     queryset = Vestiging.objects.all()
     serializer_class = VestigingSerializer
     filterset_class = VestigingFilter
