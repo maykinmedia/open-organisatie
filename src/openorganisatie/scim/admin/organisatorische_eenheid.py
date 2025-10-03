@@ -23,6 +23,7 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
                     "organization_type",
                     "description",
                     "end_date",
+                    "parent_organisation",
                 )
             },
         ),

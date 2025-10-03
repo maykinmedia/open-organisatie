@@ -549,7 +549,12 @@ components:
           type: string
           format: date
           nullable: true
+        hoofdOrganisatorischeEenheid:
+          type: string
+          format: uuid
+          readOnly: true
       required:
+      - hoofdOrganisatorischeEenheid
       - identificatie
       - naam
       - typeOrganisatie

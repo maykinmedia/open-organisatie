@@ -1,5 +1,6 @@
 import uuid
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -72,6 +73,15 @@ class OrganisatorischeEenheid(models.Model):
         verbose_name=_("Functies"),
         help_text=_("Functies binnen deze organisatorische eenheid."),
     )
+    parent_organisation = models.ForeignKey(
+        "self",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="sub_organisatorische_eenheden",
+        verbose_name=_("Bovenliggende eenheid"),
+        help_text=_("Optionele bovenliggende organisatorische eenheid."),
+    )
 
     class Meta:
         verbose_name = _("Organisatorische Eenheid")
@@ -79,3 +89,24 @@ class OrganisatorischeEenheid(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if self.parent_organisation and self.parent_organisation == self:
+            raise ValidationError(
+                {
+                    "parent_organisation": _(
+                        "Een organisatorische eenheid kan niet naar zichzelf verwijzen."
+                    )
+                }
+            )
+        parent = self.parent_organisation
+        while parent:
+            if parent == self:
+                raise ValidationError(
+                    {
+                        "parent_organisation": _(
+                            "Een organisatorische eenheid kan geen kind als bovenliggende eenheid hebben."
+                        )
+                    }
+                )
+            parent = parent.parent_organisation

@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 from rest_framework import status
@@ -141,3 +142,101 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["einddatum"], org1.end_date.isoformat())
+
+    def test_list_children_under_parent(self):
+        parent = OrganisatorischeEenheidFactory()
+        child1 = OrganisatorischeEenheidFactory(parent_organisation=parent)
+        child2 = OrganisatorischeEenheidFactory(parent_organisation=parent)
+        OrganisatorischeEenheidFactory()
+
+        url = reverse("scim_api:organisatorischeeenheid-list")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        children = [
+            org
+            for org in response.data["results"]
+            if org.get("hoofd_organisatorische_eenheid") == str(parent.uuid)
+        ]
+        self.assertIn(str(child1.uuid), [c["uuid"] for c in children])
+        self.assertIn(str(child2.uuid), [c["uuid"] for c in children])
+
+    def test_parent_field_in_detail(self):
+        parent = OrganisatorischeEenheidFactory()
+        child = OrganisatorischeEenheidFactory(parent_organisation=parent)
+
+        url = reverse(
+            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": child.uuid}
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data["hoofd_organisatorische_eenheid"], str(parent.uuid)
+        )
+
+    def test_multiple_independent_trees(self):
+        root1 = OrganisatorischeEenheidFactory()
+        root2 = OrganisatorischeEenheidFactory()
+
+        child1a = OrganisatorischeEenheidFactory(parent_organisation=root1)
+        child1b = OrganisatorischeEenheidFactory(parent_organisation=root1)
+        child2a = OrganisatorischeEenheidFactory(parent_organisation=root2)
+
+        url = reverse("scim_api:organisatorischeeenheid-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        data = response.data["results"]
+
+        roots = [
+            org for org in data if org.get("hoofd_organisatorische_eenheid") is None
+        ]
+        self.assertIn(str(root1.uuid), [r["uuid"] for r in roots])
+        self.assertIn(str(root2.uuid), [r["uuid"] for r in roots])
+        self.assertEqual(len(roots), 2)
+
+        children_root1 = [
+            org["uuid"]
+            for org in data
+            if org.get("hoofd_organisatorische_eenheid") == str(root1.uuid)
+        ]
+        children_root2 = [
+            org["uuid"]
+            for org in data
+            if org.get("hoofd_organisatorische_eenheid") == str(root2.uuid)
+        ]
+
+        self.assertIn(str(child1a.uuid), children_root1)
+        self.assertIn(str(child1b.uuid), children_root1)
+        self.assertIn(str(child2a.uuid), children_root2)
+
+    def test_prevent_cycle_in_parent(self):
+        parent = OrganisatorischeEenheidFactory()
+        child = OrganisatorischeEenheidFactory(parent_organisation=parent)
+
+        parent.parent_organisation = child
+        with self.assertRaises(ValidationError) as val:
+            parent.clean()
+        self.assertIn(
+            "parent_organisation",
+            val.exception.message_dict,
+        )
+        self.assertIn(
+            "Een organisatorische eenheid kan geen kind als bovenliggende eenheid hebben.",
+            val.exception.message_dict["parent_organisation"][0],
+        )
+
+    def test_prevent_self_parenting(self):
+        org = OrganisatorischeEenheidFactory()
+        org.parent_organisation = org
+        with self.assertRaises(ValidationError) as val:
+            org.clean()
+        self.assertIn(
+            "parent_organisation",
+            val.exception.message_dict,
+        )
+        self.assertIn(
+            "Een organisatorische eenheid kan niet naar zichzelf verwijzen.",
+            val.exception.message_dict["parent_organisation"][0],
+        )
