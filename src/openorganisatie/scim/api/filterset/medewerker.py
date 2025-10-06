@@ -1,28 +1,26 @@
 import django_filters
+from vng_api_common.utils import get_help_text
 
 from openorganisatie.scim.models.medewerker import Medewerker
-from openorganisatie.scim.models.team import Team
 
 
 class MedewerkerFilter(django_filters.FilterSet):
-    functie = django_filters.CharFilter(
-        field_name="job_title", lookup_expr="icontains", label="Functie"
-    )
     geslachtsaanduiding = django_filters.BooleanFilter(
-        field_name="gender_indicator", label="Geslachtsaanduiding"
+        field_name="gender_indicator",
+        help_text=get_help_text("scim.Medewerker", "gender_indicator"),
     )
     datum_uit_dienst = django_filters.DateFilter(
-        field_name="termination_date", label="Datum uit dienst"
+        field_name="termination_date",
+        help_text=get_help_text("scim.Medewerker", "termination_date"),
     )
-    actief = django_filters.BooleanFilter(field_name="is_active", label="Actief")
-    teams = django_filters.ModelMultipleChoiceFilter(
+    team_uuid = django_filters.UUIDFilter(
         field_name="teams__uuid",
-        queryset=Team.objects.all(),
-        to_field_name="uuid",
-        label="Teams",
+        lookup_expr="exact",
+        help_text=get_help_text("scim.Medewerker", "teams"),
     )
-    datum_toegevoegd = django_filters.DateFilter(
-        field_name="date_joined__date", label="Datum toegevoegd"
+    datum_toegevoegd = django_filters.DateFromToRangeFilter(
+        field_name="date_joined",
+        help_text=get_help_text("scim.Medewerker", "date_joined"),
     )
 
     class Meta:

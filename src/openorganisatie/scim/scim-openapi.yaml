@@ -11,14 +11,17 @@ paths:
       summary: Alle contactpersonen opvragen.
       parameters:
       - in: query
-        name: functie
-        schema:
-          type: string
-      - in: query
-        name: medewerker
+        name: medewerkerUuid
         schema:
           type: string
           format: uuid
+        description: De medewerker die aan deze rol gekoppeld is.
+      - in: query
+        name: organisatorischeEenheidUuid
+        schema:
+          type: string
+          format: uuid
+        description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
       - name: page
         required: false
         in: query
@@ -32,10 +35,11 @@ paths:
         schema:
           type: integer
       - in: query
-        name: team
+        name: teamUuid
         schema:
           type: string
           format: uuid
+        description: Teams waaraan de medewerker gekoppeld is.
       tags:
       - Contactpersonen
       security:
@@ -49,6 +53,30 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/PaginatedContactpersoonList'
+          description: ''
+    post:
+      operationId: contactpersoon_create
+      description: Voeg een nieuwe contactpersoon toe aan het systeem.
+      summary: Nieuwe contactpersoon aanmaken.
+      tags:
+      - Contactpersonen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contactpersoon'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
           description: ''
   /contactpersoon/{uuid}:
     get:
@@ -77,6 +105,88 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contactpersoon'
           description: ''
+    put:
+      operationId: contactpersoon_update
+      description: Werk alle gegevens van een contactpersoon bij.
+      summary: Contactpersoon volledig bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Contactpersonen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contactpersoon'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
+          description: ''
+    patch:
+      operationId: contactpersoon_partial_update
+      description: Werk enkele gegevens van een contactpersoon bij.
+      summary: Contactpersoon gedeeltelijk bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Contactpersonen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContactpersoon'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Contactpersoon'
+          description: ''
+    delete:
+      operationId: contactpersoon_destroy
+      description: Verwijder een specifieke contactpersoon.
+      summary: Contactpersoon verwijderen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Contactpersonen
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /groups:
     get:
       operationId: groups_list
@@ -149,36 +259,32 @@ paths:
   /medewerkers:
     get:
       operationId: medewerkers_list
-      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      description: Deze lijst kan gefilterd worden met query-string parameters.
       summary: Alle medewerkers opvragen.
       parameters:
       - in: query
-        name: actief
-        schema:
-          type: boolean
-        description: Actief
-      - in: query
-        name: datumToegevoegd
+        name: datumToegevoegdAfter
         schema:
           type: string
           format: date
-        description: Datum toegevoegd
+        description: Datum waarop de medewerker is toegevoegd.
+      - in: query
+        name: datumToegevoegdBefore
+        schema:
+          type: string
+          format: date
+        description: Datum waarop de medewerker is toegevoegd.
       - in: query
         name: datumUitDienst
         schema:
           type: string
           format: date
-        description: Datum uit dienst
-      - in: query
-        name: functie
-        schema:
-          type: string
-        description: Functie
+        description: Datum waarop de medewerker uit dienst is gegaan (indien van toepassing).
       - in: query
         name: geslachtsaanduiding
         schema:
           type: boolean
-        description: Geslachtsaanduiding
+        description: Geslachtsaanduiding (optioneel).
       - name: page
         required: false
         in: query
@@ -192,15 +298,11 @@ paths:
         schema:
           type: integer
       - in: query
-        name: teams
+        name: teamUuid
         schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: Teams
-        explode: true
-        style: form
+          type: string
+          format: uuid
+        description: Teams van de medewerker.
       tags:
       - Medewerkers
       security:
@@ -214,6 +316,30 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/PaginatedMedewerkerList'
+          description: ''
+    post:
+      operationId: medewerkers_create
+      description: Voeg een nieuwe medewerker toe aan het systeem.
+      summary: Nieuwe medewerker aanmaken.
+      tags:
+      - Medewerkers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medewerker'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
           description: ''
   /medewerkers/{uuid}:
     get:
@@ -242,6 +368,88 @@ paths:
               schema:
                 $ref: '#/components/schemas/Medewerker'
           description: ''
+    put:
+      operationId: medewerkers_update
+      description: Werk alle gegevens van een medewerker bij.
+      summary: Medewerker volledig bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Medewerkers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medewerker'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
+          description: ''
+    patch:
+      operationId: medewerkers_partial_update
+      description: Werk enkele gegevens van een medewerker bij.
+      summary: Medewerker gedeeltelijk bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Medewerkers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMedewerker'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Medewerker'
+          description: ''
+    delete:
+      operationId: medewerkers_destroy
+      description: Verwijder een specifieke medewerker.
+      summary: Medewerker verwijderen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Medewerkers
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /organisatorische-eenheid:
     get:
       operationId: organisatorische_eenheid_list
@@ -249,31 +457,18 @@ paths:
       summary: Alle organisatorische eenheden opvragen.
       parameters:
       - in: query
-        name: beschrijving
-        schema:
-          type: string
-        description: Beschrijving
-      - in: query
         name: einddatum
         schema:
           type: string
           format: date
-        description: Einddatum
+        description: Optionele einddatum waarop de organisatorische eenheid wordt
+          opgeheven of stopt te bestaan.
       - in: query
-        name: emailadres
+        name: hoofdOrganisatorischeEenheid
         schema:
           type: string
-        description: E-mailadres
-      - in: query
-        name: identificatie
-        schema:
-          type: string
-        description: Identificatie
-      - in: query
-        name: naam
-        schema:
-          type: string
-        description: Naam
+          format: uuid
+        description: UUID van de bovenliggende organisatorische eenheid.
       - name: page
         required: false
         in: query
@@ -287,20 +482,15 @@ paths:
         schema:
           type: integer
       - in: query
-        name: telefoonnummer
-        schema:
-          type: string
-        description: Telefoonnummer
-      - in: query
         name: typeOrganisatie
         schema:
           type: string
-        description: Type organisatie
+        description: Type organisatie.
       - in: query
         name: verkorteNaam
         schema:
           type: string
-        description: Verkorte naam
+        description: Afkorting of verkorte naam van de organisatorische eenheid.
       tags:
       - Organisatorische Eenheden
       security:
@@ -314,6 +504,30 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/PaginatedOrganisatorischeEenheidList'
+          description: ''
+    post:
+      operationId: organisatorische_eenheid_create
+      description: Voeg een nieuwe organisatorische eenheid toe aan het systeem.
+      summary: Nieuwe organisatorische eenheid aanmaken.
+      tags:
+      - Organisatorische Eenheden
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisatorischeEenheid'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
           description: ''
   /organisatorische-eenheid/{uuid}:
     get:
@@ -343,6 +557,88 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrganisatorischeEenheid'
           description: ''
+    put:
+      operationId: organisatorische_eenheid_update
+      description: Werk alle gegevens van een organisatorische eenheid bij.
+      summary: Organisatorische eenheid volledig bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Organisatorische Eenheden
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisatorischeEenheid'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
+          description: ''
+    patch:
+      operationId: organisatorische_eenheid_partial_update
+      description: Werk enkele gegevens van een organisatorische eenheid bij.
+      summary: Organisatorische eenheid gedeeltelijk bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Organisatorische Eenheden
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganisatorischeEenheid'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/OrganisatorischeEenheid'
+          description: ''
+    delete:
+      operationId: organisatorische_eenheid_destroy
+      description: Verwijder een specifieke organisatorische eenheid.
+      summary: Organisatorische eenheid verwijderen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Organisatorische Eenheden
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /teams:
     get:
       operationId: teams_list
@@ -350,15 +646,10 @@ paths:
       summary: Alle teams opvragen.
       parameters:
       - in: query
-        name: actief
-        schema:
-          type: boolean
-        description: Actief
-      - in: query
         name: naam
         schema:
           type: string
-        description: Naam
+        description: Naam van het team.
       - name: page
         required: false
         in: query
@@ -385,11 +676,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedTeamList'
           description: ''
+    post:
+      operationId: teams_create
+      description: Voeg een nieuw team toe aan het systeem.
+      summary: Nieuw team aanmaken.
+      tags:
+      - Team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: ''
   /teams/{uuid}:
     get:
       operationId: teams_retrieve
-      description: Een specifieke medewerker opvragen.
-      summary: Een specifieke team opvragen.
+      description: Een specifiek team opvragen via UUID.
+      summary: Een specifiek team opvragen.
       parameters:
       - in: path
         name: uuid
@@ -412,79 +727,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/Team'
           description: ''
-  /users:
-    get:
-      operationId: users_list
-      description: Deze lijst kan gefilterd wordt met query-string parameters.
-      summary: Alle users opvragen.
-      parameters:
-      - in: query
-        name: actief
-        schema:
-          type: boolean
-        description: Geeft aan of de medewerker momenteel actief is.
-      - in: query
-        name: datumToegevoegd
-        schema:
-          type: string
-          format: date
-        description: Datum waarop de medewerker is toegevoegd.
-      - in: query
-        name: functie
-        schema:
-          type: string
-        description: Functie van de medewerker (optioneel).
-      - in: query
-        name: groups
-        schema:
-          type: array
-          items:
-            type: string
-            nullable: true
-        description: Groups van de user.
-        explode: true
-        style: form
-      - name: page
-        required: false
-        in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
-        schema:
-          type: integer
-      - name: pageSize
-        required: false
-        in: query
-        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
-        schema:
-          type: integer
-      tags:
-      - Users
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedUserList'
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/PaginatedUserList'
-          description: ''
-  /users/{scim_external_id}:
-    get:
-      operationId: users_retrieve
-      description: Een specifieke user opvragen.
-      summary: Een specifieke user opvragen.
+    put:
+      operationId: teams_update
+      description: Werk alle gegevens van een team bij.
+      summary: Team volledig bijwerken.
       parameters:
       - in: path
-        name: scim_external_id
+        name: uuid
         schema:
           type: string
-          description: A string that is an identifier for the resource as defined
-            by the provisioning client.
+          format: uuid
+          description: Unieke resource identifier (UUID4)
         required: true
       tags:
-      - Users
+      - Team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+        required: true
       security:
       - tokenAuth: []
       responses:
@@ -492,11 +754,61 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Team'
             application/problem+json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Team'
           description: ''
+    patch:
+      operationId: teams_partial_update
+      description: Werk enkele gegevens van een team bij.
+      summary: Team gedeeltelijk bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Team
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTeam'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Team'
+          description: ''
+    delete:
+      operationId: teams_destroy
+      description: Verwijder een specifiek team.
+      summary: Team verwijderen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Team
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /vestiging:
     get:
       operationId: vestiging_list
@@ -507,27 +819,22 @@ paths:
         name: adres
         schema:
           type: string
-        description: Adres
-      - in: query
-        name: correspondentieadres
-        schema:
-          type: string
-        description: Correspondentieadres
+        description: Fysiek adres van de vestiging (optioneel).
       - in: query
         name: korteNaam
         schema:
           type: string
-        description: Korte naam
+        description: Afkorting of korte naam van de vestiging.
       - in: query
         name: landcode
         schema:
           type: string
-        description: Landcode
+        description: ISO-landcode van de vestiging (bijv. NL, BE).
       - in: query
         name: naam
         schema:
           type: string
-        description: Naam
+        description: Volledige naam van de vestiging.
       - name: page
         required: false
         in: query
@@ -544,17 +851,12 @@ paths:
         name: postadres
         schema:
           type: string
-        description: Postadres
-      - in: query
-        name: telefoonnummer
-        schema:
-          type: string
-        description: Telefoonnummer
+        description: Post adres van de vestiging (optioneel).
       - in: query
         name: vestigingsnummer
         schema:
           type: string
-        description: Vestigingsnummer
+        description: Unieke identificatiecode of nummer van de vestiging.
       tags:
       - Vestigingen
       security:
@@ -568,6 +870,30 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/PaginatedVestigingList'
+          description: ''
+    post:
+      operationId: vestiging_create
+      description: Voeg een nieuwe vestiging toe aan het systeem.
+      summary: Nieuwe vestiging aanmaken.
+      tags:
+      - Vestigingen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vestiging'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
           description: ''
   /vestiging/{uuid}:
     get:
@@ -596,6 +922,88 @@ paths:
               schema:
                 $ref: '#/components/schemas/Vestiging'
           description: ''
+    put:
+      operationId: vestiging_update
+      description: Werk alle gegevens van een vestiging bij.
+      summary: Vestiging volledig bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Vestigingen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vestiging'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
+          description: ''
+    patch:
+      operationId: vestiging_partial_update
+      description: Werk enkele gegevens van een vestiging bij.
+      summary: Vestiging gedeeltelijk bijwerken.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Vestigingen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVestiging'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Vestiging'
+          description: ''
+    delete:
+      operationId: vestiging_destroy
+      description: Verwijder een specifieke vestiging.
+      summary: Vestiging verwijderen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        required: true
+      tags:
+      - Vestigingen
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
 components:
   schemas:
     Contactpersoon:
@@ -605,17 +1013,50 @@ components:
           type: string
           format: uuid
           readOnly: true
+          description: Unieke resource identifier (UUID4)
         medewerker:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/NestedMedewerker'
           readOnly: true
+          description: De medewerker die aan deze rol gekoppeld is.
+        medewerkerUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+          description: UUID van de gekoppelde medewerker.
         team:
-          type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
           readOnly: true
+          description: Teams waaraan de medewerker gekoppeld is.
+        teamUuid:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+            nullable: true
+          writeOnly: true
+          description: UUID van de gekoppelde teams.
         organisatorischeEenheid:
-          type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisatorischeEenheid'
           readOnly: true
+          description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
+        organisatorischeEenheidUuid:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+            nullable: true
+          writeOnly: true
+          description: UUID van de gekoppelde organisatorsiche eenheden.
       required:
       - medewerker
+      - medewerkerUuid
       - organisatorischeEenheid
       - team
       - uuid
@@ -650,48 +1091,60 @@ components:
           type: string
           format: uuid
           readOnly: true
+          description: Unieke resource identifier (UUID4)
         medewerkerId:
           type: string
           readOnly: true
+          description: ID van de medewerker.
         voornaam:
           type: string
+          description: Voornaam van de medewerker.
         achternaam:
           type: string
+          description: Achternaam van de medewerker.
         emailadres:
           type: string
           format: email
+          description: E-mailadres van de medewerker.
         telefoonnummer:
           type: string
+          description: Telefoonnummer van de medewerker (optioneel).
         geslachtsaanduiding:
           type: boolean
+          description: Geslachtsaanduiding (optioneel).
         datumUitDienst:
           type: string
           format: date
           nullable: true
+          description: Datum waarop de medewerker uit dienst is gegaan (indien van
+            toepassing).
         teams:
           type: array
           items:
             $ref: '#/components/schemas/Team'
           readOnly: true
-        vestiging:
-          allOf:
-          - $ref: '#/components/schemas/SubVestiging'
-          readOnly: true
-        contactpersoon:
-          allOf:
-          - $ref: '#/components/schemas/Contactpersoon'
-          readOnly: true
+          description: Teams van de medewerker.
+        teamUuid:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+            nullable: true
+          writeOnly: true
+          description: UUID van de gekoppelde teams.
         datumToegevoegd:
           type: string
           format: date-time
           readOnly: true
+          description: Datum waarop de medewerker is toegevoegd.
         laatstGewijzigd:
           type: string
           format: date-time
           readOnly: true
+          description: Datum waarop de medewerker voor het laatst is gewijzigd.
       required:
       - achternaam
-      - contactpersoon
       - datumToegevoegd
       - emailadres
       - geslachtsaanduiding
@@ -699,7 +1152,67 @@ components:
       - medewerkerId
       - teams
       - uuid
-      - vestiging
+      - voornaam
+    NestedMedewerker:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke resource identifier (UUID4)
+        medewerkerId:
+          type: string
+          readOnly: true
+          description: ID van de medewerker.
+        voornaam:
+          type: string
+          readOnly: true
+          description: Voornaam van de medewerker.
+        achternaam:
+          type: string
+          readOnly: true
+          description: Achternaam van de medewerker.
+        emailadres:
+          type: string
+          format: email
+          readOnly: true
+          description: E-mailadres van de medewerker.
+        telefoonnummer:
+          type: string
+          readOnly: true
+          description: Telefoonnummer van de medewerker (optioneel).
+        geslachtsaanduiding:
+          type: boolean
+          readOnly: true
+          description: Geslachtsaanduiding (optioneel).
+        datumUitDienst:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+          description: Datum waarop de medewerker uit dienst is gegaan (indien van
+            toepassing).
+        datumToegevoegd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker is toegevoegd.
+        laatstGewijzigd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker voor het laatst is gewijzigd.
+      required:
+      - achternaam
+      - datumToegevoegd
+      - datumUitDienst
+      - emailadres
+      - geslachtsaanduiding
+      - laatstGewijzigd
+      - medewerkerId
+      - telefoonnummer
+      - uuid
       - voornaam
     OrganisatorischeEenheid:
       type: object
@@ -708,29 +1221,40 @@ components:
           type: string
           format: uuid
           readOnly: true
+          description: Unieke resource identifier (UUID4)
         identificatie:
           type: string
+          description: Unieke interne identificatie van de organisatorische eenheid.
         naam:
           type: string
+          description: Volledige naam van de organisatorische eenheid.
         typeOrganisatie:
           type: string
+          description: Type organisatie.
         verkorteNaam:
           type: string
+          description: Afkorting of verkorte naam van de organisatorische eenheid.
         beschrijving:
           type: string
+          description: Optionele beschrijving van de organisatorische eenheid.
         emailadres:
           type: string
           format: email
+          description: E-mailadres van de organisatorische eenheid.
         telefoonnummer:
           type: string
+          description: Telefoonnummer van de organisatorische eenheid.
         einddatum:
           type: string
           format: date
           nullable: true
+          description: Optionele einddatum waarop de organisatorische eenheid wordt
+            opgeheven of stopt te bestaan.
         hoofdOrganisatorischeEenheid:
           type: string
           format: uuid
           readOnly: true
+          description: UUID van de bovenliggende organisatorsiche eenheden.
       required:
       - hoofdOrganisatorischeEenheid
       - identificatie
@@ -898,33 +1422,200 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Vestiging'
-    SubVestiging:
+    PatchedContactpersoon:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
           readOnly: true
-        vestigingsnummer:
+          description: Unieke resource identifier (UUID4)
+        medewerker:
+          allOf:
+          - $ref: '#/components/schemas/NestedMedewerker'
+          readOnly: true
+          description: De medewerker die aan deze rol gekoppeld is.
+        medewerkerUuid:
           type: string
-        naam:
+          format: uuid
+          writeOnly: true
+          description: UUID van de gekoppelde medewerker.
+        team:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+          readOnly: true
+          description: Teams waaraan de medewerker gekoppeld is.
+        teamUuid:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+            nullable: true
+          writeOnly: true
+          description: UUID van de gekoppelde teams.
+        organisatorischeEenheid:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisatorischeEenheid'
+          readOnly: true
+          description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
+        organisatorischeEenheidUuid:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+            nullable: true
+          writeOnly: true
+          description: UUID van de gekoppelde organisatorsiche eenheden.
+    PatchedMedewerker:
+      type: object
+      properties:
+        uuid:
           type: string
-        korteNaam:
+          format: uuid
+          readOnly: true
+          description: Unieke resource identifier (UUID4)
+        medewerkerId:
           type: string
-        adres:
+          readOnly: true
+          description: ID van de medewerker.
+        voornaam:
           type: string
-        correspondentieadres:
+          description: Voornaam van de medewerker.
+        achternaam:
           type: string
-        postadres:
+          description: Achternaam van de medewerker.
+        emailadres:
           type: string
+          format: email
+          description: E-mailadres van de medewerker.
         telefoonnummer:
           type: string
+          description: Telefoonnummer van de medewerker (optioneel).
+        geslachtsaanduiding:
+          type: boolean
+          description: Geslachtsaanduiding (optioneel).
+        datumUitDienst:
+          type: string
+          format: date
+          nullable: true
+          description: Datum waarop de medewerker uit dienst is gegaan (indien van
+            toepassing).
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
+          readOnly: true
+          description: Teams van de medewerker.
+        teamUuid:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+            nullable: true
+          writeOnly: true
+          description: UUID van de gekoppelde teams.
+        datumToegevoegd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker is toegevoegd.
+        laatstGewijzigd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker voor het laatst is gewijzigd.
+    PatchedOrganisatorischeEenheid:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke resource identifier (UUID4)
+        identificatie:
+          type: string
+          description: Unieke interne identificatie van de organisatorische eenheid.
+        naam:
+          type: string
+          description: Volledige naam van de organisatorische eenheid.
+        typeOrganisatie:
+          type: string
+          description: Type organisatie.
+        verkorteNaam:
+          type: string
+          description: Afkorting of verkorte naam van de organisatorische eenheid.
+        beschrijving:
+          type: string
+          description: Optionele beschrijving van de organisatorische eenheid.
+        emailadres:
+          type: string
+          format: email
+          description: E-mailadres van de organisatorische eenheid.
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van de organisatorische eenheid.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: Optionele einddatum waarop de organisatorische eenheid wordt
+            opgeheven of stopt te bestaan.
+        hoofdOrganisatorischeEenheid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: UUID van de bovenliggende organisatorsiche eenheden.
+    PatchedTeam:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke resource identifier (UUID4)
+        naam:
+          type: string
+          description: Naam van het team.
+        beschrijving:
+          type: string
+          description: Optionele beschrijving van het team.
+    PatchedVestiging:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unieke resource identifier (UUID4)
+        vestigingsnummer:
+          type: string
+          description: Unieke identificatiecode of nummer van de vestiging.
+        naam:
+          type: string
+          description: Volledige naam van de vestiging.
+        korteNaam:
+          type: string
+          description: Afkorting of korte naam van de vestiging.
+        adres:
+          type: string
+          description: Fysiek adres van de vestiging (optioneel).
+        correspondentieadres:
+          type: string
+          description: Adres voor correspondentie (optioneel).
+        postadres:
+          type: string
+          description: Post adres van de vestiging (optioneel).
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van de vestiging (optioneel).
         landcode:
           type: string
-      required:
-      - naam
-      - uuid
-      - vestigingsnummer
+          description: ISO-landcode van de vestiging (bijv. NL, BE).
     Team:
       type: object
       properties:
@@ -932,10 +1623,13 @@ components:
           type: string
           format: uuid
           readOnly: true
+          description: Unieke resource identifier (UUID4)
         naam:
           type: string
+          description: Naam van het team.
         beschrijving:
           type: string
+          description: Optionele beschrijving van het team.
       required:
       - beschrijving
       - naam
@@ -1009,29 +1703,33 @@ components:
           type: string
           format: uuid
           readOnly: true
+          description: Unieke resource identifier (UUID4)
         vestigingsnummer:
           type: string
+          description: Unieke identificatiecode of nummer van de vestiging.
         naam:
           type: string
+          description: Volledige naam van de vestiging.
         korteNaam:
           type: string
+          description: Afkorting of korte naam van de vestiging.
         adres:
           type: string
+          description: Fysiek adres van de vestiging (optioneel).
         correspondentieadres:
           type: string
+          description: Adres voor correspondentie (optioneel).
         postadres:
           type: string
+          description: Post adres van de vestiging (optioneel).
         telefoonnummer:
           type: string
+          description: Telefoonnummer van de vestiging (optioneel).
         landcode:
           type: string
-        organisatorischeEenheid:
-          allOf:
-          - $ref: '#/components/schemas/OrganisatorischeEenheid'
-          readOnly: true
+          description: ISO-landcode van de vestiging (bijv. NL, BE).
       required:
       - naam
-      - organisatorischeEenheid
       - uuid
       - vestigingsnummer
   securitySchemes:

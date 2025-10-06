@@ -1,33 +1,31 @@
+from django.utils.translation import gettext_lazy as _
+
 import django_filters
+from vng_api_common.utils import get_help_text
 
 from openorganisatie.scim.models.organisatorische_eenheid import OrganisatorischeEenheid
 
 
 class OrganisatorischeEenheidFilter(django_filters.FilterSet):
-    identificatie = django_filters.CharFilter(
-        field_name="identifier", lookup_expr="icontains", label="Identificatie"
-    )
-    naam = django_filters.CharFilter(
-        field_name="name", lookup_expr="icontains", label="Naam"
-    )
     type_organisatie = django_filters.CharFilter(
         field_name="organization_type",
         lookup_expr="icontains",
-        label="Type organisatie",
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "organization_type"),
     )
     verkorte_naam = django_filters.CharFilter(
-        field_name="short_name", lookup_expr="icontains", label="Verkorte naam"
+        field_name="short_name",
+        lookup_expr="icontains",
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "short_name"),
     )
-    beschrijving = django_filters.CharFilter(
-        field_name="description", lookup_expr="icontains", label="Beschrijving"
+    einddatum = django_filters.DateFilter(
+        field_name="end_date",
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "end_date"),
     )
-    emailadres = django_filters.CharFilter(
-        field_name="email_address", lookup_expr="icontains", label="E-mailadres"
+    hoofd_organisatorische_eenheid = django_filters.UUIDFilter(
+        field_name="parent_organisation__uuid",
+        lookup_expr="exact",
+        help_text=_("UUID van de bovenliggende organisatorische eenheid."),
     )
-    telefoonnummer = django_filters.CharFilter(
-        field_name="phone_number", lookup_expr="icontains", label="Telefoonnummer"
-    )
-    einddatum = django_filters.DateFilter(field_name="end_date", label="Einddatum")
 
     class Meta:
         model = OrganisatorischeEenheid
