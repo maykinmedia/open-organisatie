@@ -9,6 +9,8 @@ from vng_api_common import routers
 
 from .schema import custom_settings
 from .viewsets.contactpersoon import ContactpersoonViewSet
+from .viewsets.functie import FunctieViewSet
+from .viewsets.functietype import FunctieTypeViewSet
 from .viewsets.group import GroupReadOnlyViewSet
 from .viewsets.medewerker import MedewerkerViewSet
 from .viewsets.organisatorische_eenheid import OrganisatorischeEenheidViewSet
@@ -24,6 +26,8 @@ router.register("contactpersoon", ContactpersoonViewSet)
 router.register("vestiging", VestigingViewSet)
 router.register("organisatorische-eenheid", OrganisatorischeEenheidViewSet)
 router.register("teams", TeamViewSet)
+router.register("functie", FunctieViewSet)
+router.register("functietype", FunctieTypeViewSet)
 router.register("users", UserReadOnlyViewSet)
 router.register("groups", GroupReadOnlyViewSet)
 

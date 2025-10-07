@@ -9,8 +9,8 @@ from openorganisatie.scim.models.organisatorische_eenheid import Organisatorisch
 from openorganisatie.scim.models.team import Team
 from openorganisatie.utils.fields import UUIDRelatedField
 
-from .organisatorische_eenheid import OrganisatorischeEenheidSerializer
-from .team import TeamSerializer
+from .organisatorische_eenheid import NestedOrganisatorischeEenheidSerializer
+from .team import NestedTeamSerializer
 
 
 class NestedMedewerkerSerializer(serializers.ModelSerializer):
@@ -89,17 +89,16 @@ class ContactpersoonSerializer(serializers.ModelSerializer):
     medewerker = NestedMedewerkerSerializer(
         read_only=True, help_text=get_help_text("scim.Contactpersoon", "medewerker")
     )
-    team = TeamSerializer(
+    team = NestedTeamSerializer(
         read_only=True,
         many=True,
         help_text=get_help_text("scim.Contactpersoon", "teams"),
     )
-    organisatorischeEenheid = OrganisatorischeEenheidSerializer(
+    organisatorischeEenheid = NestedOrganisatorischeEenheidSerializer(
         read_only=True,
         many=True,
         help_text=get_help_text("scim.Contactpersoon", "organisatorische_eenheden"),
     )
-
     medewerker_uuid = UUIDRelatedField(
         queryset=Medewerker.objects.all(),
         write_only=True,
