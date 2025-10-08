@@ -10,7 +10,9 @@ from openorganisatie.scim.models.team import Team
 from openorganisatie.utils.fields import UUIDRelatedField
 
 from ..serializers.functie import NestedFunctieSerializer
-from ..serializers.organisatorische_eenheid import OrganisatorischeEenheidSerializer
+from ..serializers.organisatorische_eenheid import (
+    NestedOrganisatorischeEenheidSerializer,
+)
 from ..serializers.team import NestedTeamSerializer
 
 
@@ -59,7 +61,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         read_only=True,
         help_text=get_help_text("scim.Medewerker", "teams"),
     )
-    team_uuids = UUIDRelatedField(
+    teams_uuids = UUIDRelatedField(
         queryset=Team.objects.all(),
         write_only=True,
         source="teams",
@@ -72,7 +74,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         read_only=True,
         help_text=get_help_text("scim.Medewerker", "functies"),
     )
-    functie_uuids = UUIDRelatedField(
+    functies_uuids = UUIDRelatedField(
         queryset=Functie.objects.all(),
         write_only=True,
         source="functies",
@@ -80,12 +82,12 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         required=False,
         help_text=_("UUID’s van gekoppelde functies."),
     )
-    organisatorische_eenheden = OrganisatorischeEenheidSerializer(
+    organisatorische_eenheden = NestedOrganisatorischeEenheidSerializer(
         many=True,
         read_only=True,
         help_text=get_help_text("scim.Medewerker", "organisatorische_eenheden"),
     )
-    organisatorische_eenheid_uuids = UUIDRelatedField(
+    organisatorische_eenheden_uuids = UUIDRelatedField(
         queryset=OrganisatorischeEenheid.objects.all(),
         write_only=True,
         source="organisatorische_eenheden",
@@ -116,11 +118,11 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "geslachtsaanduiding",
             "datum_uit_dienst",
             "teams",
-            "team_uuids",
+            "teams_uuids",
             "functies",
-            "functie_uuids",
+            "functies_uuids",
             "organisatorische_eenheden",
-            "organisatorische_eenheid_uuids",
+            "organisatorische_eenheden_uuids",
             "datum_toegevoegd",
             "laatst_gewijzigd",
         ]

@@ -1,13 +1,14 @@
-import uuid
-from datetime import date, datetime
-
 from django.urls import reverse
-from django.utils.timezone import make_aware
 
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from openorganisatie.scim.enums.enums import GenderIndicator
+from openorganisatie.scim.models.factories.functie import FunctieFactory
 from openorganisatie.scim.models.factories.medewerker import MedewerkerFactory
+from openorganisatie.scim.models.factories.organisatorische_eenheid import (
+    OrganisatorischeEenheidFactory,
+)
 from openorganisatie.scim.models.factories.team import TeamFactory
 
 from .api_testcase import APITestCase
@@ -51,53 +52,55 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_filter_geslachtsaanduiding(self):
-        m1 = MedewerkerFactory(gender_indicator=True)
-        MedewerkerFactory(gender_indicator=False)
+        m1 = MedewerkerFactory(gender_indicator=GenderIndicator.MAN)
+        MedewerkerFactory(gender_indicator=GenderIndicator.VROUW)
 
         url = reverse("scim_api:medewerker-list")
-        response = self.client.get(url, {"geslachtsaanduiding": "true"})
+        response = self.client.get(url, {"geslachtsaanduiding": GenderIndicator.MAN})
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(
             response.data["results"][0]["geslachtsaanduiding"], m1.gender_indicator
         )
 
-    def test_filter_datum_uit_dienst(self):
-        m1 = MedewerkerFactory(termination_date=date(2025, 1, 1))
-        MedewerkerFactory(termination_date=date(2026, 1, 1))
-
-        url = reverse("scim_api:medewerker-list")
-        response = self.client.get(url, {"datum_uit_dienst": "2025-01-01"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["datum_uit_dienst"],
-            m1.termination_date.isoformat(),
-        )
-
-    def test_filter_teams(self):
-        team1 = TeamFactory(uuid=str(uuid.uuid4()))
-        team2 = TeamFactory(uuid=str(uuid.uuid4()))
-
+    def test_filter_teams_uuid(self):
+        team1 = TeamFactory()
+        team2 = TeamFactory()
         m1 = MedewerkerFactory()
         m1.teams.add(team1)
-
         MedewerkerFactory().teams.add(team2)
 
         url = reverse("scim_api:medewerker-list")
-        response = self.client.get(url, {"teams": [team1.uuid]})
-
+        response = self.client.get(url, {"teams_uuid": str(team1.uuid)})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
 
-    def test_filter_datum_toegevoegd(self):
-        m1 = MedewerkerFactory(date_joined=make_aware(datetime(2025, 1, 1)))
-        MedewerkerFactory(date_joined=make_aware(datetime(2026, 1, 1)))
+    def test_filter_organisatorische_eenheden_uuid(self):
+        org1 = OrganisatorischeEenheidFactory()
+        org2 = OrganisatorischeEenheidFactory()
+        m1 = MedewerkerFactory()
+        m1.organisatorische_eenheden.add(org1)
+        MedewerkerFactory().organisatorische_eenheden.add(org2)
 
         url = reverse("scim_api:medewerker-list")
-        response = self.client.get(url, {"datum_toegevoegd": "2025-01-01"})
+        response = self.client.get(
+            url, {"organisatorische_eenheden_uuid": str(org1.uuid)}
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["datum_toegevoegd"], m1.date_joined.isoformat()
-        )
+        self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
+
+    def test_filter_functies_uuid(self):
+        functie1 = FunctieFactory()
+        functie2 = FunctieFactory()
+        m1 = MedewerkerFactory()
+        m1.functies.add(functie1)
+        MedewerkerFactory().functies.add(functie2)
+
+        url = reverse("scim_api:medewerker-list")
+        response = self.client.get(url, {"functiesUuid": str(functie1.uuid)})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))

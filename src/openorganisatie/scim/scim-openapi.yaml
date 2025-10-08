@@ -17,11 +17,15 @@ paths:
           format: uuid
         description: De medewerker die aan deze rol gekoppeld is.
       - in: query
-        name: organisatorischeEenheidUuid
+        name: organisatorischeEenhedenUuid
         schema:
-          type: string
-          format: uuid
+          type: array
+          items:
+            type: string
+            format: uuid
         description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
+        explode: false
+        style: form
       - name: page
         required: false
         in: query
@@ -35,11 +39,15 @@ paths:
         schema:
           type: integer
       - in: query
-        name: teamUuid
+        name: teamsUuid
         schema:
-          type: string
-          format: uuid
+          type: array
+          items:
+            type: string
+            format: uuid
         description: Teams waaraan de medewerker gekoppeld is.
+        explode: false
+        style: form
       tags:
       - Contactpersonen
       security:
@@ -545,6 +553,75 @@ paths:
       responses:
         '204':
           description: No response body
+  /groups:
+    get:
+      operationId: groups_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle groups opvragen.
+      parameters:
+      - in: query
+        name: actief
+        schema:
+          type: boolean
+        description: Geeft aan of het team momenteel actief is.
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam van het team.
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - Group
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGroupList'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGroupList'
+          description: ''
+  /groups/{scim_external_id}:
+    get:
+      operationId: groups_retrieve
+      description: Een specifieke group opvragen.
+      summary: Een specifieke group opvragen.
+      parameters:
+      - in: path
+        name: scim_external_id
+        schema:
+          type: string
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        required: true
+      tags:
+      - Group
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
   /medewerkers:
     get:
       operationId: medewerkers_list
@@ -570,10 +647,40 @@ paths:
           format: date
         description: Datum waarop de medewerker uit dienst is gegaan (indien van toepassing).
       - in: query
+        name: functiesUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Functies van de medewerker.
+        explode: false
+        style: form
+      - in: query
         name: geslachtsaanduiding
         schema:
-          type: boolean
-        description: Geslachtsaanduiding (optioneel).
+          type: string
+          title: Geslachtsaanduiding
+          enum:
+          - M
+          - V
+          - X
+        description: |-
+          Geslachtsaanduiding (optioneel).
+
+          * `M` - Man
+          * `V` - Vrouw
+          * `X` - Anders
+      - in: query
+        name: organisatorischeEenhedenUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Organisatorische eenheden waartoe de medewerker behoort.
+        explode: false
+        style: form
       - name: page
         required: false
         in: query
@@ -587,11 +694,15 @@ paths:
         schema:
           type: integer
       - in: query
-        name: teamUuid
+        name: teamsUuid
         schema:
-          type: string
-          format: uuid
+          type: array
+          items:
+            type: string
+            format: uuid
         description: Teams van de medewerker.
+        explode: false
+        style: form
       tags:
       - Medewerkers
       security:
@@ -1098,6 +1209,91 @@ paths:
       responses:
         '204':
           description: No response body
+  /users:
+    get:
+      operationId: users_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle users opvragen.
+      parameters:
+      - in: query
+        name: actief
+        schema:
+          type: boolean
+        description: Geeft aan of de medewerker momenteel actief is.
+      - in: query
+        name: datumToegevoegd
+        schema:
+          type: string
+          format: date
+        description: Datum waarop de medewerker is toegevoegd.
+      - in: query
+        name: functie
+        schema:
+          type: string
+        description: Functie van de medewerker (optioneel).
+      - in: query
+        name: groups
+        schema:
+          type: array
+          items:
+            type: string
+            nullable: true
+        description: Groups van de user.
+        explode: true
+        style: form
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - Users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+  /users/{scim_external_id}:
+    get:
+      operationId: users_retrieve
+      description: Een specifieke user opvragen.
+      summary: Een specifieke user opvragen.
+      parameters:
+      - in: path
+        name: scim_external_id
+        schema:
+          type: string
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        required: true
+      tags:
+      - Users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
   /vestiging:
     get:
       operationId: vestiging_list
@@ -1316,13 +1512,13 @@ components:
           format: uuid
           writeOnly: true
           description: UUID van de gekoppelde medewerker.
-        team:
+        teams:
           type: array
           items:
             $ref: '#/components/schemas/NestedTeam'
           readOnly: true
           description: Teams waaraan de medewerker gekoppeld is.
-        teamUuid:
+        teamsUuid:
           type: array
           items:
             type: string
@@ -1330,14 +1526,14 @@ components:
             writeOnly: true
             nullable: true
           writeOnly: true
-          description: UUID van de gekoppelde teams.
-        organisatorischeEenheid:
+          description: UUID's van de gekoppelde teams.
+        organisatorischeEenheden:
           type: array
           items:
             $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
           readOnly: true
           description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
-        organisatorischeEenheidUuid:
+        organisatorischeEenhedenUuid:
           type: array
           items:
             type: string
@@ -1345,12 +1541,12 @@ components:
             writeOnly: true
             nullable: true
           writeOnly: true
-          description: UUID van de gekoppelde organisatorsiche eenheden.
+          description: UUID's van de gekoppelde organisatorsiche eenheden.
       required:
       - medewerker
       - medewerkerUuid
-      - organisatorischeEenheid
-      - team
+      - organisatorischeEenheden
+      - teams
       - uuid
     Functie:
       type: object
@@ -1419,6 +1615,30 @@ components:
         * `M` - Man
         * `V` - Vrouw
         * `X` - Anders
+    Group:
+      type: object
+      properties:
+        scimExternalId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        naam:
+          type: string
+          description: Naam van het team.
+        beschrijving:
+          type: string
+          description: Optionele beschrijving van het team.
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Geeft aan of het team momenteel actief is.
+      required:
+      - beschrijving
+      - isActive
+      - naam
+      - scimExternalId
     Medewerker:
       type: object
       properties:
@@ -1466,7 +1686,7 @@ components:
             $ref: '#/components/schemas/NestedTeam'
           readOnly: true
           description: Teams van de medewerker.
-        teamUuids:
+        teamsUuids:
           type: array
           items:
             type: string
@@ -1817,6 +2037,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FunctieType'
+    PaginatedGroupList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
     PaginatedMedewerkerList:
       type: object
       required:
@@ -1950,13 +2193,13 @@ components:
           format: uuid
           writeOnly: true
           description: UUID van de gekoppelde medewerker.
-        team:
+        teams:
           type: array
           items:
             $ref: '#/components/schemas/NestedTeam'
           readOnly: true
           description: Teams waaraan de medewerker gekoppeld is.
-        teamUuid:
+        teamsUuid:
           type: array
           items:
             type: string
@@ -1964,14 +2207,14 @@ components:
             writeOnly: true
             nullable: true
           writeOnly: true
-          description: UUID van de gekoppelde teams.
-        organisatorischeEenheid:
+          description: UUID's van de gekoppelde teams.
+        organisatorischeEenheden:
           type: array
           items:
             $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
           readOnly: true
           description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
-        organisatorischeEenheidUuid:
+        organisatorischeEenhedenUuid:
           type: array
           items:
             type: string
@@ -1979,7 +2222,7 @@ components:
             writeOnly: true
             nullable: true
           writeOnly: true
-          description: UUID van de gekoppelde organisatorsiche eenheden.
+          description: UUID's van de gekoppelde organisatorsiche eenheden.
     PatchedFunctie:
       type: object
       properties:
@@ -2075,7 +2318,7 @@ components:
             $ref: '#/components/schemas/NestedTeam'
           readOnly: true
           description: Teams van de medewerker.
-        teamUuids:
+        teamsUuids:
           type: array
           items:
             type: string
@@ -2312,6 +2555,68 @@ components:
       - naam
       - uuid
       - vestigingen
+    User:
+      type: object
+      properties:
+        scimExternalId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        username:
+          type: string
+          readOnly: true
+          description: User principal name van de medewerker.
+        voornaam:
+          type: string
+          readOnly: true
+          description: Voornaam van de medewerker.
+        achternaam:
+          type: string
+          readOnly: true
+          description: Achternaam van de medewerker.
+        emailadres:
+          type: string
+          format: email
+          readOnly: true
+          description: E-mailadres van de medewerker.
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van de medewerker (optioneel).
+        titel:
+          type: string
+          description: Functie van de medewerker (optioneel).
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Geeft aan of de medewerker momenteel actief is.
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          readOnly: true
+          description: Groups van de user.
+        datumToegevoegd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker is toegevoegd.
+        laatstGewijzigd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker voor het laatst is gewijzigd.
+      required:
+      - achternaam
+      - datumToegevoegd
+      - emailadres
+      - groups
+      - isActive
+      - laatstGewijzigd
+      - scimExternalId
+      - username
+      - voornaam
     Vestiging:
       type: object
       properties:
