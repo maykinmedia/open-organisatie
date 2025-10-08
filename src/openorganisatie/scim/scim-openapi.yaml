@@ -77,6 +77,75 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contactpersoon'
           description: ''
+  /groups:
+    get:
+      operationId: groups_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle groups opvragen.
+      parameters:
+      - in: query
+        name: actief
+        schema:
+          type: boolean
+        description: Geeft aan of het team momenteel actief is.
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Naam van het team.
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - Group
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGroupList'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGroupList'
+          description: ''
+  /groups/{scim_external_id}:
+    get:
+      operationId: groups_retrieve
+      description: Een specifieke group opvragen.
+      summary: Een specifieke group opvragen.
+      parameters:
+      - in: path
+        name: scim_external_id
+        schema:
+          type: string
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        required: true
+      tags:
+      - Group
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
   /medewerkers:
     get:
       operationId: medewerkers_list
@@ -343,6 +412,91 @@ paths:
               schema:
                 $ref: '#/components/schemas/Team'
           description: ''
+  /users:
+    get:
+      operationId: users_list
+      description: Deze lijst kan gefilterd wordt met query-string parameters.
+      summary: Alle users opvragen.
+      parameters:
+      - in: query
+        name: actief
+        schema:
+          type: boolean
+        description: Geeft aan of de medewerker momenteel actief is.
+      - in: query
+        name: datumToegevoegd
+        schema:
+          type: string
+          format: date
+        description: Datum waarop de medewerker is toegevoegd.
+      - in: query
+        name: functie
+        schema:
+          type: string
+        description: Functie van de medewerker (optioneel).
+      - in: query
+        name: groups
+        schema:
+          type: array
+          items:
+            type: string
+            nullable: true
+        description: Groups van de user.
+        explode: true
+        style: form
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
+        schema:
+          type: integer
+      tags:
+      - Users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+  /users/{scim_external_id}:
+    get:
+      operationId: users_retrieve
+      description: Een specifieke user opvragen.
+      summary: Een specifieke user opvragen.
+      parameters:
+      - in: path
+        name: scim_external_id
+        schema:
+          type: string
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        required: true
+      tags:
+      - Users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
   /vestiging:
     get:
       operationId: vestiging_list
@@ -465,6 +619,30 @@ components:
       - organisatorischeEenheid
       - team
       - uuid
+    Group:
+      type: object
+      properties:
+        scimExternalId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        naam:
+          type: string
+          description: Naam van het team.
+        beschrijving:
+          type: string
+          description: Optionele beschrijving van het team.
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Geeft aan of het team momenteel actief is.
+      required:
+      - beschrijving
+      - isActive
+      - naam
+      - scimExternalId
     Medewerker:
       type: object
       properties:
@@ -582,6 +760,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contactpersoon'
+    PaginatedGroupList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
     PaginatedMedewerkerList:
       type: object
       required:
@@ -651,6 +852,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Team'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
     PaginatedVestigingList:
       type: object
       required:
@@ -716,6 +940,68 @@ components:
       - beschrijving
       - naam
       - uuid
+    User:
+      type: object
+      properties:
+        scimExternalId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: A string that is an identifier for the resource as defined
+            by the provisioning client.
+        username:
+          type: string
+          readOnly: true
+          description: User principal name van de medewerker.
+        voornaam:
+          type: string
+          readOnly: true
+          description: Voornaam van de medewerker.
+        achternaam:
+          type: string
+          readOnly: true
+          description: Achternaam van de medewerker.
+        emailadres:
+          type: string
+          format: email
+          readOnly: true
+          description: E-mailadres van de medewerker.
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van de medewerker (optioneel).
+        titel:
+          type: string
+          description: Functie van de medewerker (optioneel).
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Geeft aan of de medewerker momenteel actief is.
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          readOnly: true
+          description: Groups van de user.
+        datumToegevoegd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker is toegevoegd.
+        laatstGewijzigd:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum waarop de medewerker voor het laatst is gewijzigd.
+      required:
+      - achternaam
+      - datumToegevoegd
+      - emailadres
+      - groups
+      - isActive
+      - laatstGewijzigd
+      - scimExternalId
+      - username
+      - voornaam
     Vestiging:
       type: object
       properties:

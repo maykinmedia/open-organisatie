@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -7,11 +5,6 @@ from django_scim.models import AbstractSCIMGroupMixin
 
 
 class Group(AbstractSCIMGroupMixin, models.Model):
-    uuid = models.UUIDField(
-        unique=True,
-        default=uuid.uuid4,
-        help_text=_("Unieke resource identifier (UUID4)"),
-    )
     name = models.CharField(
         max_length=100,
         unique=True,
