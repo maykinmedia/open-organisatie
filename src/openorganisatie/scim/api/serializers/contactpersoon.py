@@ -89,12 +89,12 @@ class ContactpersoonSerializer(serializers.ModelSerializer):
     medewerker = NestedMedewerkerSerializer(
         read_only=True, help_text=get_help_text("scim.Contactpersoon", "medewerker")
     )
-    team = NestedTeamSerializer(
+    teams = NestedTeamSerializer(
         read_only=True,
         many=True,
         help_text=get_help_text("scim.Contactpersoon", "teams"),
     )
-    organisatorischeEenheid = NestedOrganisatorischeEenheidSerializer(
+    organisatorische_eenheden = NestedOrganisatorischeEenheidSerializer(
         read_only=True,
         many=True,
         help_text=get_help_text("scim.Contactpersoon", "organisatorische_eenheden"),
@@ -105,23 +105,23 @@ class ContactpersoonSerializer(serializers.ModelSerializer):
         source="medewerker",
         help_text=_("UUID van de gekoppelde medewerker."),
     )
-    team_uuid = UUIDRelatedField(
+    teams_uuid = UUIDRelatedField(
         queryset=Team.objects.all(),
         write_only=True,
-        source="team",
+        source="teams",
         allow_null=True,
         required=False,
         many=True,
-        help_text=_("UUID van de gekoppelde teams."),
+        help_text=_("UUID's van de gekoppelde teams."),
     )
-    organisatorischeEenheid_uuid = UUIDRelatedField(
+    organisatorische_eenheden_uuid = UUIDRelatedField(
         queryset=OrganisatorischeEenheid.objects.all(),
         write_only=True,
-        source="organisatorische_eenheid",
+        source="organisatorische_eenheden",
         allow_null=True,
         required=False,
         many=True,
-        help_text=_("UUID van de gekoppelde organisatorsiche eenheden."),
+        help_text=_("UUID's van de gekoppelde organisatorsiche eenheden."),
     )
 
     class Meta:
@@ -130,8 +130,8 @@ class ContactpersoonSerializer(serializers.ModelSerializer):
             "uuid",
             "medewerker",
             "medewerker_uuid",
-            "team",
-            "team_uuid",
-            "organisatorischeEenheid",
-            "organisatorischeEenheid_uuid",
+            "teams",
+            "teams_uuid",
+            "organisatorische_eenheden",
+            "organisatorische_eenheden_uuid",
         ]
