@@ -135,7 +135,7 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         read_only=True,
         help_text=get_help_text("scim.OrganisatorischeEenheid", "branches"),
     )
-    vestiging_uuids = UUIDRelatedField(
+    vestigingen_uuid = UUIDRelatedField(
         queryset=Vestiging.objects.all(),
         write_only=True,
         source="branches",
@@ -148,7 +148,7 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         read_only=True,
         help_text=get_help_text("scim.OrganisatorischeEenheid", "functies"),
     )
-    functie_uuids = UUIDRelatedField(
+    functies_uuid = UUIDRelatedField(
         queryset=Functie.objects.all(),
         write_only=True,
         source="functies",
@@ -177,8 +177,15 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
             "telefoonnummer",
             "einddatum",
             "vestigingen",
-            "vestiging_uuids",
+            "vestigingen_uuid",
             "functies",
-            "functie_uuids",
+            "functies_uuid",
             "hoofd_organisatorische_eenheid",
         ]
+
+    def to_representation(self, instance):
+        """Ensure hoofd_organisatorische_eenheid is serialized as a string UUID."""
+        data = super().to_representation(instance)
+        parent = instance.parent_organisation
+        data["hoofd_organisatorische_eenheid"] = str(parent.uuid) if parent else None
+        return data

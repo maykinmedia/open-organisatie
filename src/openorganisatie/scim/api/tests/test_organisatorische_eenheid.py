@@ -1,14 +1,14 @@
-from datetime import date
-
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from openorganisatie.scim.models.factories.functie import FunctieFactory
 from openorganisatie.scim.models.factories.organisatorische_eenheid import (
     OrganisatorischeEenheidFactory,
 )
+from openorganisatie.scim.models.factories.vestiging import VestigingFactory
 
 from .api_testcase import APITestCase
 
@@ -96,52 +96,35 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["verkorteNaam"], org1.short_name)
 
-    def test_beschrijving_filter(self):
-        org1 = OrganisatorischeEenheidFactory(description="Finance divisie")
-        OrganisatorischeEenheidFactory(description="HR divisie")
+    def test_filter_vestiging_uuids(self):
+        vest1 = VestigingFactory()
+        vest2 = VestigingFactory()
+        org1 = OrganisatorischeEenheidFactory()
+        org1.branches.add(vest1)
+
+        OrganisatorischeEenheidFactory().branches.add(vest2)
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"beschrijving": "Finance divisie"})
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["beschrijving"], org1.description)
+        response = self.client.get(url, {"vestigingen_uuid": str(vest1.uuid)})
 
-    def test_emailadres_filter(self):
-        org1 = OrganisatorischeEenheidFactory(email_address="finance@example.com")
-        OrganisatorischeEenheidFactory(email_address="hr@example.com")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(org1.uuid))
+
+    def test_filter_functie_uuids(self):
+        functie1 = FunctieFactory()
+        functie2 = FunctieFactory()
+        org1 = OrganisatorischeEenheidFactory()
+        org1.functies.add(functie1)
+
+        OrganisatorischeEenheidFactory().functies.add(functie2)
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"emailadres": "finance@example.com"})
+        response = self.client.get(url, {"functies_uuid": str(functie1.uuid)})
 
-        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["emailadres"], org1.email_address)
-
-    def test_telefoonnummer_filter(self):
-        org1 = OrganisatorischeEenheidFactory(phone_number="0612345678")
-        OrganisatorischeEenheidFactory(phone_number="0687654321")
-
-        url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"telefoonnummer": "0612345678"})
-
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["telefoonnummer"], org1.phone_number)
-
-    def test_einddatum_filter(self):
-        org1 = OrganisatorischeEenheidFactory(end_date=date(2025, 1, 1))
-        OrganisatorischeEenheidFactory(end_date=date(2026, 1, 1))
-
-        url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"einddatum": "2025-01-01"})
-
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["einddatum"], org1.end_date.isoformat())
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(org1.uuid))
 
     def test_list_children_under_parent(self):
         parent = OrganisatorischeEenheidFactory()

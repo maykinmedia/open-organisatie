@@ -8,7 +8,7 @@ from openorganisatie.scim.models.organisatorische_eenheid import Organisatorisch
 class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
     uuid = factory.LazyFunction(uuid.uuid4)
     identifier = factory.Sequence(lambda n: f"OE{n:03d}")
-    name = factory.Faker("company")
+    name = factory.Faker("name")
     organization_type = factory.Faker("job")
     short_name = factory.Faker("company_suffix")
     description = factory.Faker("text", max_nb_chars=50)
