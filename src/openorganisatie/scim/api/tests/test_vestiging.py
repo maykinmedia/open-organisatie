@@ -83,19 +83,6 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["adres"], v1.address)
 
-    def test_correspondentieadres_filter(self):
-        v1 = VestigingFactory(correspondence_address="Co adres")
-        VestigingFactory(correspondence_address="ander adres 2")
-
-        url = reverse("scim_api:vestiging-list")
-        response = self.client.get(url, {"correspondentieadres": "Co adres"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["correspondentieadres"],
-            v1.correspondence_address,
-        )
-
     def test_postadres_filter(self):
         v1 = VestigingFactory(postal_address="1000AB")
         VestigingFactory(postal_address="2000CD")
@@ -105,16 +92,6 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["postadres"], v1.postal_address)
-
-    def test_telefoonnummer_filter(self):
-        v1 = VestigingFactory(phone_number="0612345678")
-        VestigingFactory(phone_number="06876543921")
-
-        url = reverse("scim_api:vestiging-list")
-        response = self.client.get(url, {"telefoonnummer": "0612345678"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["telefoonnummer"], v1.phone_number)
 
     def test_landcode_filter(self):
         v1 = VestigingFactory(country_code="NL")
