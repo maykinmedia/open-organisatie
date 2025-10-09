@@ -1,12 +1,11 @@
 from django.urls import include, path
 
 from drf_spectacular.views import (
-    SpectacularJSONAPIView,
     SpectacularRedocView,
-    SpectacularYAMLAPIView,
 )
 from vng_api_common import routers
 
+from ...utils.views import SpectacularJSONAPIView, SpectacularYAMLAPIView
 from .schema import custom_settings
 from .viewsets.contactpersoon import ContactpersoonReadOnlyViewSet
 from .viewsets.group import GroupReadOnlyViewSet
@@ -31,7 +30,7 @@ urlpatterns = [
     path("", include(router.urls)),
     path("", router.APIRootView.as_view(), name="root"),
     path(
-        "schema/openapi.json",
+        "openapi.json",
         SpectacularJSONAPIView.as_view(
             urlconf="openorganisatie.scim.api.urls",
             custom_settings=custom_settings,
@@ -39,7 +38,7 @@ urlpatterns = [
         name="schema-json-medewerkers",
     ),
     path(
-        "schema/openapi.yaml",
+        "openapi.yaml",
         SpectacularYAMLAPIView.as_view(
             urlconf="openorganisatie.scim.api.urls",
             custom_settings=custom_settings,

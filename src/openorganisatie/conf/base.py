@@ -154,12 +154,13 @@ MIDDLEWARE = [
     "hijack.middleware.HijackUserMiddleware",
     "openorganisatie.utils.scim_middleware.SCIMTokenAuthMiddleware",
     "django_scim.middleware.SCIMAuthCheckMiddleware",
+    "vng_api_common.middleware.APIVersionHeaderMiddleware",
     # should be last according to docs
     "axes.middleware.AxesMiddleware",
 ]
 
-SCIM_API_VERSION = "0.1.0"
-SCIM_API_MAJOR_VERSION = SCIM_API_VERSION.split(".")[0]
+API_VERSION = "0.1.0"
+SCIM_API_MAJOR_VERSION = API_VERSION.split(".")[0]
 
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
 
@@ -170,7 +171,7 @@ REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"]
 ) + ("openorganisatie.utils.renderers.ProblemJSONRenderer",)
 
-REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "drf_spectacular.openapi.AutoSchema"
+REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "openorganisatie.utils.schema.AutoSchema"
 
 REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (
     "vng_api_common.pagination.DynamicPageSizePagination"
@@ -181,6 +182,11 @@ REST_FRAMEWORK["EXCEPTION_HANDLER"] = "vng_api_common.views.exception_handler"
 SPECTACULAR_SETTINGS = {
     "TITLE": "Open Organisatie API",
     "DESCRIPTION": "......",
+    "CONTACT": {
+        "url": "https://github.com/maykinmedia/open-organisatie",
+        "name": "Maykin Media",
+        "email": "support@maykinmedia.nl",
+    },
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
