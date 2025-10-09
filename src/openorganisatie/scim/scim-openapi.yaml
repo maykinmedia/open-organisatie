@@ -202,17 +202,10 @@ paths:
       summary: Alle functies opvragen.
       parameters:
       - in: query
-        name: beginDatum
+        name: functieOmschrijving
         schema:
           type: string
-          format: date
-        description: De datum waarop de functie ingaat.
-      - in: query
-        name: eindDatum
-        schema:
-          type: string
-          format: date
-        description: De datum waarop de functie eindigt.
+        description: Korte omschrijving of titel van de functie.
       - in: query
         name: functieTypeUuid
         schema:
