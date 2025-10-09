@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.user import User
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(ReadOnlyCompareVersionAdmin):
     list_display = (
         "first_name",
         "last_name",

@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.functie import Functie
 
 
 @admin.register(Functie)
-class FunctieAdmin(admin.ModelAdmin):
+class FunctieAdmin(ReadOnlyCompareVersionAdmin):
     list_display = (
         "functie_omschrijving",
         "functie_type",

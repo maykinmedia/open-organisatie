@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.organisatorische_eenheid import OrganisatorischeEenheid
 
 
 @admin.register(OrganisatorischeEenheid)
-class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
+class OrganisatorischeEenheidAdmin(ReadOnlyCompareVersionAdmin):
     list_display = ("naam", "soort_organisatie", "verkorte_naam", "contactpersoon")
     search_fields = ("naam", "omschrijving", "verkorte_naam", "soort_organisatie")
     list_filter = ("soort_organisatie",)

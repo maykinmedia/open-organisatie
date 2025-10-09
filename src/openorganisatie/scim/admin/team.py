@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.team import Team
 
 
 @admin.register(Team)
-class TeamAdmin(admin.ModelAdmin):
+class TeamAdmin(ReadOnlyCompareVersionAdmin):
     list_display = ("naam", "display_medewerkers", "contactpersoon")
     search_fields = ("naam", "omschrijving")
     readonly_fields = ("display_medewerkers", "uuid")
