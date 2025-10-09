@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 
 import sentry_sdk
 import structlog
+from notifications_api_common.settings import *  # noqa
 from open_api_framework.conf.base import *  # noqa
 from open_api_framework.conf.utils import config
 from vng_api_common.conf.api import BASE_REST_FRAMEWORK  # noqa: F401
@@ -93,18 +94,11 @@ CACHES = {
 #
 
 INSTALLED_APPS += [
-    # NOTE: If enabled, at least one Site object is required and
-    # uncomment SITE_ID above.
-    # 'django.contrib.sites',
-    "django_structlog",
-    # Two-factor authentication in the Django admin, enforced.
     # Optional applications.
+    "django_structlog",
+    "vng_api_common.notifications",
     "django_scim",
     "rest_framework.authtoken",
-    # "django_extensions",
-    # 'django.contrib.admindocs',
-    # 'django.contrib.humanize',
-    # 'django.contrib.sitemaps',
     # External applications.
     "hijack",
     "hijack.contrib.admin",
@@ -201,6 +195,27 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "openorganisatie.wsgi.application"
+
+# Django setup configuration
+#
+SETUP_CONFIGURATION_STEPS = (
+    "zgw_consumers.contrib.setup_configuration.steps.ServiceConfigurationStep",
+    "notifications_api_common.contrib.setup_configuration.steps.NotificationConfigurationStep",
+    # "openklant.setup_configuration.steps.TokenAuthConfigurationStep",
+    # "mozilla_django_oidc_db.setup_configuration.steps.AdminOIDCConfigurationStep",
+)
+
+# Notifications
+# Override the default to be `True`, to make notifications opt-in
+NOTIFICATIONS_DISABLED = config(
+    "NOTIFICATIONS_DISABLED",
+    default=True,
+    help_text=(
+        "Indicates whether or not notifications should be sent to the Notificaties API "
+        "for operations on the API endpoints."
+    ),
+)
+
 
 #
 # SCIM
