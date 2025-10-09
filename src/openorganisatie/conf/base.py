@@ -201,8 +201,6 @@ WSGI_APPLICATION = "openorganisatie.wsgi.application"
 SETUP_CONFIGURATION_STEPS = (
     "zgw_consumers.contrib.setup_configuration.steps.ServiceConfigurationStep",
     "notifications_api_common.contrib.setup_configuration.steps.NotificationConfigurationStep",
-    # "openklant.setup_configuration.steps.TokenAuthConfigurationStep",
-    # "mozilla_django_oidc_db.setup_configuration.steps.AdminOIDCConfigurationStep",
 )
 
 # Notifications
@@ -541,11 +539,6 @@ CSRF_FAILURE_VIEW = "openorganisatie.accounts.views.csrf_failure"
 
 X_FRAME_OPTIONS = "DENY"
 
-#
-# FIXTURES
-#
-
-FIXTURE_DIRS = (DJANGO_PROJECT_DIR / "fixtures",)
 
 #
 # Custom settings
