@@ -41,6 +41,9 @@ class TeamAPITests(APITestCase):
         self.assertEqual(data["naam"], team.name)
         self.assertEqual(data["beschrijving"], team.description)
 
+        self.assertIn("vestigingen", data)
+        self.assertIn("functies", data)
+
     def test_authentication_required(self):
         client = APIClient()
         url = reverse("scim_api:team-list")

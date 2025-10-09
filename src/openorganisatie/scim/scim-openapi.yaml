@@ -629,24 +629,6 @@ paths:
       summary: Alle medewerkers opvragen.
       parameters:
       - in: query
-        name: datumToegevoegdAfter
-        schema:
-          type: string
-          format: date
-        description: Datum waarop de medewerker is toegevoegd.
-      - in: query
-        name: datumToegevoegdBefore
-        schema:
-          type: string
-          format: date
-        description: Datum waarop de medewerker is toegevoegd.
-      - in: query
-        name: datumUitDienst
-        schema:
-          type: string
-          format: date
-        description: Datum waarop de medewerker uit dienst is gegaan (indien van toepassing).
-      - in: query
         name: functiesUuid
         schema:
           type: array
@@ -857,18 +839,31 @@ paths:
       summary: Alle organisatorische eenheden opvragen.
       parameters:
       - in: query
-        name: einddatum
+        name: functiesUuid
         schema:
-          type: string
-          format: date
-        description: Optionele einddatum waarop de organisatorische eenheid wordt
-          opgeheven of stopt te bestaan.
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Functies binnen deze organisatorische eenheid.
+        explode: false
+        style: form
       - in: query
         name: hoofdOrganisatorischeEenheid
         schema:
           type: string
           format: uuid
         description: UUID van de bovenliggende organisatorische eenheid.
+      - in: query
+        name: identificatie
+        schema:
+          type: string
+        description: Unieke interne identificatie van de organisatorische eenheid.
+      - in: query
+        name: naam
+        schema:
+          type: string
+        description: Volledige naam van de organisatorische eenheid.
       - name: page
         required: false
         in: query
@@ -891,6 +886,16 @@ paths:
         schema:
           type: string
         description: Afkorting of verkorte naam van de organisatorische eenheid.
+      - in: query
+        name: vestigingenUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Vestigingen waaraan de medewerker gekoppeld is.
+        explode: false
+        style: form
       tags:
       - Organisatorische Eenheden
       security:
@@ -1046,6 +1051,16 @@ paths:
       summary: Alle teams opvragen.
       parameters:
       - in: query
+        name: functiesUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Functies die binnen dit team actief zijn.
+        explode: false
+        style: form
+      - in: query
         name: naam
         schema:
           type: string
@@ -1062,6 +1077,16 @@ paths:
         description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
         schema:
           type: integer
+      - in: query
+        name: vestigingenUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Vestigingen waaraan de medewerker gekoppeld is.
+        explode: false
+        style: form
       tags:
       - Team
       security:
@@ -1700,7 +1725,7 @@ components:
             $ref: '#/components/schemas/NestedFunctie'
           readOnly: true
           description: Functies van de medewerker.
-        functieUuids:
+        functiesUuids:
           type: array
           items:
             type: string
@@ -1711,10 +1736,10 @@ components:
         organisatorischeEenheden:
           type: array
           items:
-            $ref: '#/components/schemas/OrganisatorischeEenheid'
+            $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
           readOnly: true
           description: Organisatorische eenheden waartoe de medewerker behoort.
-        organisatorischeEenheidUuids:
+        organisatorischeEenhedenUuids:
           type: array
           items:
             type: string
@@ -1934,7 +1959,7 @@ components:
             $ref: '#/components/schemas/Vestiging'
           readOnly: true
           description: Vestigingen waaraan de medewerker gekoppeld is.
-        vestigingUuids:
+        vestigingenUuid:
           type: array
           items:
             type: string
@@ -1948,7 +1973,7 @@ components:
             $ref: '#/components/schemas/NestedFunctie'
           readOnly: true
           description: Functies binnen deze organisatorische eenheid.
-        functieUuids:
+        functiesUuid:
           type: array
           items:
             type: string
@@ -2332,7 +2357,7 @@ components:
             $ref: '#/components/schemas/NestedFunctie'
           readOnly: true
           description: Functies van de medewerker.
-        functieUuids:
+        functiesUuids:
           type: array
           items:
             type: string
@@ -2343,10 +2368,10 @@ components:
         organisatorischeEenheden:
           type: array
           items:
-            $ref: '#/components/schemas/OrganisatorischeEenheid'
+            $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
           readOnly: true
           description: Organisatorische eenheden waartoe de medewerker behoort.
-        organisatorischeEenheidUuids:
+        organisatorischeEenhedenUuids:
           type: array
           items:
             type: string
@@ -2406,7 +2431,7 @@ components:
             $ref: '#/components/schemas/Vestiging'
           readOnly: true
           description: Vestigingen waaraan de medewerker gekoppeld is.
-        vestigingUuids:
+        vestigingenUuid:
           type: array
           items:
             type: string
@@ -2420,7 +2445,7 @@ components:
             $ref: '#/components/schemas/NestedFunctie'
           readOnly: true
           description: Functies binnen deze organisatorische eenheid.
-        functieUuids:
+        functiesUuid:
           type: array
           items:
             type: string
@@ -2453,7 +2478,7 @@ components:
             $ref: '#/components/schemas/Vestiging'
           readOnly: true
           description: Vestigingen waaraan de medewerker gekoppeld is.
-        vestigingUuids:
+        vestigingenUuid:
           type: array
           items:
             type: string
@@ -2467,7 +2492,7 @@ components:
             $ref: '#/components/schemas/NestedFunctie'
           readOnly: true
           description: Functies die binnen dit team actief zijn.
-        functieUuids:
+        functiesUuid:
           type: array
           items:
             type: string
@@ -2527,7 +2552,7 @@ components:
             $ref: '#/components/schemas/Vestiging'
           readOnly: true
           description: Vestigingen waaraan de medewerker gekoppeld is.
-        vestigingUuids:
+        vestigingenUuid:
           type: array
           items:
             type: string
@@ -2541,7 +2566,7 @@ components:
             $ref: '#/components/schemas/NestedFunctie'
           readOnly: true
           description: Functies die binnen dit team actief zijn.
-        functieUuids:
+        functiesUuid:
           type: array
           items:
             type: string

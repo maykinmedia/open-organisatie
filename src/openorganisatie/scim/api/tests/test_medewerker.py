@@ -26,7 +26,12 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(len(data["results"]), 2)
 
     def test_read_medewerker_detail(self):
-        medewerker = MedewerkerFactory()
+        team = TeamFactory()
+        functie = FunctieFactory()
+        org = OrganisatorischeEenheidFactory()
+        medewerker = MedewerkerFactory(
+            teams=[team], functies=[functie], organisatorische_eenheden=[org]
+        )
 
         detail_url = reverse(
             "scim_api:medewerker-detail", kwargs={"uuid": str(medewerker.uuid)}
@@ -42,6 +47,10 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(data["voornaam"], medewerker.first_name)
         self.assertEqual(data["achternaam"], medewerker.last_name)
         self.assertEqual(data["emailadres"], medewerker.email)
+
+        self.assertIn("teams", data)
+        self.assertIn("functies", data)
+        self.assertIn("organisatorischeEenheden", data)
 
     def test_authentication_required(self):
         client = APIClient()

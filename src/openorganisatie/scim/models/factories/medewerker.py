@@ -25,3 +25,24 @@ class MedewerkerFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Medewerker
+
+    @factory.post_generation
+    def teams(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.teams.set(extracted)
+
+    @factory.post_generation
+    def organisatorische_eenheden(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.organisatorische_eenheden.set(extracted)
+
+    @factory.post_generation
+    def functies(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.functies.set(extracted)

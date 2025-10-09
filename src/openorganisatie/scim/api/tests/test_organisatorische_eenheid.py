@@ -30,7 +30,9 @@ class OrganisatorischeEenheidAPITests(APITestCase):
             self.assertIn("typeOrganisatie", org)
 
     def test_read_organisatorische_eenheid_detail(self):
-        org = OrganisatorischeEenheidFactory()
+        vest = VestigingFactory()
+        func = FunctieFactory()
+        org = OrganisatorischeEenheidFactory(branches=[vest], functies=[func])
 
         detail_url = reverse(
             "scim_api:organisatorischeeenheid-detail",
@@ -45,6 +47,9 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(data["identificatie"], org.identifier)
         self.assertEqual(data["naam"], org.name)
         self.assertEqual(data["typeOrganisatie"], org.organization_type)
+
+        self.assertIn("functies", data)
+        self.assertIn("vestigingen", data)
 
     def test_authentication_required(self):
         client = APIClient()

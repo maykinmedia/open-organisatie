@@ -131,6 +131,7 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         help_text=get_help_text("scim.OrganisatorischeEenheid", "end_date"),
     )
     vestigingen = VestigingSerializer(
+        source="branches",
         many=True,
         read_only=True,
         help_text=get_help_text("scim.OrganisatorischeEenheid", "branches"),

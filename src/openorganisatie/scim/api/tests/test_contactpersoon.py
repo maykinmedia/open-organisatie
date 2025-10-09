@@ -38,7 +38,6 @@ class ContactpersoonAPITests(APITestCase):
             "scim_api:contactpersoon-detail", kwargs={"uuid": str(contactpersoon.uuid)}
         )
         response = self.client.get(detail_url)
-        print(response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()

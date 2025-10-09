@@ -19,3 +19,17 @@ class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = OrganisatorischeEenheid
+
+    @factory.post_generation
+    def branches(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.branches.set(extracted)
+
+    @factory.post_generation
+    def functies(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.functies.set(extracted)
