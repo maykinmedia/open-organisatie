@@ -46,4 +46,4 @@ class MedewerkerViewSet(NotificationViewSetMixin, RevisionMixin, viewsets.ModelV
     lookup_field = "uuid"
     authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    notications_kanaal = KANAAL_ORGANISATIE
+    notifications_kanaal = KANAAL_ORGANISATIE

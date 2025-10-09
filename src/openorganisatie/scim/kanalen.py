@@ -7,20 +7,20 @@ KANAAL_IDENTITEIT = Kanaal(
     "users",
     main_resource=User,
     kenmerken=(
-        "username",
+        "scim_external_id",
         "username",
         "email",
     ),
-    extra_kwargs={"scim_external_id": {"help_text": "Object id van de user"}},
 )
 
 KANAAL_ORGANISATIE = Kanaal(
     "medewerkers",
     main_resource=Medewerker,
     kenmerken=(
+        "uuid",
         "medewerker_id",
-        "first_name",
-        "email",
+        "voornaam",
+        "achternaam",
+        "emailadres",
     ),
-    extra_kwargs={"uuid": {"help_text": "uuid van de medewerker"}},
 )
