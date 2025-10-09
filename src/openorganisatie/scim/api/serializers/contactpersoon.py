@@ -85,7 +85,6 @@ class ContactpersoonSerializer(serializers.ModelSerializer):
     uuid = serializers.UUIDField(
         read_only=True, help_text=get_help_text("scim.Contactpersoon", "uuid")
     )
-
     medewerker = NestedMedewerkerSerializer(
         read_only=True, help_text=get_help_text("scim.Contactpersoon", "medewerker")
     )

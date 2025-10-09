@@ -3,7 +3,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from openorganisatie.scim.models.factories.functie import FunctieFactory
 from openorganisatie.scim.models.factories.team import TeamFactory
+from openorganisatie.scim.models.factories.vestiging import VestigingFactory
 
 from .api_testcase import APITestCase
 
@@ -25,7 +27,10 @@ class TeamAPITests(APITestCase):
             self.assertIn("beschrijving", team)
 
     def test_team_detail(self):
-        team = TeamFactory()
+        vest1 = VestigingFactory()
+        func = FunctieFactory()
+
+        team = TeamFactory(branches=[vest1], functies=[func])
 
         detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
         response = self.client.get(detail_url)
@@ -53,3 +58,33 @@ class TeamAPITests(APITestCase):
         data = response.json()
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["naam"], team1.name)
+
+    def test_filter_vestigingen_uuid(self):
+        vest1 = VestigingFactory()
+        vest2 = VestigingFactory()
+        team1 = TeamFactory(branches=[vest1])
+        TeamFactory(branches=[vest2])
+
+        url = reverse("scim_api:team-list")
+        response = self.client.get(url, {"vestigingenUuid": str(vest1.uuid)})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["uuid"], str(team1.uuid))
+
+    def test_filter_functies_uuid(self):
+        functie1 = FunctieFactory()
+        functie2 = FunctieFactory()
+        team1 = TeamFactory()
+        team2 = TeamFactory()
+        team1.functies.add(functie1)
+        team2.functies.add(functie2)
+
+        url = reverse("scim_api:team-list")
+        response = self.client.get(url, {"functiesUuid": str(functie1.uuid)})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["uuid"], str(team1.uuid))

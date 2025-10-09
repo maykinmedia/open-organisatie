@@ -48,9 +48,10 @@ class TeamSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True,
         required=False,
+        source="branches",
         help_text=get_help_text("scim.Team", "branches"),
     )
-    vestiging_uuids = UUIDRelatedField(
+    vestigingen_uuid = UUIDRelatedField(
         queryset=Vestiging.objects.all(),
         write_only=True,
         source="branches",
@@ -64,7 +65,7 @@ class TeamSerializer(serializers.ModelSerializer):
         read_only=True,
         help_text=get_help_text("scim.Team", "functies"),
     )
-    functie_uuids = UUIDRelatedField(
+    functies_uuid = UUIDRelatedField(
         queryset=Functie.objects.all(),
         write_only=True,
         source="functies",
@@ -80,7 +81,7 @@ class TeamSerializer(serializers.ModelSerializer):
             "naam",
             "beschrijving",
             "vestigingen",
-            "vestiging_uuids",
+            "vestigingen_uuid",
             "functies",
-            "functie_uuids",
+            "functies_uuid",
         ]
