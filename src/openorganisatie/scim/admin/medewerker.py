@@ -6,15 +6,15 @@ from ..models.medewerker import Medewerker
 @admin.register(Medewerker)
 class MedewerkerAdmin(admin.ModelAdmin):
     list_display = (
-        "first_name",
-        "last_name",
-        "email",
-        "phone_number",
-        "date_joined",
-        "last_modified",
+        "voornaam",
+        "achternaam",
+        "emailadres",
+        "telefoonnummer",
+        "datum_toegevoegd",
+        "datum_aangepast",
     )
-    readonly_fields = ("medewerker_id", "date_joined", "last_modified")
-    search_fields = ("first_name", "last_name", "email", "job_title")
+    readonly_fields = ("medewerker_id", "datum_toegevoegd", "datum_aangepast")
+    search_fields = ("voornaam", "achternaam", "emailadres")
     filter_horizontal = ("teams", "functies", "organisatorische_eenheden")
 
     fieldsets = (
@@ -23,11 +23,11 @@ class MedewerkerAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "medewerker_id",
-                    "first_name",
-                    "last_name",
-                    "email",
-                    "phone_number",
-                    "gender_indicator",
+                    "voornaam",
+                    "achternaam",
+                    "emailadres",
+                    "telefoonnummer",
+                    "geslachtsaanduiding",
                 )
             },
         ),
@@ -45,9 +45,9 @@ class MedewerkerAdmin(admin.ModelAdmin):
             "Status",
             {
                 "fields": (
-                    "termination_date",
-                    "date_joined",
-                    "last_modified",
+                    "datum_uit_dienst",
+                    "datum_toegevoegd",
+                    "datum_aangepast",
                 )
             },
         ),

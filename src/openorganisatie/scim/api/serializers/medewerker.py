@@ -17,45 +17,6 @@ from ..serializers.team import NestedTeamSerializer
 
 
 class MedewerkerSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "uuid"),
-    )
-    medewerker_id = serializers.CharField(
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "medewerker_id"),
-    )
-    voornaam = serializers.CharField(
-        source="first_name",
-        help_text=get_help_text("scim.Medewerker", "first_name"),
-    )
-    achternaam = serializers.CharField(
-        source="last_name",
-        help_text=get_help_text("scim.Medewerker", "last_name"),
-    )
-    emailadres = serializers.EmailField(
-        source="email",
-        help_text=get_help_text("scim.Medewerker", "email"),
-    )
-    telefoonnummer = serializers.CharField(
-        source="phone_number",
-        allow_blank=True,
-        required=False,
-        help_text=get_help_text("scim.Medewerker", "phone_number"),
-    )
-    geslachtsaanduiding = serializers.ChoiceField(
-        source="gender_indicator",
-        choices=getattr(Medewerker._meta.get_field("gender_indicator"), "choices", []),
-        allow_blank=True,
-        required=False,
-        help_text=get_help_text("scim.Medewerker", "gender_indicator"),
-    )
-    datum_uit_dienst = serializers.DateField(
-        source="termination_date",
-        required=False,
-        allow_null=True,
-        help_text=get_help_text("scim.Medewerker", "termination_date"),
-    )
     teams = NestedTeamSerializer(
         many=True,
         read_only=True,
@@ -95,16 +56,6 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         required=False,
         help_text=_("UUID’s van gekoppelde organisatorische eenheden."),
     )
-    datum_toegevoegd = serializers.DateTimeField(
-        source="date_joined",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "date_joined"),
-    )
-    laatst_gewijzigd = serializers.DateTimeField(
-        source="last_modified",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "last_modified"),
-    )
 
     class Meta:
         model = Medewerker
@@ -124,5 +75,5 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "organisatorische_eenheden",
             "organisatorische_eenheden_uuids",
             "datum_toegevoegd",
-            "laatst_gewijzigd",
+            "datum_aangepast",
         ]

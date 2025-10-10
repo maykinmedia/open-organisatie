@@ -5,11 +5,11 @@ from ..models.organisatorische_eenheid import OrganisatorischeEenheid
 
 @admin.register(OrganisatorischeEenheid)
 class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
-    list_display = ("name", "organization_type", "short_name")
-    search_fields = ("name", "description", "short_name", "organization_type")
-    list_filter = ("organization_type",)
+    list_display = ("naam", "soort_organisatie", "verkorte_naam")
+    search_fields = ("naam", "omschrijving", "verkorte_naam", "soort_organisatie")
+    list_filter = ("soort_organisatie",)
     readonly_fields = ("uuid",)
-    filter_horizontal = ("branches", "functies")
+    filter_horizontal = ("vestigingen", "functies")
 
     fieldsets = (
         (
@@ -17,25 +17,25 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "uuid",
-                    "identifier",
-                    "name",
-                    "short_name",
-                    "organization_type",
-                    "description",
-                    "end_date",
-                    "parent_organisation",
+                    "identificatie",
+                    "naam",
+                    "verkorte_naam",
+                    "soort_organisatie",
+                    "omschrijving",
+                    "datum_opheffing",
+                    "hoofd_organisatie",
                 )
             },
         ),
         (
             "Contactgegevens",
-            {"fields": ("email_address", "phone_number")},
+            {"fields": ("emailadres", "telefoonnummer")},
         ),
         (
             "Relaties",
-            {"fields": ("branches", "functies")},
+            {"fields": ("vestigingen", "functies")},
         ),
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related("branches", "functies")
+        return super().get_queryset(request).prefetch_related("vestigingen", "functies")

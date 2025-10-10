@@ -11,59 +11,50 @@ class OrganisatorischeEenheid(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4)"),
     )
-    identifier = models.CharField(
+    identificatie = models.CharField(
         max_length=50,
         unique=True,
-        verbose_name=_("Identificatie"),
         help_text=_("Unieke interne identificatie van de organisatorische eenheid."),
     )
-    name = models.CharField(
+    naam = models.CharField(
         max_length=100,
         unique=True,
-        verbose_name=_("Naam"),
         help_text=_("Volledige naam van de organisatorische eenheid."),
     )
-    organization_type = models.CharField(
+    soort_organisatie = models.CharField(
         max_length=50,
-        verbose_name=_("Type organisatie"),
-        help_text=_("Type organisatie."),
+        help_text=_("Soort organisatorische eenheid."),
     )
-    short_name = models.CharField(
+    verkorte_naam = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name=_("Verkorte naam"),
         help_text=_("Afkorting of verkorte naam van de organisatorische eenheid."),
     )
-    description = models.TextField(
+    omschrijving = models.TextField(
         blank=True,
-        verbose_name=_("Beschrijving"),
-        help_text=_("Optionele beschrijving van de organisatorische eenheid."),
+        help_text=_("Optionele omschrijving van de organisatorische eenheid."),
     )
-    email_address = models.EmailField(
+    emailadres = models.EmailField(
         max_length=254,
         blank=True,
-        verbose_name=_("E-mailadres"),
         help_text=_("E-mailadres van de organisatorische eenheid."),
     )
-    phone_number = models.CharField(
+    telefoonnummer = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name=_("Telefoonnummer"),
         help_text=_("Telefoonnummer van de organisatorische eenheid."),
     )
-    end_date = models.DateField(
+    datum_opheffing = models.DateField(
         blank=True,
         null=True,
-        verbose_name=_("Einddatum"),
         help_text=_(
-            "Optionele einddatum waarop de organisatorische eenheid wordt opgeheven of stopt te bestaan."
+            "Optionele datum waarop de organisatorische eenheid wordt opgeheven."
         ),
     )
-    branches = models.ManyToManyField(
+    vestigingen = models.ManyToManyField(
         "scim.Vestiging",
         related_name="organisatorische_eenheden",
         blank=True,
-        verbose_name=_("Vestigingen"),
         help_text=_("Vestigingen waaraan de medewerker gekoppeld is."),
     )
     functies = models.ManyToManyField(
@@ -73,13 +64,12 @@ class OrganisatorischeEenheid(models.Model):
         verbose_name=_("Functies"),
         help_text=_("Functies binnen deze organisatorische eenheid."),
     )
-    parent_organisation = models.ForeignKey(
+    hoofd_organisatorische_eenheid = models.ForeignKey(
         "self",
         on_delete=models.PROTECT,
         null=True,
         blank=True,
         related_name="sub_organisatorische_eenheden",
-        verbose_name=_("Bovenliggende eenheid"),
         help_text=_("Optionele bovenliggende organisatorische eenheid."),
     )
 
@@ -88,25 +78,28 @@ class OrganisatorischeEenheid(models.Model):
         verbose_name_plural = _("Organisatorische Eenheden")
 
     def __str__(self):
-        return self.name
+        return self.naam
 
     def clean(self):
-        if self.parent_organisation and self.parent_organisation == self:
+        if (
+            self.hoofd_organisatorische_eenheid
+            and self.hoofd_organisatorische_eenheid == self
+        ):
             raise ValidationError(
                 {
-                    "parent_organisation": _(
+                    "hoofd_organisatorische_eenheid": _(
                         "Een organisatorische eenheid kan niet naar zichzelf verwijzen."
                     )
                 }
             )
-        parent = self.parent_organisation
+        parent = self.hoofd_organisatorische_eenheid
         while parent:
             if parent == self:
                 raise ValidationError(
                     {
-                        "parent_organisation": _(
+                        "hoofd_organisatorische_eenheid": _(
                             "Een organisatorische eenheid kan geen kind als bovenliggende eenheid hebben."
                         )
                     }
                 )
-            parent = parent.parent_organisation
+            parent = parent.hoofd_organisatorische_eenheid

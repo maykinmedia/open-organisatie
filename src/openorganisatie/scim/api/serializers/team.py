@@ -11,53 +11,25 @@ from .vestiging import VestigingSerializer
 
 
 class NestedTeamSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(
-        read_only=True,
-        help_text=get_help_text("scim.Team", "uuid"),
-    )
-    naam = serializers.CharField(
-        source="name",
-        help_text=get_help_text("scim.Team", "name"),
-    )
-    beschrijving = serializers.CharField(
-        source="description",
-        allow_blank=True,
-        help_text=get_help_text("scim.Team", "description"),
-    )
-
     class Meta:
         model = Team
-        fields = ["uuid", "naam", "beschrijving"]
+        fields = ["uuid", "naam", "omschrijving"]
 
 
 class TeamSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(
-        read_only=True,
-        help_text=get_help_text("scim.Team", "uuid"),
-    )
-    naam = serializers.CharField(
-        source="name",
-        help_text=get_help_text("scim.Team", "name"),
-    )
-    beschrijving = serializers.CharField(
-        source="description",
-        allow_blank=True,
-        help_text=get_help_text("scim.Team", "description"),
-    )
     vestigingen = VestigingSerializer(
         many=True,
         read_only=True,
         required=False,
-        source="branches",
-        help_text=get_help_text("scim.Team", "branches"),
+        help_text=get_help_text("scim.Team", "vestigingen"),
     )
     vestigingen_uuid = UUIDRelatedField(
         queryset=Vestiging.objects.all(),
         write_only=True,
-        source="branches",
         many=True,
         required=False,
-        help_text=get_help_text("scim.Team", "branches"),
+        help_text=get_help_text("scim.Team", "vestigingen"),
+        source="vestigingen",
     )
     functies = NestedFunctieSerializer(
         many=True,
@@ -79,7 +51,7 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = [
             "uuid",
             "naam",
-            "beschrijving",
+            "omschrijving",
             "vestigingen",
             "vestigingen_uuid",
             "functies",

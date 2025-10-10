@@ -6,34 +6,28 @@ from openorganisatie.scim.models.vestiging import Vestiging
 
 class VestigingFilter(django_filters.FilterSet):
     vestigingsnummer = django_filters.CharFilter(
-        field_name="branchnumber",
         lookup_expr="icontains",
-        help_text=get_help_text("scim.Vestiging", "branchnumber"),
+        help_text=get_help_text("scim.Vestiging", "vestigingsnummer"),
     )
     naam = django_filters.CharFilter(
-        field_name="branchname",
         lookup_expr="icontains",
-        help_text=get_help_text("scim.Vestiging", "branchname"),
+        help_text=get_help_text("scim.Vestiging", "naam"),
     )
-    korte_naam = django_filters.CharFilter(
-        field_name="short_name",
+    verkorte_naam = django_filters.CharFilter(
         lookup_expr="icontains",
-        help_text=get_help_text("scim.Vestiging", "short_name"),
+        help_text=get_help_text("scim.Vestiging", "verkorte_naam"),
     )
     adres = django_filters.CharFilter(
-        field_name="address",
         lookup_expr="icontains",
-        help_text=get_help_text("scim.Vestiging", "address"),
+        help_text=get_help_text("scim.Vestiging", "adres"),
     )
-    postadres = django_filters.CharFilter(
-        field_name="postal_address",
+    post_adres = django_filters.CharFilter(
         lookup_expr="icontains",
-        help_text=get_help_text("scim.Vestiging", "postal_address"),
+        help_text=get_help_text("scim.Vestiging", "post_adres"),
     )
     landcode = django_filters.CharFilter(
-        field_name="country_code",
         lookup_expr="iexact",
-        help_text=get_help_text("scim.Vestiging", "country_code"),
+        help_text=get_help_text("scim.Vestiging", "landcode"),
     )
 
     class Meta:

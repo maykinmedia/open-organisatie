@@ -14,21 +14,18 @@ class Contactpersoon(models.Model):
         "scim.Medewerker",
         on_delete=models.CASCADE,
         related_name="contactpersoon_roles",
-        verbose_name=_("Medewerker"),
         help_text=_("De medewerker die aan deze rol gekoppeld is."),
     )
     teams = models.ManyToManyField(
         "scim.Team",
         related_name="contactpersonen",
         blank=True,
-        verbose_name=_("Teams"),
         help_text=_("Teams waaraan de medewerker gekoppeld is."),
     )
     organisatorische_eenheden = models.ManyToManyField(
         "scim.OrganisatorischeEenheid",
         related_name="contactpersonen",
         blank=True,
-        verbose_name=_("Organisatorische Eenheden"),
         help_text=_("Organisatorische eenheden waaraan de medewerker gekoppeld is."),
     )
 
@@ -39,11 +36,11 @@ class Contactpersoon(models.Model):
     def __str__(self):
         parts = []
         if self.teams.exists():
-            parts.append("Teams: " + ", ".join([t.name for t in self.teams.all()]))
+            parts.append("Teams: " + ", ".join([t.naam for t in self.teams.all()]))
         if self.organisatorische_eenheden.exists():
             parts.append(
                 "OE: "
-                + ", ".join([oe.name for oe in self.organisatorische_eenheden.all()])
+                + ", ".join([oe.naam for oe in self.organisatorische_eenheden.all()])
             )
         return (
             f"{self.medewerker} - " + " | ".join(parts)

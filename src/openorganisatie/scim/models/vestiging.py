@@ -10,52 +10,44 @@ class Vestiging(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4)"),
     )
-    branchnumber = models.CharField(
+    vestigingsnummer = models.CharField(
         max_length=50,
         unique=True,
-        verbose_name=_("Vestigingsnummer"),
         help_text=_("Unieke identificatiecode of nummer van de vestiging."),
     )
-    branchname = models.CharField(
+    naam = models.CharField(
         max_length=100,
         unique=True,
-        verbose_name=_("Naam"),
         help_text=_("Volledige naam van de vestiging."),
     )
-    short_name = models.CharField(
+    verkorte_naam = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name=_("Korte naam"),
         help_text=_("Afkorting of korte naam van de vestiging."),
     )
-    address = models.CharField(
+    adres = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name=_("Adres"),
         help_text=_("Fysiek adres van de vestiging (optioneel)."),
     )
-    correspondence_address = models.CharField(
+    correspondentieadres = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name=_("Correspondentieadres"),
         help_text=_("Adres voor correspondentie (optioneel)."),
     )
-    postal_address = models.CharField(
+    post_adres = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name=_("Post adres"),
         help_text=_("Post adres van de vestiging (optioneel)."),
     )
-    phone_number = models.CharField(
+    telefoonnummer = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name=_("Telefoonnummer"),
         help_text=_("Telefoonnummer van de vestiging (optioneel)."),
     )
-    country_code = models.CharField(
+    landcode = models.CharField(
         max_length=2,
         blank=True,
-        verbose_name=_("Landcode"),
         help_text=_("ISO-landcode van de vestiging (bijv. NL, BE)."),
     )
 
@@ -64,4 +56,4 @@ class Vestiging(models.Model):
         verbose_name_plural = _("Vestigingen")
 
     def __str__(self):
-        return self.branchname
+        return self.naam

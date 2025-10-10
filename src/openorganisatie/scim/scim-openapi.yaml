@@ -628,14 +628,13 @@ paths:
           items:
             type: string
             format: uuid
-        description: Functies van de medewerker.
+        description: Multiple values may be separated by commas.
         explode: false
         style: form
       - in: query
         name: geslachtsaanduiding
         schema:
           type: string
-          title: Geslachtsaanduiding
           enum:
           - M
           - V
@@ -653,7 +652,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Organisatorische eenheden waartoe de medewerker behoort.
+        description: Multiple values may be separated by commas.
         explode: false
         style: form
       - name: page
@@ -675,7 +674,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Teams van de medewerker.
+        description: Multiple values may be separated by commas.
         explode: false
         style: form
       tags:
@@ -838,7 +837,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Functies binnen deze organisatorische eenheid.
+        description: Multiple values may be separated by commas.
         explode: false
         style: form
       - in: query
@@ -870,10 +869,10 @@ paths:
         schema:
           type: integer
       - in: query
-        name: typeOrganisatie
+        name: soortOrganisatie
         schema:
           type: string
-        description: Type organisatie.
+        description: Soort organisatorische eenheid.
       - in: query
         name: verkorteNaam
         schema:
@@ -886,7 +885,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Vestigingen waaraan de medewerker gekoppeld is.
+        description: Multiple values may be separated by commas.
         explode: false
         style: form
       tags:
@@ -1050,7 +1049,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Functies die binnen dit team actief zijn.
+        description: Multiple values may be separated by commas.
         explode: false
         style: form
       - in: query
@@ -1077,7 +1076,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Vestigingen waaraan de medewerker gekoppeld is.
+        description: Multiple values may be separated by commas.
         explode: false
         style: form
       tags:
@@ -1324,11 +1323,6 @@ paths:
           type: string
         description: Fysiek adres van de vestiging (optioneel).
       - in: query
-        name: korteNaam
-        schema:
-          type: string
-        description: Afkorting of korte naam van de vestiging.
-      - in: query
         name: landcode
         schema:
           type: string
@@ -1351,10 +1345,15 @@ paths:
         schema:
           type: integer
       - in: query
-        name: postadres
+        name: postAdres
         schema:
           type: string
         description: Post adres van de vestiging (optioneel).
+      - in: query
+        name: verkorteNaam
+        schema:
+          type: string
+        description: Afkorting of korte naam van de vestiging.
       - in: query
         name: vestigingsnummer
         schema:
@@ -1518,7 +1517,6 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         medewerker:
           allOf:
@@ -1565,26 +1563,27 @@ components:
       - medewerkerUuid
       - organisatorischeEenheden
       - teams
-      - uuid
     Functie:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4) voor deze functie.
         functieOmschrijving:
           type: string
           description: Korte omschrijving of titel van de functie.
+          maxLength: 255
         beginDatum:
           type: string
           format: date
+          title: Begindatum
           description: De datum waarop de functie ingaat.
         eindDatum:
           type: string
           format: date
           nullable: true
+          title: Einddatum
           description: De datum waarop de functie eindigt.
         functieType:
           allOf:
@@ -1598,31 +1597,30 @@ components:
             format: uuid
             writeOnly: true
           writeOnly: true
-          description: UUID’s van gekoppelde teams.
+          description: UUID’s van gekoppelde functie type.
       required:
       - beginDatum
       - functieOmschrijving
       - functieType
-      - uuid
     FunctieType:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4) voor dit functietype.
         naam:
           type: string
           description: De naam van het functietype (bijv. Manager, Medewerker).
+          maxLength: 50
         slug:
           type: string
           description: Unieke, URL-vriendelijke identificatie voor dit functietype.
+          maxLength: 100
           pattern: ^[-a-zA-Z0-9_]+$
       required:
       - naam
       - slug
-      - uuid
     GeslachtsaanduidingEnum:
       enum:
       - M
@@ -1663,25 +1661,28 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         medewerkerId:
           type: string
-          readOnly: true
           description: ID van de medewerker.
+          maxLength: 50
         voornaam:
           type: string
           description: Voornaam van de medewerker.
+          maxLength: 100
         achternaam:
           type: string
           description: Achternaam van de medewerker.
+          maxLength: 100
         emailadres:
           type: string
           format: email
           description: E-mailadres van de medewerker.
+          maxLength: 254
         telefoonnummer:
           type: string
           description: Telefoonnummer van de medewerker (optioneel).
+          maxLength: 30
         geslachtsaanduiding:
           description: |-
             Geslachtsaanduiding (optioneel).
@@ -1745,21 +1746,20 @@ components:
           format: date-time
           readOnly: true
           description: Datum waarop de medewerker is toegevoegd.
-        laatstGewijzigd:
+        datumAangepast:
           type: string
           format: date-time
           readOnly: true
           description: Datum waarop de medewerker voor het laatst is gewijzigd.
       required:
       - achternaam
+      - datumAangepast
       - datumToegevoegd
       - emailadres
       - functies
-      - laatstGewijzigd
       - medewerkerId
       - organisatorischeEenheden
       - teams
-      - uuid
       - voornaam
     NestedFunctie:
       type: object
@@ -1767,61 +1767,66 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4) voor deze functie.
         functieOmschrijving:
           type: string
           description: Korte omschrijving of titel van de functie.
+          maxLength: 255
         beginDatum:
           type: string
           format: date
+          title: Begindatum
           description: De datum waarop de functie ingaat.
         eindDatum:
           type: string
           format: date
           nullable: true
+          title: Einddatum
           description: De datum waarop de functie eindigt.
       required:
       - beginDatum
       - functieOmschrijving
-      - uuid
     NestedMedewerker:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         medewerkerId:
           type: string
-          readOnly: true
           description: ID van de medewerker.
+          maxLength: 50
         voornaam:
           type: string
-          readOnly: true
           description: Voornaam van de medewerker.
+          maxLength: 100
         achternaam:
           type: string
-          readOnly: true
           description: Achternaam van de medewerker.
+          maxLength: 100
         emailadres:
           type: string
           format: email
-          readOnly: true
           description: E-mailadres van de medewerker.
+          maxLength: 254
         telefoonnummer:
           type: string
-          readOnly: true
           description: Telefoonnummer van de medewerker (optioneel).
+          maxLength: 30
         geslachtsaanduiding:
-          type: boolean
-          readOnly: true
-          description: Geslachtsaanduiding (optioneel).
+          description: |-
+            Geslachtsaanduiding (optioneel).
+
+            * `M` - Man
+            * `V` - Vrouw
+            * `X` - Anders
+          oneOf:
+          - $ref: '#/components/schemas/GeslachtsaanduidingEnum'
+          - $ref: '#/components/schemas/BlankEnum'
         datumUitDienst:
           type: string
           format: date
-          readOnly: true
           nullable: true
           description: Datum waarop de medewerker uit dienst is gegaan (indien van
             toepassing).
@@ -1830,21 +1835,17 @@ components:
           format: date-time
           readOnly: true
           description: Datum waarop de medewerker is toegevoegd.
-        laatstGewijzigd:
+        datumAangepast:
           type: string
           format: date-time
           readOnly: true
           description: Datum waarop de medewerker voor het laatst is gewijzigd.
       required:
       - achternaam
+      - datumAangepast
       - datumToegevoegd
-      - datumUitDienst
       - emailadres
-      - geslachtsaanduiding
-      - laatstGewijzigd
       - medewerkerId
-      - telefoonnummer
-      - uuid
       - voornaam
     NestedOrganisatorischeEenheid:
       type: object
@@ -1852,36 +1853,40 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         identificatie:
           type: string
           description: Unieke interne identificatie van de organisatorische eenheid.
+          maxLength: 50
         naam:
           type: string
           description: Volledige naam van de organisatorische eenheid.
-        typeOrganisatie:
+          maxLength: 100
+        soortOrganisatie:
           type: string
-          description: Type organisatie.
+          description: Soort organisatorische eenheid.
+          maxLength: 50
         verkorteNaam:
           type: string
           description: Afkorting of verkorte naam van de organisatorische eenheid.
-        beschrijving:
+          maxLength: 50
+        omschrijving:
           type: string
-          description: Optionele beschrijving van de organisatorische eenheid.
+          description: Optionele omschrijving van de organisatorische eenheid.
         emailadres:
           type: string
           format: email
           description: E-mailadres van de organisatorische eenheid.
+          maxLength: 254
         telefoonnummer:
           type: string
           description: Telefoonnummer van de organisatorische eenheid.
-        einddatum:
+          maxLength: 50
+        datumOpheffing:
           type: string
           format: date
           nullable: true
-          description: Optionele einddatum waarop de organisatorische eenheid wordt
-            opgeheven of stopt te bestaan.
+          description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
         hoofdOrganisatorischeEenheid:
           type: string
           format: uuid
@@ -1890,62 +1895,63 @@ components:
       required:
       - identificatie
       - naam
-      - typeOrganisatie
-      - uuid
+      - soortOrganisatie
     NestedTeam:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         naam:
           type: string
           description: Naam van het team.
-        beschrijving:
+          maxLength: 100
+        omschrijving:
           type: string
-          description: Optionele beschrijving van het team.
+          description: Optionele omschrijving van het team.
       required:
-      - beschrijving
       - naam
-      - uuid
     OrganisatorischeEenheid:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         identificatie:
           type: string
           description: Unieke interne identificatie van de organisatorische eenheid.
+          maxLength: 50
         naam:
           type: string
           description: Volledige naam van de organisatorische eenheid.
-        typeOrganisatie:
+          maxLength: 100
+        soortOrganisatie:
           type: string
-          description: Type organisatie.
+          description: Soort organisatorische eenheid.
+          maxLength: 50
         verkorteNaam:
           type: string
           description: Afkorting of verkorte naam van de organisatorische eenheid.
-        beschrijving:
+          maxLength: 50
+        omschrijving:
           type: string
-          description: Optionele beschrijving van de organisatorische eenheid.
+          description: Optionele omschrijving van de organisatorische eenheid.
         emailadres:
           type: string
           format: email
           description: E-mailadres van de organisatorische eenheid.
+          maxLength: 254
         telefoonnummer:
           type: string
           description: Telefoonnummer van de organisatorische eenheid.
-        einddatum:
+          maxLength: 50
+        datumOpheffing:
           type: string
           format: date
           nullable: true
-          description: Optionele einddatum waarop de organisatorische eenheid wordt
-            opgeheven of stopt te bestaan.
+          description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
         vestigingen:
           type: array
           items:
@@ -1983,8 +1989,7 @@ components:
       - functies
       - identificatie
       - naam
-      - typeOrganisatie
-      - uuid
+      - soortOrganisatie
       - vestigingen
     PaginatedContactpersoonList:
       type: object
@@ -2199,7 +2204,6 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         medewerker:
           allOf:
@@ -2247,19 +2251,21 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4) voor deze functie.
         functieOmschrijving:
           type: string
           description: Korte omschrijving of titel van de functie.
+          maxLength: 255
         beginDatum:
           type: string
           format: date
+          title: Begindatum
           description: De datum waarop de functie ingaat.
         eindDatum:
           type: string
           format: date
           nullable: true
+          title: Einddatum
           description: De datum waarop de functie eindigt.
         functieType:
           allOf:
@@ -2273,21 +2279,22 @@ components:
             format: uuid
             writeOnly: true
           writeOnly: true
-          description: UUID’s van gekoppelde teams.
+          description: UUID’s van gekoppelde functie type.
     PatchedFunctieType:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4) voor dit functietype.
         naam:
           type: string
           description: De naam van het functietype (bijv. Manager, Medewerker).
+          maxLength: 50
         slug:
           type: string
           description: Unieke, URL-vriendelijke identificatie voor dit functietype.
+          maxLength: 100
           pattern: ^[-a-zA-Z0-9_]+$
     PatchedMedewerker:
       type: object
@@ -2295,25 +2302,28 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         medewerkerId:
           type: string
-          readOnly: true
           description: ID van de medewerker.
+          maxLength: 50
         voornaam:
           type: string
           description: Voornaam van de medewerker.
+          maxLength: 100
         achternaam:
           type: string
           description: Achternaam van de medewerker.
+          maxLength: 100
         emailadres:
           type: string
           format: email
           description: E-mailadres van de medewerker.
+          maxLength: 254
         telefoonnummer:
           type: string
           description: Telefoonnummer van de medewerker (optioneel).
+          maxLength: 30
         geslachtsaanduiding:
           description: |-
             Geslachtsaanduiding (optioneel).
@@ -2377,7 +2387,7 @@ components:
           format: date-time
           readOnly: true
           description: Datum waarop de medewerker is toegevoegd.
-        laatstGewijzigd:
+        datumAangepast:
           type: string
           format: date-time
           readOnly: true
@@ -2388,36 +2398,40 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         identificatie:
           type: string
           description: Unieke interne identificatie van de organisatorische eenheid.
+          maxLength: 50
         naam:
           type: string
           description: Volledige naam van de organisatorische eenheid.
-        typeOrganisatie:
+          maxLength: 100
+        soortOrganisatie:
           type: string
-          description: Type organisatie.
+          description: Soort organisatorische eenheid.
+          maxLength: 50
         verkorteNaam:
           type: string
           description: Afkorting of verkorte naam van de organisatorische eenheid.
-        beschrijving:
+          maxLength: 50
+        omschrijving:
           type: string
-          description: Optionele beschrijving van de organisatorische eenheid.
+          description: Optionele omschrijving van de organisatorische eenheid.
         emailadres:
           type: string
           format: email
           description: E-mailadres van de organisatorische eenheid.
+          maxLength: 254
         telefoonnummer:
           type: string
           description: Telefoonnummer van de organisatorische eenheid.
-        einddatum:
+          maxLength: 50
+        datumOpheffing:
           type: string
           format: date
           nullable: true
-          description: Optionele einddatum waarop de organisatorische eenheid wordt
-            opgeheven of stopt te bestaan.
+          description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
         vestigingen:
           type: array
           items:
@@ -2457,14 +2471,14 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         naam:
           type: string
           description: Naam van het team.
-        beschrijving:
+          maxLength: 100
+        omschrijving:
           type: string
-          description: Optionele beschrijving van het team.
+          description: Optionele omschrijving van het team.
         vestigingen:
           type: array
           items:
@@ -2499,46 +2513,53 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         vestigingsnummer:
           type: string
           description: Unieke identificatiecode of nummer van de vestiging.
+          maxLength: 50
         naam:
           type: string
           description: Volledige naam van de vestiging.
-        korteNaam:
+          maxLength: 100
+        verkorteNaam:
           type: string
           description: Afkorting of korte naam van de vestiging.
+          maxLength: 50
         adres:
           type: string
           description: Fysiek adres van de vestiging (optioneel).
+          maxLength: 255
         correspondentieadres:
           type: string
           description: Adres voor correspondentie (optioneel).
-        postadres:
+          maxLength: 255
+        postAdres:
           type: string
           description: Post adres van de vestiging (optioneel).
+          maxLength: 255
         telefoonnummer:
           type: string
           description: Telefoonnummer van de vestiging (optioneel).
+          maxLength: 50
         landcode:
           type: string
           description: ISO-landcode van de vestiging (bijv. NL, BE).
+          maxLength: 2
     Team:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         naam:
           type: string
           description: Naam van het team.
-        beschrijving:
+          maxLength: 100
+        omschrijving:
           type: string
-          description: Optionele beschrijving van het team.
+          description: Optionele omschrijving van het team.
         vestigingen:
           type: array
           items:
@@ -2568,10 +2589,8 @@ components:
           writeOnly: true
           description: Functies die binnen dit team actief zijn.
       required:
-      - beschrijving
       - functies
       - naam
-      - uuid
       - vestigingen
     User:
       type: object
@@ -2641,35 +2660,41 @@ components:
         uuid:
           type: string
           format: uuid
-          readOnly: true
           description: Unieke resource identifier (UUID4)
         vestigingsnummer:
           type: string
           description: Unieke identificatiecode of nummer van de vestiging.
+          maxLength: 50
         naam:
           type: string
           description: Volledige naam van de vestiging.
-        korteNaam:
+          maxLength: 100
+        verkorteNaam:
           type: string
           description: Afkorting of korte naam van de vestiging.
+          maxLength: 50
         adres:
           type: string
           description: Fysiek adres van de vestiging (optioneel).
+          maxLength: 255
         correspondentieadres:
           type: string
           description: Adres voor correspondentie (optioneel).
-        postadres:
+          maxLength: 255
+        postAdres:
           type: string
           description: Post adres van de vestiging (optioneel).
+          maxLength: 255
         telefoonnummer:
           type: string
           description: Telefoonnummer van de vestiging (optioneel).
+          maxLength: 50
         landcode:
           type: string
           description: ISO-landcode van de vestiging (bijv. NL, BE).
+          maxLength: 2
       required:
       - naam
-      - uuid
       - vestigingsnummer
   securitySchemes:
     tokenAuth:

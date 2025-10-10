@@ -16,8 +16,8 @@ class ContactpersoonAdmin(admin.ModelAdmin):
         "organisatorische_eenheden",
     )
     search_fields = (
-        "medewerker__first_name",
-        "medewerker__last_name",
+        "medewerker__voornaam",
+        "medewerker__acternaam",
         "teams__name",
         "organisatorische_eenheden__name",
     )

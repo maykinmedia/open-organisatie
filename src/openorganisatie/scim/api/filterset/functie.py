@@ -12,7 +12,8 @@ class FunctieFilter(django_filters.FilterSet):
     )
     functie_type_uuid = django_filters.UUIDFilter(
         field_name="functie_type__uuid",
-        lookup_expr="exact",
+        lookup_expr="in",
+        distinct=True,
         help_text=get_help_text("scim.Functie", "functie_type"),
     )
 

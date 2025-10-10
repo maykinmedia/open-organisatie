@@ -9,27 +9,22 @@ from openorganisatie.utils.filters import UUIDFInFilter
 
 class OrganisatorischeEenheidFilter(django_filters.FilterSet):
     naam = django_filters.CharFilter(
-        field_name="name",
         lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "name"),
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "naam"),
     )
     identificatie = django_filters.CharFilter(
-        field_name="identifier",
         lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "identifier"),
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "identificatie"),
     )
-    type_organisatie = django_filters.CharFilter(
-        field_name="organization_type",
+    soort_organisatie = django_filters.CharFilter(
         lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "organization_type"),
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "soort_organisatie"),
     )
     verkorte_naam = django_filters.CharFilter(
-        field_name="short_name",
         lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "short_name"),
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "verkorte_naam"),
     )
     hoofd_organisatorische_eenheid = django_filters.UUIDFilter(
-        field_name="parent_organisation__uuid",
         lookup_expr="exact",
         help_text=_("UUID van de bovenliggende organisatorische eenheid."),
     )
@@ -37,13 +32,11 @@ class OrganisatorischeEenheidFilter(django_filters.FilterSet):
         field_name="branches__uuid",
         lookup_expr="in",
         distinct=True,
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "branches"),
     )
     functies_uuid = UUIDFInFilter(
         field_name="functies__uuid",
         lookup_expr="in",
         distinct=True,
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "functies"),
     )
 
     class Meta:

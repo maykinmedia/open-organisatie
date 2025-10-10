@@ -14,57 +14,6 @@ from .team import NestedTeamSerializer
 
 
 class NestedMedewerkerSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(
-        read_only=True, help_text=get_help_text("scim.Medewerker", "uuid")
-    )
-    medewerker_id = serializers.CharField(
-        read_only=True, help_text=get_help_text("scim.Medewerker", "medewerker_id")
-    )
-    voornaam = serializers.CharField(
-        source="first_name",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "first_name"),
-    )
-    achternaam = serializers.CharField(
-        source="last_name",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "last_name"),
-    )
-    emailadres = serializers.EmailField(
-        source="email",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "email"),
-    )
-    telefoonnummer = serializers.CharField(
-        source="phone_number",
-        allow_blank=True,
-        required=False,
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "phone_number"),
-    )
-    geslachtsaanduiding = serializers.BooleanField(
-        source="gender_indicator",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "gender_indicator"),
-    )
-    datum_uit_dienst = serializers.DateField(
-        source="termination_date",
-        read_only=True,
-        required=False,
-        allow_null=True,
-        help_text=get_help_text("scim.Medewerker", "termination_date"),
-    )
-    datum_toegevoegd = serializers.DateTimeField(
-        source="date_joined",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "date_joined"),
-    )
-    laatst_gewijzigd = serializers.DateTimeField(
-        source="last_modified",
-        read_only=True,
-        help_text=get_help_text("scim.Medewerker", "last_modified"),
-    )
-
     class Meta:
         model = Medewerker
         fields = [
@@ -77,14 +26,11 @@ class NestedMedewerkerSerializer(serializers.ModelSerializer):
             "geslachtsaanduiding",
             "datum_uit_dienst",
             "datum_toegevoegd",
-            "laatst_gewijzigd",
+            "datum_aangepast",
         ]
 
 
 class ContactpersoonSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(
-        read_only=True, help_text=get_help_text("scim.Contactpersoon", "uuid")
-    )
     medewerker = NestedMedewerkerSerializer(
         read_only=True, help_text=get_help_text("scim.Contactpersoon", "medewerker")
     )
