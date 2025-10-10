@@ -92,6 +92,6 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         """Ensure hoofd_organisatorische_eenheid is serialized as a string UUID."""
         data = super().to_representation(instance)
-        parent = instance.parent_organisation
+        parent = instance.hoofd_organisatorische_eenheid
         data["hoofd_organisatorische_eenheid"] = str(parent.uuid) if parent else None
         return data

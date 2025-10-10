@@ -29,7 +29,7 @@ class OrganisatorischeEenheidFilter(django_filters.FilterSet):
         help_text=_("UUID van de bovenliggende organisatorische eenheid."),
     )
     vestigingen_uuid = UUIDFInFilter(
-        field_name="branches__uuid",
+        field_name="vestigingen__uuid",
         lookup_expr="in",
         distinct=True,
     )

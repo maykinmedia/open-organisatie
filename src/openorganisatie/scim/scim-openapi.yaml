@@ -209,9 +209,13 @@ paths:
       - in: query
         name: functieTypeUuid
         schema:
-          type: string
-          format: uuid
-        description: Het type functie dat hieraan gekoppeld is.
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
       - name: page
         required: false
         in: query

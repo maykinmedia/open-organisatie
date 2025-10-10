@@ -44,9 +44,9 @@ class MedewerkerAPITests(APITestCase):
         data = response.json()
 
         self.assertEqual(data["medewerkerId"], str(medewerker.medewerker_id))
-        self.assertEqual(data["voornaam"], medewerker.first_name)
-        self.assertEqual(data["achternaam"], medewerker.last_name)
-        self.assertEqual(data["emailadres"], medewerker.email)
+        self.assertEqual(data["voornaam"], medewerker.voornaam)
+        self.assertEqual(data["achternaam"], medewerker.achternaam)
+        self.assertEqual(data["emailadres"], medewerker.emailadres)
 
         self.assertIn("teams", data)
         self.assertIn("functies", data)
@@ -61,8 +61,8 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_filter_geslachtsaanduiding(self):
-        m1 = MedewerkerFactory(gender_indicator=GenderIndicator.MAN)
-        MedewerkerFactory(gender_indicator=GenderIndicator.VROUW)
+        m1 = MedewerkerFactory(geslachtsaanduiding=GenderIndicator.MAN)
+        MedewerkerFactory(geslachtsaanduiding=GenderIndicator.VROUW)
 
         url = reverse("scim_api:medewerker-list")
         response = self.client.get(url, {"geslachtsaanduiding": GenderIndicator.MAN})
@@ -70,7 +70,7 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(
-            response.data["results"][0]["geslachtsaanduiding"], m1.gender_indicator
+            response.data["results"][0]["geslachtsaanduiding"], m1.geslachtsaanduiding
         )
 
     def test_filter_teams_uuid(self):

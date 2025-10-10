@@ -30,9 +30,9 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()
-        self.assertEqual(data["vestigingsnummer"], vestiging.branchnumber)
-        self.assertEqual(data["naam"], vestiging.branchname)
-        self.assertEqual(data["landcode"], vestiging.country_code)
+        self.assertEqual(data["vestigingsnummer"], vestiging.vestigingsnummer)
+        self.assertEqual(data["naam"], vestiging.naam)
+        self.assertEqual(data["landcode"], vestiging.landcode)
 
     def test_authentication_required(self):
         client = APIClient()
@@ -41,64 +41,65 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_vestigingsnummer_filter(self):
-        v1 = VestigingFactory(branchnumber="123")
-        VestigingFactory(branchnumber="456")
+        v1 = VestigingFactory(vestigingsnummer="123")
+        VestigingFactory(vestigingsnummer="456")
 
         url = reverse("scim_api:vestiging-list")
         response = self.client.get(url, {"vestigingsnummer": "123"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(
-            response.data["results"][0]["vestigingsnummer"], v1.branchnumber
+            response.data["results"][0]["vestigingsnummer"], v1.vestigingsnummer
         )
 
     def test_naam_filter(self):
-        v1 = VestigingFactory(branchname="Amsterdam")
-        VestigingFactory(branchname="Rotterdam")
+        v1 = VestigingFactory(naam="Amsterdam")
+        VestigingFactory(naam="Rotterdam")
 
         url = reverse("scim_api:vestiging-list")
         response = self.client.get(url, {"naam": "Amsterdam"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["naam"], v1.branchname)
+        self.assertEqual(response.data["results"][0]["naam"], v1.naam)
 
     def test_korte_naam_filter(self):
-        v1 = VestigingFactory(short_name="AMS")
-        VestigingFactory(short_name="RTM")
+        v1 = VestigingFactory(verkorte_naam="AMS")
+        VestigingFactory(verkorte_naam="RTM")
 
         url = reverse("scim_api:vestiging-list")
-        response = self.client.get(url, {"korteNaam": "AMS"})
+        response = self.client.get(url, {"verkorteNaam": "AMS"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["korteNaam"], v1.short_name)
+        self.assertEqual(data["results"][0]["verkorteNaam"], v1.verkorte_naam)
 
     def test_adres_filter(self):
-        v1 = VestigingFactory(address="Straat 1")
-        VestigingFactory(address="Straat 2")
+        v1 = VestigingFactory(adres="Straat 1")
+        VestigingFactory(adres="Straat 2")
 
         url = reverse("scim_api:vestiging-list")
         response = self.client.get(url, {"adres": "Straat 1"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["adres"], v1.address)
+        self.assertEqual(response.data["results"][0]["adres"], v1.adres)
 
     def test_postadres_filter(self):
-        v1 = VestigingFactory(postal_address="1000AB")
-        VestigingFactory(postal_address="2000CD")
+        v1 = VestigingFactory(post_adres="1000AB")
+        VestigingFactory(post_adres="2000CD")
 
         url = reverse("scim_api:vestiging-list")
-        response = self.client.get(url, {"postadres": "1000AB"})
+        response = self.client.get(url, {"postAdres": "1000AB"})
+        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["postadres"], v1.postal_address)
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["postAdres"], v1.post_adres)
 
     def test_landcode_filter(self):
-        v1 = VestigingFactory(country_code="NL")
-        VestigingFactory(country_code="BE")
+        v1 = VestigingFactory(landcode="NL")
+        VestigingFactory(landcode="BE")
 
         url = reverse("scim_api:vestiging-list")
         response = self.client.get(url, {"landcode": "NL"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["landcode"], v1.country_code)
+        self.assertEqual(response.data["results"][0]["landcode"], v1.landcode)

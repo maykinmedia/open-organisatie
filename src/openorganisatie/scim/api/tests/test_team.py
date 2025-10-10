@@ -24,13 +24,13 @@ class TeamAPITests(APITestCase):
         for team in data:
             self.assertIn("uuid", team)
             self.assertIn("naam", team)
-            self.assertIn("beschrijving", team)
+            self.assertIn("omschrijving", team)
 
     def test_team_detail(self):
         vest1 = VestigingFactory()
         func = FunctieFactory()
 
-        team = TeamFactory(branches=[vest1], functies=[func])
+        team = TeamFactory(vestigingen=[vest1], functies=[func])
 
         detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
         response = self.client.get(detail_url)
@@ -38,8 +38,8 @@ class TeamAPITests(APITestCase):
 
         data = response.json()
         self.assertEqual(data["uuid"], str(team.uuid))
-        self.assertEqual(data["naam"], team.name)
-        self.assertEqual(data["beschrijving"], team.description)
+        self.assertEqual(data["naam"], team.naam)
+        self.assertEqual(data["omschrijving"], team.omschrijving)
 
         self.assertIn("vestigingen", data)
         self.assertIn("functies", data)
@@ -51,8 +51,8 @@ class TeamAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_filter_naam(self):
-        team1 = TeamFactory(name="Finance Team")
-        TeamFactory(name="HR Team")
+        team1 = TeamFactory(naam="Finance Team")
+        TeamFactory(naam="HR Team")
 
         url = reverse("scim_api:team-list")
         response = self.client.get(url, {"naam": "finance"})
@@ -60,13 +60,13 @@ class TeamAPITests(APITestCase):
 
         data = response.json()
         self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["naam"], team1.name)
+        self.assertEqual(data["results"][0]["naam"], team1.naam)
 
     def test_filter_vestigingen_uuid(self):
         vest1 = VestigingFactory()
         vest2 = VestigingFactory()
-        team1 = TeamFactory(branches=[vest1])
-        TeamFactory(branches=[vest2])
+        team1 = TeamFactory(vestigingen=[vest1])
+        TeamFactory(vestigingen=[vest2])
 
         url = reverse("scim_api:team-list")
         response = self.client.get(url, {"vestigingenUuid": str(vest1.uuid)})
