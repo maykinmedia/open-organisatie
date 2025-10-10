@@ -23,7 +23,7 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
                     "soort_organisatie",
                     "omschrijving",
                     "datum_opheffing",
-                    "hoofd_organisatie",
+                    "hoofd_organisatorische_eenheid",
                 )
             },
         ),

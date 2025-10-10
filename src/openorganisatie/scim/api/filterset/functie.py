@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 import django_filters
 from vng_api_common.utils import get_help_text
 
@@ -17,6 +19,7 @@ class FunctieFilter(django_filters.FilterSet):
         field_name="functie_type__uuid",
         lookup_expr="in",
         distinct=True,
+        help_text=_("UUID's van de gekoppelde functietypen."),
     )
 
     class Meta:

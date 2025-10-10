@@ -13,24 +13,20 @@ class Functie(models.Model):
     functie_omschrijving = models.CharField(
         max_length=255,
         help_text=_("Korte omschrijving of titel van de functie."),
-        verbose_name=_("Functie omschrijving"),
     )
     begin_datum = models.DateField(
         help_text=_("De datum waarop de functie ingaat."),
-        verbose_name=_("Begindatum"),
     )
     eind_datum = models.DateField(
         blank=True,
         null=True,
         help_text=_("De datum waarop de functie eindigt."),
-        verbose_name=_("Einddatum"),
     )
     functie_type = models.ForeignKey(
         "scim.FunctieType",
         on_delete=models.CASCADE,
         related_name="functies",
         help_text=_("Het type functie dat hieraan gekoppeld is."),
-        verbose_name=_("Functietype"),
     )
 
     class Meta:

@@ -32,11 +32,13 @@ class OrganisatorischeEenheidFilter(django_filters.FilterSet):
         field_name="vestigingen__uuid",
         lookup_expr="in",
         distinct=True,
+        help_text=_("UUID's van de gekoppelde vestigingen."),
     )
     functies_uuid = UUIDFInFilter(
         field_name="functies__uuid",
         lookup_expr="in",
         distinct=True,
+        help_text=_("UUID's van de gekoppelde functies."),
     )
 
     class Meta:

@@ -17,9 +17,9 @@ class ContactpersoonAdmin(admin.ModelAdmin):
     )
     search_fields = (
         "medewerker__voornaam",
-        "medewerker__acternaam",
-        "teams__name",
-        "organisatorische_eenheden__name",
+        "medewerker__achternaam",
+        "teams__naam",
+        "organisatorische_eenheden__naam",
     )
     readonly_fields = ("uuid",)
     filter_horizontal = ("organisatorische_eenheden", "teams")
@@ -33,11 +33,11 @@ class ContactpersoonAdmin(admin.ModelAdmin):
         )
 
     def get_teams(self, obj):
-        return ", ".join([team.name for team in obj.teams.all()]) or "-"
+        return ", ".join([team.naam for team in obj.teams.all()]) or "-"
 
     get_teams.short_description = "Teams"
 
     def get_organisatorische_eenheden(self, obj):
-        return ", ".join([oe.name for oe in obj.organisatorische_eenheden.all()]) or "-"
+        return ", ".join([oe.naam for oe in obj.organisatorische_eenheden.all()]) or "-"
 
     get_organisatorische_eenheden.short_description = "Organisatorische Eenheden"

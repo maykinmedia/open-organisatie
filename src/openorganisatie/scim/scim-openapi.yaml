@@ -15,7 +15,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: De medewerker die aan deze rol gekoppeld is.
+        description: UUID van de gekoppelde medewerker.
       - in: query
         name: organisatorischeEenhedenUuid
         schema:
@@ -23,7 +23,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
+        description: UUID's van de gekoppelde organisatorische eenheden.
         explode: false
         style: form
       - name: page
@@ -45,7 +45,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Teams waaraan de medewerker gekoppeld is.
+        description: UUID's van de gekoppelde teams.
         explode: false
         style: form
       tags:
@@ -213,7 +213,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde functietypen.
         explode: false
         style: form
       - name: page
@@ -632,7 +632,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde functies.
         explode: false
         style: form
       - in: query
@@ -656,7 +656,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde organisatorische eenheden.
         explode: false
         style: form
       - name: page
@@ -678,7 +678,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde teams.
         explode: false
         style: form
       tags:
@@ -841,7 +841,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde functies.
         explode: false
         style: form
       - in: query
@@ -889,7 +889,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde vestigingen.
         explode: false
         style: form
       tags:
@@ -1053,7 +1053,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde functies.
         explode: false
         style: form
       - in: query
@@ -1080,7 +1080,7 @@ paths:
           items:
             type: string
             format: uuid
-        description: Multiple values may be separated by commas.
+        description: UUID's van de gekoppelde vestigingen.
         explode: false
         style: form
       tags:
@@ -1581,13 +1581,11 @@ components:
         beginDatum:
           type: string
           format: date
-          title: Begindatum
           description: De datum waarop de functie ingaat.
         eindDatum:
           type: string
           format: date
           nullable: true
-          title: Einddatum
           description: De datum waarop de functie eindigt.
         functieType:
           allOf:
@@ -1779,13 +1777,11 @@ components:
         beginDatum:
           type: string
           format: date
-          title: Begindatum
           description: De datum waarop de functie ingaat.
         eindDatum:
           type: string
           format: date
           nullable: true
-          title: Einddatum
           description: De datum waarop de functie eindigt.
       required:
       - beginDatum
@@ -2263,13 +2259,11 @@ components:
         beginDatum:
           type: string
           format: date
-          title: Begindatum
           description: De datum waarop de functie ingaat.
         eindDatum:
           type: string
           format: date
           nullable: true
-          title: Einddatum
           description: De datum waarop de functie eindigt.
         functieType:
           allOf:
