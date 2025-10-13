@@ -51,7 +51,7 @@ class FunctieAPITests(APITestCase):
         FunctieFactory(functie_omschrijving="Data Scientist")
 
         url = reverse("scim_api:functie-list")
-        response = self.client.get(url, {"functie_omschrijving": "engineer"})
+        response = self.client.get(url, {"functie_omschrijving": "Software Engineer"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)

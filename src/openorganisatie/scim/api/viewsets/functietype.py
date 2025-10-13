@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from openorganisatie.scim.models.functietype import FunctieType
 from openorganisatie.utils.bearer import BearerTokenAuthentication
 
-from ..filterset.functietype import FunctieTypeFilter
 from ..serializers.functietype import FunctieTypeSerializer
 
 
@@ -39,7 +38,10 @@ from ..serializers.functietype import FunctieTypeSerializer
 class FunctieTypeViewSet(viewsets.ModelViewSet):
     queryset = FunctieType.objects.all()
     serializer_class = FunctieTypeSerializer
-    filterset_class = FunctieTypeFilter
+    filterset_fields = {
+        "naam",
+        "slug",
+    }
     lookup_field = "uuid"
     authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)

@@ -207,6 +207,11 @@ paths:
           type: string
         description: Korte omschrijving of titel van de functie.
       - in: query
+        name: functieOmschrijving__icontains
+        schema:
+          type: string
+        description: Korte omschrijving of titel van de functie.
+      - in: query
         name: functieTypeUuid
         schema:
           type: array
@@ -860,6 +865,11 @@ paths:
         schema:
           type: string
         description: Volledige naam van de organisatorische eenheid.
+      - in: query
+        name: naam__icontains
+        schema:
+          type: string
+        description: Volledige naam van de organisatorische eenheid.
       - name: page
         required: false
         in: query
@@ -1061,6 +1071,11 @@ paths:
         schema:
           type: string
         description: Naam van het team.
+      - in: query
+        name: naam__icontains
+        schema:
+          type: string
+        description: Naam van het team.
       - name: page
         required: false
         in: query
@@ -1245,7 +1260,19 @@ paths:
         name: datumToegevoegd
         schema:
           type: string
-          format: date
+          format: date-time
+        description: Datum waarop de medewerker is toegevoegd.
+      - in: query
+        name: datumToegevoegd__gt
+        schema:
+          type: string
+          format: date-time
+        description: Datum waarop de medewerker is toegevoegd.
+      - in: query
+        name: datumToegevoegd__lt
+        schema:
+          type: string
+          format: date-time
         description: Datum waarop de medewerker is toegevoegd.
       - in: query
         name: functie

@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from openorganisatie.scim.models.vestiging import Vestiging
 from openorganisatie.utils.bearer import BearerTokenAuthentication
 
-from ..filterset.vestiging import VestigingFilter
 from ..serializers.vestiging import VestigingSerializer
 
 
@@ -39,7 +38,14 @@ from ..serializers.vestiging import VestigingSerializer
 class VestigingViewSet(viewsets.ModelViewSet):
     queryset = Vestiging.objects.all()
     serializer_class = VestigingSerializer
-    filterset_class = VestigingFilter
+    filterset_fields = {
+        "naam",
+        "vestigingsnummer",
+        "verkorte_naam",
+        "adres",
+        "post_adres",
+        "landcode",
+    }
     lookup_field = "uuid"
     authentication_classes = (BearerTokenAuthentication,)
     permission_classes = (IsAuthenticated,)

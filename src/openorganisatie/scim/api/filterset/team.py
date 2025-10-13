@@ -1,17 +1,10 @@
 from django.utils.translation import gettext_lazy as _
 
-import django_filters
-from vng_api_common.utils import get_help_text
-
 from openorganisatie.scim.models.team import Team
-from openorganisatie.utils.filters import UUIDFInFilter
+from openorganisatie.utils.filters import FilterSet, UUIDFInFilter
 
 
-class TeamFilter(django_filters.FilterSet):
-    naam = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=get_help_text("scim.Team", "naam"),
-    )
+class TeamFilter(FilterSet):
     vestigingen_uuid = UUIDFInFilter(
         field_name="vestigingen__uuid",
         lookup_expr="in",
@@ -27,4 +20,6 @@ class TeamFilter(django_filters.FilterSet):
 
     class Meta:
         model = Team
-        fields = []
+        fields = {
+            "naam": ["exact", "icontains"],
+        }

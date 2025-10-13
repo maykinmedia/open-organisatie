@@ -1,29 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 
 import django_filters
-from vng_api_common.utils import get_help_text
 
 from openorganisatie.scim.models.organisatorische_eenheid import OrganisatorischeEenheid
-from openorganisatie.utils.filters import UUIDFInFilter
+from openorganisatie.utils.filters import FilterSet, UUIDFInFilter
 
 
-class OrganisatorischeEenheidFilter(django_filters.FilterSet):
-    naam = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "naam"),
-    )
-    identificatie = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "identificatie"),
-    )
-    soort_organisatie = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "soort_organisatie"),
-    )
-    verkorte_naam = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=get_help_text("scim.OrganisatorischeEenheid", "verkorte_naam"),
-    )
+class OrganisatorischeEenheidFilter(FilterSet):
     hoofd_organisatorische_eenheid = django_filters.UUIDFilter(
         lookup_expr="exact",
         help_text=_("UUID van de bovenliggende organisatorische eenheid."),
@@ -43,4 +26,9 @@ class OrganisatorischeEenheidFilter(django_filters.FilterSet):
 
     class Meta:
         model = OrganisatorischeEenheid
-        fields = []
+        fields = {
+            "naam": ["exact", "icontains"],
+            "identificatie": ["exact"],
+            "soort_organisatie": ["exact"],
+            "verkorte_naam": ["exact"],
+        }

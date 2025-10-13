@@ -49,7 +49,7 @@ class FunctieTypeAPITests(APITestCase):
         FunctieTypeFactory(naam="Developer")
 
         url = reverse("scim_api:functietype-list")
-        response = self.client.get(url, {"naam": "manager"})
+        response = self.client.get(url, {"naam": "Manager HR"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)

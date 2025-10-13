@@ -55,7 +55,7 @@ class TeamAPITests(APITestCase):
         TeamFactory(naam="HR Team")
 
         url = reverse("scim_api:team-list")
-        response = self.client.get(url, {"naam": "finance"})
+        response = self.client.get(url, {"naam": "Finance Team"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()

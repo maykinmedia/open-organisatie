@@ -73,7 +73,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         OrganisatorischeEenheidFactory(naam="ORG2")
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"naam": "Org1"})
+        response = self.client.get(url, {"naam": "ORG1"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
