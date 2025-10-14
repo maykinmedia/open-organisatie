@@ -5,13 +5,13 @@ from ..models.team import Team
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ("name", "display_medewerkers")
-    search_fields = ("name", "description")
+    list_display = ("naam", "display_medewerkers")
+    search_fields = ("naam", "omschrijving")
     readonly_fields = ("display_medewerkers", "uuid")
-    filter_horizontal = ("branches", "functies")
+    filter_horizontal = ("vestigingen", "functies")
 
     fieldsets = (
-        ("Algemene informatie", {"fields": ("uuid", "name", "description")}),
+        ("Algemene informatie", {"fields": ("uuid", "naam", "omschrijving")}),
         (
             "Medewerkers",
             {
@@ -20,14 +20,14 @@ class TeamAdmin(admin.ModelAdmin):
         ),
         (
             "Relaties",
-            {"fields": ("branches", "functies")},
+            {"fields": ("vestigingen", "functies")},
         ),
     )
 
     def display_medewerkers(self, obj):
         return ", ".join(
             [
-                f"{medewerker.first_name} {medewerker.last_name}"
+                f"{medewerker.voornaam} {medewerker.achternaam}"
                 for medewerker in obj.medewerkers.all()
             ]
         )
@@ -38,5 +38,5 @@ class TeamAdmin(admin.ModelAdmin):
         return (
             super()
             .get_queryset(request)
-            .prefetch_related("branches", "functies", "medewerkers")
+            .prefetch_related("vestigingen", "functies", "medewerkers")
         )

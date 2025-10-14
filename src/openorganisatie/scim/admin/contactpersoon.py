@@ -8,36 +8,36 @@ class ContactpersoonAdmin(admin.ModelAdmin):
     list_display = (
         "uuid",
         "medewerker",
-        "get_team",
-        "get_organisatorische_eenheid",
+        "get_teams",
+        "get_organisatorische_eenheden",
     )
     list_filter = (
-        "team",
-        "organisatorische_eenheid",
+        "teams",
+        "organisatorische_eenheden",
     )
     search_fields = (
-        "medewerker__first_name",
-        "medewerker__last_name",
-        "team__name",
-        "organisatorische_eenheid__name",
+        "medewerker__voornaam",
+        "medewerker__achternaam",
+        "teams__naam",
+        "organisatorische_eenheden__naam",
     )
     readonly_fields = ("uuid",)
+    filter_horizontal = ("organisatorische_eenheden", "teams")
 
     def get_queryset(self, request):
         return (
             super()
             .get_queryset(request)
-            .select_related("team", "organisatorische_eenheid", "medewerker")
+            .select_related("medewerker")
+            .prefetch_related("organisatorische_eenheden", "teams")
         )
 
-    def get_team(self, obj):
-        return obj.team.name if obj.team else "-"
+    def get_teams(self, obj):
+        return ", ".join([team.naam for team in obj.teams.all()]) or "-"
 
-    get_team.short_description = "Team"
+    get_teams.short_description = "Teams"
 
-    def get_organisatorische_eenheid(self, obj):
-        return (
-            obj.organisatorische_eenheid.name if obj.organisatorische_eenheid else "-"
-        )
+    def get_organisatorische_eenheden(self, obj):
+        return ", ".join([oe.naam for oe in obj.organisatorische_eenheden.all()]) or "-"
 
-    get_organisatorische_eenheid.short_description = "Organisatorische Eenheid"
+    get_organisatorische_eenheden.short_description = "Organisatorische Eenheden"

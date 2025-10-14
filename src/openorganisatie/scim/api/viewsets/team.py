@@ -16,11 +16,27 @@ from ..serializers.team import TeamSerializer
         description="Deze lijst kan gefilterd wordt met query-string parameters.",
     ),
     retrieve=extend_schema(
-        summary="Een specifieke team opvragen.",
-        description="Een specifieke medewerker opvragen.",
+        summary="Een specifiek team opvragen.",
+        description="Een specifiek team opvragen via UUID.",
+    ),
+    create=extend_schema(
+        summary="Nieuw team aanmaken.",
+        description="Voeg een nieuw team toe aan het systeem.",
+    ),
+    update=extend_schema(
+        summary="Team volledig bijwerken.",
+        description="Werk alle gegevens van een team bij.",
+    ),
+    partial_update=extend_schema(
+        summary="Team gedeeltelijk bijwerken.",
+        description="Werk enkele gegevens van een team bij.",
+    ),
+    destroy=extend_schema(
+        summary="Team verwijderen.",
+        description="Verwijder een specifiek team.",
     ),
 )
-class TeamReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
     filterset_class = TeamFilter

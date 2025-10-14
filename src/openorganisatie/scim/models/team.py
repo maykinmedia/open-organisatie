@@ -3,31 +3,26 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_scim.models import AbstractSCIMGroupMixin
 
-
-class Team(AbstractSCIMGroupMixin, models.Model):
+class Team(models.Model):
     uuid = models.UUIDField(
         unique=True,
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4)"),
     )
-    name = models.CharField(
+    naam = models.CharField(
         max_length=100,
         unique=True,
-        verbose_name=_("Naam"),
         help_text=_("Naam van het team."),
     )
-    description = models.TextField(
+    omschrijving = models.TextField(
         blank=True,
-        verbose_name=_("Beschrijving"),
-        help_text=_("Optionele beschrijving van het team."),
+        help_text=_("Optionele omschrijving van het team."),
     )
-    branches = models.ManyToManyField(
+    vestigingen = models.ManyToManyField(
         "scim.Vestiging",
         related_name="teams",
         blank=True,
-        verbose_name=_("Vestigingen"),
         help_text=_("Vestigingen waaraan de medewerker gekoppeld is."),
     )
     functies = models.ManyToManyField(
@@ -43,4 +38,4 @@ class Team(AbstractSCIMGroupMixin, models.Model):
         verbose_name_plural = _("Teams")
 
     def __str__(self):
-        return self.name
+        return self.naam

@@ -1,34 +1,34 @@
+from django.utils.translation import gettext_lazy as _
+
 import django_filters
 
 from openorganisatie.scim.models.organisatorische_eenheid import OrganisatorischeEenheid
+from openorganisatie.utils.filters import FilterSet, UUIDFInFilter
 
 
-class OrganisatorischeEenheidFilter(django_filters.FilterSet):
-    identificatie = django_filters.CharFilter(
-        field_name="identifier", lookup_expr="icontains", label="Identificatie"
+class OrganisatorischeEenheidFilter(FilterSet):
+    hoofd_organisatorische_eenheid = django_filters.UUIDFilter(
+        lookup_expr="exact",
+        help_text=_("UUID van de bovenliggende organisatorische eenheid."),
     )
-    naam = django_filters.CharFilter(
-        field_name="name", lookup_expr="icontains", label="Naam"
+    vestigingen_uuid = UUIDFInFilter(
+        field_name="vestigingen__uuid",
+        lookup_expr="in",
+        distinct=True,
+        help_text=_("UUID's van de gekoppelde vestigingen."),
     )
-    type_organisatie = django_filters.CharFilter(
-        field_name="organization_type",
-        lookup_expr="icontains",
-        label="Type organisatie",
+    functies_uuid = UUIDFInFilter(
+        field_name="functies__uuid",
+        lookup_expr="in",
+        distinct=True,
+        help_text=_("UUID's van de gekoppelde functies."),
     )
-    verkorte_naam = django_filters.CharFilter(
-        field_name="short_name", lookup_expr="icontains", label="Verkorte naam"
-    )
-    beschrijving = django_filters.CharFilter(
-        field_name="description", lookup_expr="icontains", label="Beschrijving"
-    )
-    emailadres = django_filters.CharFilter(
-        field_name="email_address", lookup_expr="icontains", label="E-mailadres"
-    )
-    telefoonnummer = django_filters.CharFilter(
-        field_name="phone_number", lookup_expr="icontains", label="Telefoonnummer"
-    )
-    einddatum = django_filters.DateFilter(field_name="end_date", label="Einddatum")
 
     class Meta:
         model = OrganisatorischeEenheid
-        fields = []
+        fields = {
+            "naam": ["exact", "icontains"],
+            "identificatie": ["exact"],
+            "soort_organisatie": ["exact"],
+            "verkorte_naam": ["exact"],
+        }

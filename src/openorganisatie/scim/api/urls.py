@@ -8,22 +8,26 @@ from drf_spectacular.views import (
 from vng_api_common import routers
 
 from .schema import custom_settings
-from .viewsets.contactpersoon import ContactpersoonReadOnlyViewSet
+from .viewsets.contactpersoon import ContactpersoonViewSet
+from .viewsets.functie import FunctieViewSet
+from .viewsets.functietype import FunctieTypeViewSet
 from .viewsets.group import GroupReadOnlyViewSet
-from .viewsets.medewerker import MedewerkerReadOnlyViewSet
-from .viewsets.organisatorische_eenheid import OrganisatorischeEenheidReadOnlyViewSet
-from .viewsets.team import TeamReadOnlyViewSet
+from .viewsets.medewerker import MedewerkerViewSet
+from .viewsets.organisatorische_eenheid import OrganisatorischeEenheidViewSet
+from .viewsets.team import TeamViewSet
 from .viewsets.user import UserReadOnlyViewSet
-from .viewsets.vestiging import VestigingReadOnlyViewSet
+from .viewsets.vestiging import VestigingViewSet
 
 app_name = "scim_api"
 
 router = routers.DefaultRouter()
-router.register("medewerkers", MedewerkerReadOnlyViewSet)
-router.register("contactpersoon", ContactpersoonReadOnlyViewSet)
-router.register("vestiging", VestigingReadOnlyViewSet)
-router.register("organisatorische-eenheid", OrganisatorischeEenheidReadOnlyViewSet)
-router.register("teams", TeamReadOnlyViewSet)
+router.register("medewerkers", MedewerkerViewSet)
+router.register("contactpersoon", ContactpersoonViewSet)
+router.register("vestiging", VestigingViewSet)
+router.register("organisatorische-eenheid", OrganisatorischeEenheidViewSet)
+router.register("teams", TeamViewSet)
+router.register("functie", FunctieViewSet)
+router.register("functietype", FunctieTypeViewSet)
 router.register("users", UserReadOnlyViewSet)
 router.register("groups", GroupReadOnlyViewSet)
 

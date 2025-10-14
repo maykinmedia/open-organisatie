@@ -1,14 +1,14 @@
-from datetime import date
-
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from openorganisatie.scim.models.factories.functie import FunctieFactory
 from openorganisatie.scim.models.factories.organisatorische_eenheid import (
     OrganisatorischeEenheidFactory,
 )
+from openorganisatie.scim.models.factories.vestiging import VestigingFactory
 
 from .api_testcase import APITestCase
 
@@ -27,10 +27,12 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         for org in data["results"]:
             self.assertIn("uuid", org)
             self.assertIn("naam", org)
-            self.assertIn("typeOrganisatie", org)
+            self.assertIn("soortOrganisatie", org)
 
     def test_read_organisatorische_eenheid_detail(self):
-        org = OrganisatorischeEenheidFactory()
+        vest = VestigingFactory()
+        func = FunctieFactory()
+        org = OrganisatorischeEenheidFactory(vestigingen=[vest], functies=[func])
 
         detail_url = reverse(
             "scim_api:organisatorischeeenheid-detail",
@@ -42,9 +44,12 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         data = response.json()
         self.assertEqual(data["uuid"], str(org.uuid))
-        self.assertEqual(data["identificatie"], org.identifier)
-        self.assertEqual(data["naam"], org.name)
-        self.assertEqual(data["typeOrganisatie"], org.organization_type)
+        self.assertEqual(data["identificatie"], org.identificatie)
+        self.assertEqual(data["naam"], org.naam)
+        self.assertEqual(data["soortOrganisatie"], org.soort_organisatie)
+
+        self.assertIn("functies", data)
+        self.assertIn("vestigingen", data)
 
     def test_authentication_required(self):
         client = APIClient()
@@ -53,100 +58,83 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_identificatie_filter(self):
-        org1 = OrganisatorischeEenheidFactory(identifier="12345")
-        OrganisatorischeEenheidFactory(identifier="6789")
+        org1 = OrganisatorischeEenheidFactory(identificatie="12345")
+        OrganisatorischeEenheidFactory(identificatie="6789")
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"identificatie": "12345"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["identificatie"], org1.identifier)
+        self.assertEqual(data["results"][0]["identificatie"], org1.identificatie)
 
     def test_naam_filter(self):
-        org1 = OrganisatorischeEenheidFactory(name="ORG1")
-        OrganisatorischeEenheidFactory(name="ORG2")
+        org1 = OrganisatorischeEenheidFactory(naam="ORG1")
+        OrganisatorischeEenheidFactory(naam="ORG2")
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"naam": "Org1"})
+        response = self.client.get(url, {"naam": "ORG1"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["naam"], org1.name)
+        self.assertEqual(data["results"][0]["naam"], org1.naam)
 
     def test_type_organisatie_filter(self):
-        org1 = OrganisatorischeEenheidFactory(organization_type="Type1")
-        OrganisatorischeEenheidFactory(organization_type="Type2")
+        org1 = OrganisatorischeEenheidFactory(soort_organisatie="Type1")
+        OrganisatorischeEenheidFactory(soort_organisatie="Type2")
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"typeOrganisatie": "Type1"})
+        response = self.client.get(url, {"soortOrganisatie": "Type1"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["typeOrganisatie"], org1.organization_type)
+        self.assertEqual(data["results"][0]["soortOrganisatie"], org1.soort_organisatie)
 
     def test_verkorte_naam_filter(self):
-        org1 = OrganisatorischeEenheidFactory(short_name="FIN")
-        OrganisatorischeEenheidFactory(short_name="HR")
+        org1 = OrganisatorischeEenheidFactory(verkorte_naam="FIN")
+        OrganisatorischeEenheidFactory(verkorte_naam="HR")
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"verkorteNaam": "FIN"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["verkorteNaam"], org1.short_name)
+        self.assertEqual(data["results"][0]["verkorteNaam"], org1.verkorte_naam)
 
-    def test_beschrijving_filter(self):
-        org1 = OrganisatorischeEenheidFactory(description="Finance divisie")
-        OrganisatorischeEenheidFactory(description="HR divisie")
+    def test_filter_vestiging_uuids(self):
+        vest1 = VestigingFactory()
+        vest2 = VestigingFactory()
+        org1 = OrganisatorischeEenheidFactory()
+        org1.vestigingen.add(vest1)
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"beschrijving": "Finance divisie"})
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["beschrijving"], org1.description)
-
-    def test_emailadres_filter(self):
-        org1 = OrganisatorischeEenheidFactory(email_address="finance@example.com")
-        OrganisatorischeEenheidFactory(email_address="hr@example.com")
+        OrganisatorischeEenheidFactory().vestigingen.add(vest2)
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"emailadres": "finance@example.com"})
+        response = self.client.get(url, {"vestigingen_uuid": str(vest1.uuid)})
 
-        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["emailadres"], org1.email_address)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(org1.uuid))
 
-    def test_telefoonnummer_filter(self):
-        org1 = OrganisatorischeEenheidFactory(phone_number="0612345678")
-        OrganisatorischeEenheidFactory(phone_number="0687654321")
+    def test_filter_functie_uuids(self):
+        functie1 = FunctieFactory()
+        functie2 = FunctieFactory()
+        org1 = OrganisatorischeEenheidFactory()
+        org1.functies.add(functie1)
+
+        OrganisatorischeEenheidFactory().functies.add(functie2)
 
         url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"telefoonnummer": "0612345678"})
+        response = self.client.get(url, {"functies_uuid": str(functie1.uuid)})
 
-        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["telefoonnummer"], org1.phone_number)
-
-    def test_einddatum_filter(self):
-        org1 = OrganisatorischeEenheidFactory(end_date=date(2025, 1, 1))
-        OrganisatorischeEenheidFactory(end_date=date(2026, 1, 1))
-
-        url = reverse("scim_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"einddatum": "2025-01-01"})
-
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["einddatum"], org1.end_date.isoformat())
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(org1.uuid))
 
     def test_list_children_under_parent(self):
         parent = OrganisatorischeEenheidFactory()
-        child1 = OrganisatorischeEenheidFactory(parent_organisation=parent)
-        child2 = OrganisatorischeEenheidFactory(parent_organisation=parent)
+        child1 = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
+        child2 = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
         OrganisatorischeEenheidFactory()
 
         url = reverse("scim_api:organisatorischeeenheid-list")
@@ -164,7 +152,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
     def test_parent_field_in_detail(self):
         parent = OrganisatorischeEenheidFactory()
-        child = OrganisatorischeEenheidFactory(parent_organisation=parent)
+        child = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
 
         url = reverse(
             "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": child.uuid}
@@ -179,9 +167,9 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         root1 = OrganisatorischeEenheidFactory()
         root2 = OrganisatorischeEenheidFactory()
 
-        child1a = OrganisatorischeEenheidFactory(parent_organisation=root1)
-        child1b = OrganisatorischeEenheidFactory(parent_organisation=root1)
-        child2a = OrganisatorischeEenheidFactory(parent_organisation=root2)
+        child1a = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=root1)
+        child1b = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=root1)
+        child2a = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=root2)
 
         url = reverse("scim_api:organisatorischeeenheid-list")
         response = self.client.get(url)
@@ -213,30 +201,30 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
     def test_prevent_cycle_in_parent(self):
         parent = OrganisatorischeEenheidFactory()
-        child = OrganisatorischeEenheidFactory(parent_organisation=parent)
+        child = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
 
-        parent.parent_organisation = child
+        parent.hoofd_organisatorische_eenheid = child
         with self.assertRaises(ValidationError) as val:
             parent.clean()
         self.assertIn(
-            "parent_organisation",
+            "hoofd_organisatorische_eenheid",
             val.exception.message_dict,
         )
         self.assertIn(
             "Een organisatorische eenheid kan geen kind als bovenliggende eenheid hebben.",
-            val.exception.message_dict["parent_organisation"][0],
+            val.exception.message_dict["hoofd_organisatorische_eenheid"][0],
         )
 
     def test_prevent_self_parenting(self):
         org = OrganisatorischeEenheidFactory()
-        org.parent_organisation = org
+        org.hoofd_organisatorische_eenheid = org
         with self.assertRaises(ValidationError) as val:
             org.clean()
         self.assertIn(
-            "parent_organisation",
+            "hoofd_organisatorische_eenheid",
             val.exception.message_dict,
         )
         self.assertIn(
             "Een organisatorische eenheid kan niet naar zichzelf verwijzen.",
-            val.exception.message_dict["parent_organisation"][0],
+            val.exception.message_dict["hoofd_organisatorische_eenheid"][0],
         )

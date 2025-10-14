@@ -13,13 +13,11 @@ class FunctieType(models.Model):
     naam = models.CharField(
         max_length=50,
         help_text=_("De naam van het functietype (bijv. Manager, Medewerker)."),
-        verbose_name=_("Naam"),
     )
     slug = models.SlugField(
         unique=True,
         max_length=100,
         help_text=_("Unieke, URL-vriendelijke identificatie voor dit functietype."),
-        verbose_name=_("Slug"),
     )
 
     class Meta:

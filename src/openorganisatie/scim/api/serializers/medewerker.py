@@ -1,30 +1,61 @@
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
+from vng_api_common.utils import get_help_text
 
 from openorganisatie.scim.models import Medewerker
+from openorganisatie.scim.models.functie import Functie
+from openorganisatie.scim.models.organisatorische_eenheid import OrganisatorischeEenheid
+from openorganisatie.scim.models.team import Team
+from openorganisatie.utils.fields import UUIDRelatedField
 
-from ..serializers.contactpersoon import ContactpersoonSerializer
-from ..serializers.team import TeamSerializer
-from ..serializers.vestiging import SubVestigingSerializer
+from ..serializers.functie import NestedFunctieSerializer
+from ..serializers.organisatorische_eenheid import (
+    NestedOrganisatorischeEenheidSerializer,
+)
+from ..serializers.team import NestedTeamSerializer
 
 
 class MedewerkerSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(read_only=True)
-    medewerker_id = serializers.CharField(read_only=True)
-    voornaam = serializers.CharField(source="first_name")
-    achternaam = serializers.CharField(source="last_name")
-    emailadres = serializers.EmailField(source="email")
-    telefoonnummer = serializers.CharField(
-        source="phone_number", allow_blank=True, required=False
+    teams = NestedTeamSerializer(
+        many=True,
+        read_only=True,
+        help_text=get_help_text("scim.Medewerker", "teams"),
     )
-    geslachtsaanduiding = serializers.BooleanField(source="gender_indicator")
-    datum_uit_dienst = serializers.DateField(
-        source="termination_date", required=False, allow_null=True
+    teams_uuids = UUIDRelatedField(
+        queryset=Team.objects.all(),
+        write_only=True,
+        source="teams",
+        many=True,
+        required=False,
+        help_text=_("UUID’s van gekoppelde teams."),
     )
-    teams = TeamSerializer(many=True, read_only=True)
-    vestiging = SubVestigingSerializer(read_only=True)
-    contactpersoon = ContactpersoonSerializer(read_only=True)
-    datum_toegevoegd = serializers.DateTimeField(source="date_joined", read_only=True)
-    laatst_gewijzigd = serializers.DateTimeField(source="last_modified", read_only=True)
+    functies = NestedFunctieSerializer(
+        many=True,
+        read_only=True,
+        help_text=get_help_text("scim.Medewerker", "functies"),
+    )
+    functies_uuids = UUIDRelatedField(
+        queryset=Functie.objects.all(),
+        write_only=True,
+        source="functies",
+        many=True,
+        required=False,
+        help_text=_("UUID’s van gekoppelde functies."),
+    )
+    organisatorische_eenheden = NestedOrganisatorischeEenheidSerializer(
+        many=True,
+        read_only=True,
+        help_text=get_help_text("scim.Medewerker", "organisatorische_eenheden"),
+    )
+    organisatorische_eenheden_uuids = UUIDRelatedField(
+        queryset=OrganisatorischeEenheid.objects.all(),
+        write_only=True,
+        source="organisatorische_eenheden",
+        many=True,
+        required=False,
+        help_text=_("UUID’s van gekoppelde organisatorische eenheden."),
+    )
 
     class Meta:
         model = Medewerker
@@ -38,8 +69,11 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "geslachtsaanduiding",
             "datum_uit_dienst",
             "teams",
-            "vestiging",
-            "contactpersoon",
+            "teams_uuids",
+            "functies",
+            "functies_uuids",
+            "organisatorische_eenheden",
+            "organisatorische_eenheden_uuids",
             "datum_toegevoegd",
-            "laatst_gewijzigd",
+            "datum_aangepast",
         ]

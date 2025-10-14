@@ -1,30 +1,33 @@
+from django.utils.translation import gettext_lazy as _
+
 import django_filters
 
 from openorganisatie.scim.models.medewerker import Medewerker
-from openorganisatie.scim.models.team import Team
+from openorganisatie.utils.filters import (
+    UUIDFInFilter,
+)
 
 
 class MedewerkerFilter(django_filters.FilterSet):
-    functie = django_filters.CharFilter(
-        field_name="job_title", lookup_expr="icontains", label="Functie"
-    )
-    geslachtsaanduiding = django_filters.BooleanFilter(
-        field_name="gender_indicator", label="Geslachtsaanduiding"
-    )
-    datum_uit_dienst = django_filters.DateFilter(
-        field_name="termination_date", label="Datum uit dienst"
-    )
-    actief = django_filters.BooleanFilter(field_name="is_active", label="Actief")
-    teams = django_filters.ModelMultipleChoiceFilter(
+    teams_uuid = UUIDFInFilter(
         field_name="teams__uuid",
-        queryset=Team.objects.all(),
-        to_field_name="uuid",
-        label="Teams",
+        lookup_expr="in",
+        distinct=True,
+        help_text=_("UUID's van de gekoppelde teams."),
     )
-    datum_toegevoegd = django_filters.DateFilter(
-        field_name="date_joined__date", label="Datum toegevoegd"
+    organisatorische_eenheden_uuid = UUIDFInFilter(
+        field_name="organisatorische_eenheden__uuid",
+        lookup_expr="in",
+        distinct=True,
+        help_text=_("UUID's van de gekoppelde organisatorische eenheden."),
+    )
+    functies_uuid = UUIDFInFilter(
+        field_name="functies__uuid",
+        lookup_expr="in",
+        distinct=True,
+        help_text=_("UUID's van de gekoppelde functies."),
     )
 
     class Meta:
         model = Medewerker
-        fields = []
+        fields = ("geslachtsaanduiding",)

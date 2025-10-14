@@ -24,9 +24,19 @@ class UserFilter(django_filters.FilterSet):
         label="Groups",
         help_text=get_help_text("scim.User", "groups"),
     )
-    datum_toegevoegd = django_filters.DateFilter(
+    datum_toegevoegd = django_filters.IsoDateTimeFilter(
         field_name="date_joined",
-        label="Datum toegevoegd",
+        lookup_expr="exact",
+        help_text=get_help_text("scim.User", "date_joined"),
+    )
+    datum_toegevoegd__gt = django_filters.IsoDateTimeFilter(
+        field_name="date_joined",
+        lookup_expr="gt",
+        help_text=get_help_text("scim.User", "date_joined"),
+    )
+    datum_toegevoegd__lt = django_filters.IsoDateTimeFilter(
+        field_name="date_joined",
+        lookup_expr="lt",
         help_text=get_help_text("scim.User", "date_joined"),
     )
 

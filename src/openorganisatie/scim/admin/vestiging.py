@@ -5,8 +5,8 @@ from ..models.vestiging import Vestiging
 
 @admin.register(Vestiging)
 class VestigingAdmin(admin.ModelAdmin):
-    list_display = ("branchname", "branchnumber")
-    search_fields = ("branchname", "address")
+    list_display = ("naam", "vestigingsnummer")
+    search_fields = ("naam", "address")
     readonly_fields = ("uuid",)
 
     fieldsets = (
@@ -15,10 +15,10 @@ class VestigingAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "uuid",
-                    "branchnumber",
-                    "branchname",
-                    "short_name",
-                    "country_code",
+                    "vestigingsnummer",
+                    "naam",
+                    "verkorte_naam",
+                    "landcode",
                 )
             },
         ),
@@ -26,10 +26,10 @@ class VestigingAdmin(admin.ModelAdmin):
             "Contactgegevens",
             {
                 "fields": (
-                    "address",
-                    "correspondence_address",
-                    "postal_address",
-                    "phone_number",
+                    "adres",
+                    "correspondentieadres",
+                    "post_adres",
+                    "telefoonnummer",
                 )
             },
         ),

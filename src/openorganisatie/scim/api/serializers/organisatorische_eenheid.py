@@ -1,30 +1,23 @@
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
+from vng_api_common.utils import get_help_text
 
+from openorganisatie.scim.models.functie import Functie
 from openorganisatie.scim.models.organisatorische_eenheid import OrganisatorischeEenheid
+from openorganisatie.scim.models.vestiging import Vestiging
+from openorganisatie.utils.fields import UUIDRelatedField
+
+from ..serializers.functie import NestedFunctieSerializer
+from ..serializers.vestiging import VestigingSerializer
 
 
-class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
-    uuid = serializers.UUIDField(read_only=True)
-    identificatie = serializers.CharField(source="identifier")
-    naam = serializers.CharField(source="name")
-    type_organisatie = serializers.CharField(source="organization_type")
-    verkorte_naam = serializers.CharField(
-        source="short_name", allow_blank=True, required=False
-    )
-    beschrijving = serializers.CharField(
-        source="description", allow_blank=True, required=False
-    )
-    emailadres = serializers.EmailField(
-        source="email_address", allow_blank=True, required=False
-    )
-    telefoonnummer = serializers.CharField(
-        source="phone_number", allow_blank=True, required=False
-    )
-    einddatum = serializers.DateField(
-        source="end_date", allow_null=True, required=False
-    )
-    hoofd_organisatorische_eenheid = serializers.UUIDField(
-        source="parent_organisation.uuid", read_only=True, required=False
+class NestedOrganisatorischeEenheidSerializer(serializers.ModelSerializer):
+    hoofd_organisatorische_eenheid = UUIDRelatedField(
+        queryset=OrganisatorischeEenheid.objects.all(),
+        required=False,
+        allow_null=True,
+        help_text=_("UUID van de bovenliggende organisatorische eenheid (optioneel)."),
     )
 
     class Meta:
@@ -33,11 +26,72 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
             "uuid",
             "identificatie",
             "naam",
-            "type_organisatie",
+            "soort_organisatie",
             "verkorte_naam",
-            "beschrijving",
+            "omschrijving",
             "emailadres",
             "telefoonnummer",
-            "einddatum",
+            "datum_opheffing",
             "hoofd_organisatorische_eenheid",
         ]
+
+
+class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
+    vestigingen = VestigingSerializer(
+        many=True,
+        read_only=True,
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "vestigingen"),
+    )
+    vestigingen_uuid = UUIDRelatedField(
+        queryset=Vestiging.objects.all(),
+        write_only=True,
+        source="vestigingen",
+        many=True,
+        required=False,
+        help_text=_("UUID’s van gekoppelde vestigingen."),
+    )
+    functies = NestedFunctieSerializer(
+        many=True,
+        read_only=True,
+        help_text=get_help_text("scim.OrganisatorischeEenheid", "functies"),
+    )
+    functies_uuid = UUIDRelatedField(
+        queryset=Functie.objects.all(),
+        write_only=True,
+        source="functies",
+        many=True,
+        required=False,
+        help_text=_("UUID’s van gekoppelde functies."),
+    )
+    hoofd_organisatorische_eenheid = UUIDRelatedField(
+        queryset=OrganisatorischeEenheid.objects.all(),
+        required=False,
+        allow_null=True,
+        help_text=_("UUID van de bovenliggende organisatorische eenheid (optioneel)."),
+    )
+
+    class Meta:
+        model = OrganisatorischeEenheid
+        fields = [
+            "uuid",
+            "identificatie",
+            "naam",
+            "soort_organisatie",
+            "verkorte_naam",
+            "omschrijving",
+            "emailadres",
+            "telefoonnummer",
+            "datum_opheffing",
+            "vestigingen",
+            "vestigingen_uuid",
+            "functies",
+            "functies_uuid",
+            "hoofd_organisatorische_eenheid",
+        ]
+
+    def to_representation(self, instance):
+        """Ensure hoofd_organisatorische_eenheid is serialized as a string UUID."""
+        data = super().to_representation(instance)
+        parent = instance.hoofd_organisatorische_eenheid
+        data["hoofd_organisatorische_eenheid"] = str(parent.uuid) if parent else None
+        return data
