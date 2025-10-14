@@ -89,7 +89,15 @@ class UserAdapter(SCIMUser):
         if job_title is not None:
             self.obj.job_title = job_title
 
+        enterprise_ext = d.get(
+            "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", {}
+        )
+        if enterprise_ext:
+            self.obj.employee_number = enterprise_ext.get("employeeNumber")
+
         self.obj.save()
+
+        self.obj.koppel_medewerker()
 
         logger.info(
             "add_scim_medewerker",

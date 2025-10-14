@@ -1,3 +1,4 @@
+from .attr_mapping_config import AttribuutMappingConfigAdmin
 from .contactpersoon import ContactpersoonAdmin
 from .functie import FunctieAdmin
 from .functietype import FunctieTypeAdmin
@@ -18,4 +19,5 @@ __all__ = [
     "GroupAdmin",
     "FunctieAdmin",
     "FunctieTypeAdmin",
+    "AttribuutMappingConfigAdmin",
 ]

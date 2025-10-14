@@ -13,7 +13,7 @@ class MedewerkerAdmin(admin.ModelAdmin):
         "datum_toegevoegd",
         "datum_aangepast",
     )
-    readonly_fields = ("medewerker_id", "datum_toegevoegd", "datum_aangepast")
+    readonly_fields = ("datum_toegevoegd", "datum_aangepast")
     search_fields = ("voornaam", "achternaam", "emailadres")
     filter_horizontal = ("teams", "functies", "organisatorische_eenheden")
 
