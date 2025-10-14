@@ -92,7 +92,7 @@ class User(AbstractSCIMUserMixin, models.Model):
         return f"{self.first_name} {self.last_name}"
 
     def koppel_medewerker(self):
-        """Link User to Medewerker dynamically based on active configuration."""
+        """Link User to Medewerker based on configuration."""
         config = AttribuutMappingConfig.objects.filter(actief=True).first()
         if not config:
             logger.warning("geen_actieve_mapping_config_gevonden")
@@ -106,8 +106,8 @@ class User(AbstractSCIMUserMixin, models.Model):
 
         mapping = {
             "employee_number": "medewerker_id",
-            "email": "email",
-            "username": "email",
+            "email": "emailadres",
+            "username": "emailadres",
         }
         medewerker_field = mapping.get(attribuut)
         if not medewerker_field:
