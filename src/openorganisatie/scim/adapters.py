@@ -1,10 +1,15 @@
 from urllib.parse import urljoin
 
+from django.conf import settings
 from django.urls import reverse
+from django.utils import timezone
 
 import structlog
 from django_scim.adapters import SCIMGroup, SCIMUser
+from notifications_api_common.tasks import send_notification
 from reversion import create_revision, set_comment
+
+from openorganisatie.scim.kanalen import KANAAL_IDENTITEIT
 
 from .models.group import Group
 from .models.user import User
@@ -142,6 +147,25 @@ class UserAdapter(ReversionSCIMMixin, SCIMUser):
                     self.obj.username = ""
 
         self.save()
+
+        if not getattr(settings, "NOTIFICATIONS_DISABLED", False):
+            try:
+                payload = {
+                    "kanaal": KANAAL_IDENTITEIT.label,
+                    "hoofdObject": self.location,
+                    "resource": "user",
+                    "resourceUrl": self.location,
+                    "actie": "update",
+                    "aanmaakdatum": timezone.now().isoformat(),
+                    "kenmerken": KANAAL_IDENTITEIT.get_kenmerken(self.obj),
+                }
+                send_notification.delay(payload)
+                logger.info(
+                    "scim_user_notification_sent",
+                    username=str(self.obj.username),
+                )
+            except Exception as e:
+                logger.warning("scim_user_notification_failed", error=str(e))
 
         logger.info(
             "scim_medewerker_operations_applied",

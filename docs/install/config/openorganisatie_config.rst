@@ -11,18 +11,6 @@ configured first.
 
     This document describes the manual configuration via the admin.
 
-.. _installation_configuration_sites:
-
-Setting the domain
-==================
-
-In the admin, under **Configuratie > Websites**, make sure to change the existing
-``Site`` to the domain under which Open Organisatie will be deployed (see
-:ref:`the manual<manual_configuration>` for more information).
-
-.. note:: Due to a cache-bug in the underlying framework, you need to restart all
-   replicas for this change to take effect everywhere.
-
 .. _installation_configuration_notificaties_api:
 
 Configure Notificaties API
