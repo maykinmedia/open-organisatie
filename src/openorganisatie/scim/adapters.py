@@ -148,7 +148,7 @@ class UserAdapter(ReversionSCIMMixin, SCIMUser):
 
         self.save()
 
-        if not getattr(settings, "NOTIFICATIONS_DISABLED", False):
+        if not settings.NOTIFICATIONS_DISABLED:
             try:
                 payload = {
                     "kanaal": KANAAL_IDENTITEIT.label,

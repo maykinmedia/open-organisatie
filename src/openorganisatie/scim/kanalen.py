@@ -1,4 +1,4 @@
-from openorganisatie.utils.kanaal import Kanaal
+from notifications_api_common.kanalen import Kanaal
 
 from .models.medewerker import Medewerker
 from .models.user import User
