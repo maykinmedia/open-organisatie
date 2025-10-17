@@ -70,3 +70,62 @@ class FunctieAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(functie1.uuid))
+
+    def test_create_functie(self):
+        functie_type = FunctieTypeFactory()
+        url = reverse("scim_api:functie-list")
+        payload = {
+            "functie_omschrijving": "Project Manager",
+            "begin_datum": "2025-01-01",
+            "eind_datum": "2025-12-31",
+            "functietype_uuids": [str(functie_type.uuid)],
+        }
+
+        response = self.client.post(url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data = response.json()
+        self.assertEqual(data["functieOmschrijving"], "Project Manager")
+        self.assertEqual(data["functieType"]["uuid"], str(functie_type.uuid))
+
+    def test_update_functie(self):
+        functie = FunctieFactory()
+        new_type = FunctieTypeFactory()
+        url = reverse("scim_api:functie-detail", kwargs={"uuid": str(functie.uuid)})
+
+        payload = {
+            "functie_omschrijving": "Lead Developer",
+            "begin_datum": "2025-02-01",
+            "eind_datum": "2025-12-31",
+            "functietype_uuids": [str(new_type.uuid)],
+        }
+
+        response = self.client.put(url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["functieOmschrijving"], "Lead Developer")
+        self.assertEqual(data["functieType"]["uuid"], str(new_type.uuid))
+
+    def test_partial_update_functie(self):
+        functie = FunctieFactory(functie_omschrijving="Intern")
+        url = reverse("scim_api:functie-detail", kwargs={"uuid": str(functie.uuid)})
+
+        payload = {
+            "functie_omschrijving": "Senior Intern",
+        }
+
+        response = self.client.patch(url, payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(data["functieOmschrijving"], "Senior Intern")
+
+    def test_delete_functie(self):
+        functie = FunctieFactory()
+        url = reverse("scim_api:functie-detail", kwargs={"uuid": str(functie.uuid)})
+
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # Verify it's deleted
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

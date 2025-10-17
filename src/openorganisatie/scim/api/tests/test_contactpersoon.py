@@ -101,3 +101,69 @@ class ContactpersoonAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(cp_1.uuid))
+
+    def test_create_contactpersoon(self):
+        medewerker = MedewerkerFactory()
+        team = TeamFactory()
+        org = OrganisatorischeEenheidFactory()
+
+        url = reverse("scim_api:contactpersoon-list")
+        payload = {
+            "medewerker_uuid": str(medewerker.uuid),
+            "teams_uuid": [str(team.uuid)],
+            "organisatorische_eenheden_uuid": [str(org.uuid)],
+        }
+
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        data = response.json()
+        self.assertEqual(data["medewerker"]["uuid"], str(medewerker.uuid))
+        self.assertEqual(len(data["teams"]), 1)
+        self.assertEqual(data["teams"][0]["uuid"], str(team.uuid))
+        self.assertEqual(len(data["organisatorischeEenheden"]), 1)
+        self.assertEqual(data["organisatorischeEenheden"][0]["uuid"], str(org.uuid))
+
+    def test_update_contactpersoon(self):
+        cp = ContactpersoonFactory()
+        new_team = TeamFactory()
+        new_org = OrganisatorischeEenheidFactory()
+        url = reverse("scim_api:contactpersoon-detail", kwargs={"uuid": str(cp.uuid)})
+
+        payload = {
+            "medewerker_uuid": str(cp.medewerker.uuid),
+            "teams_uuid": [str(new_team.uuid)],
+            "organisatorische_eenheden_uuid": [str(new_org.uuid)],
+        }
+
+        response = self.client.put(url, payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(len(data["teams"]), 1)
+        self.assertEqual(data["teams"][0]["uuid"], str(new_team.uuid))
+        self.assertEqual(len(data["organisatorischeEenheden"]), 1)
+        self.assertEqual(data["organisatorischeEenheden"][0]["uuid"], str(new_org.uuid))
+
+    def test_partial_update_contactpersoon(self):
+        cp = ContactpersoonFactory()
+        new_org = OrganisatorischeEenheidFactory()
+        url = reverse("scim_api:contactpersoon-detail", kwargs={"uuid": str(cp.uuid)})
+
+        payload = {
+            "organisatorische_eenheden_uuid": [str(new_org.uuid)],
+        }
+
+        response = self.client.patch(url, payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        self.assertEqual(len(data["organisatorischeEenheden"]), 1)
+        self.assertEqual(data["organisatorischeEenheden"][0]["uuid"], str(new_org.uuid))
+
+    def test_delete_contactpersoon(self):
+        cp = ContactpersoonFactory()
+        url = reverse("scim_api:contactpersoon-detail", kwargs={"uuid": str(cp.uuid)})
+
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
