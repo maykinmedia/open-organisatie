@@ -7,6 +7,9 @@ from .group import GroupSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name="scim_api:user-detail", lookup_field="scim_external_id"
+    )
     scim_external_id = serializers.UUIDField(
         read_only=True, help_text=get_help_text("scim.User", "scim_external_id")
     )
@@ -58,6 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            "url",
             "scim_external_id",
             "username",
             "voornaam",

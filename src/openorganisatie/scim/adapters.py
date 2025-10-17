@@ -1,16 +1,16 @@
 from urllib.parse import urljoin
 
-from django.conf import settings
 from django.urls import reverse
-from django.utils import timezone
 
 import structlog
 from django_scim.adapters import SCIMGroup, SCIMUser
-from notifications_api_common.tasks import send_notification
+from notifications_api_common.viewsets import NotificationMixin
+from rest_framework.response import Response
 from reversion import create_revision, set_comment
 
 from openorganisatie.scim.kanalen import KANAAL_IDENTITEIT
 
+from ..scim.api.serializers.user import UserSerializer
 from .models.group import Group
 from .models.user import User
 
@@ -26,10 +26,24 @@ class ReversionSCIMMixin:
         return result
 
 
-class UserAdapter(ReversionSCIMMixin, SCIMUser):
+class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
     model = User
+    queryset = User.objects.all()
     id_field = "scim_external_id"
     url_name = "scim:user-detail"
+    notifications_kanaal = KANAAL_IDENTITEIT
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        return self.queryset
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
+
+    @property
+    def action(self):
+        return "create" if getattr(self, "_is_create", None) else "update"
 
     def delete(self, *args, **kwargs):
         logger.info("scim_user_deleted", username=self.id)
@@ -74,6 +88,7 @@ class UserAdapter(ReversionSCIMMixin, SCIMUser):
                 "userName": str(self.obj.username),
                 "phoneNumbers": self.phone_numbers,
                 "jobTitle": self.obj.job_title,
+                "url": self.location,
             }
         )
 
@@ -148,30 +163,49 @@ class UserAdapter(ReversionSCIMMixin, SCIMUser):
 
         self.save()
 
-        if not settings.NOTIFICATIONS_DISABLED:
-            try:
-                payload = {
-                    "kanaal": KANAAL_IDENTITEIT.label,
-                    "hoofdObject": self.location,
-                    "resource": "user",
-                    "resourceUrl": self.location,
-                    "actie": "update",
-                    "aanmaakdatum": timezone.now().isoformat(),
-                    "kenmerken": KANAAL_IDENTITEIT.get_kenmerken(self.obj),
-                }
-                send_notification.delay(payload)
-                logger.info(
-                    "scim_user_notification_sent",
-                    username=str(self.obj.username),
-                )
-            except Exception as e:
-                logger.warning("scim_user_notification_failed", error=str(e))
-
         logger.info(
             "scim_medewerker_operations_applied",
             username=str(self.obj.username),
             operations=operations,
         )
+
+    def construct_message(
+        self, data, instance=None, kanaal=None, model=None, action=None
+    ):
+        message_data = super().construct_message(data, instance, kanaal, model, action)
+        if "kenmerken" in message_data:
+            message_data["kenmerken"] = dict(message_data["kenmerken"])
+        return dict(message_data)
+
+    def save(self):
+        self._is_create = self.obj._state.adding
+        super().save()
+
+        try:
+            serializer = self.serializer_class(
+                instance=self.obj,
+                context={"request": self.request},
+            )
+            response = Response(serializer.data, status=201 if self._is_create else 200)
+            data = response.data
+            data["url"] = self.location
+
+            self.notify(
+                status_code=response.status_code,
+                data=data,
+                instance=self.obj,
+            )
+            logger.info(
+                "scim_user_notification_sent",
+                username=str(self.obj.username),
+                action="create" if self._is_create else "update",
+            )
+        except Exception as e:
+            logger.warning(
+                "scim_user_notification_failed",
+                username=str(self.obj.username),
+                error=str(e),
+            )
 
 
 class GroupAdapter(ReversionSCIMMixin, SCIMGroup):

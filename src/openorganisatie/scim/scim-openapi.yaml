@@ -2497,6 +2497,14 @@ components:
     User:
       type: object
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          minLength: 1
+          maxLength: 1000
+          description: URL-referentie naar dit object. Dit is de unieke identificatie
+            en locatie van dit object.
         scimExternalId:
           type: string
           format: uuid
@@ -2554,6 +2562,7 @@ components:
       - isActive
       - laatstGewijzigd
       - scimExternalId
+      - url
       - username
       - voornaam
     Vestiging:

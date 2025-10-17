@@ -180,7 +180,6 @@ class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        cls.list_url = reverse("scim:users")
         cls.existing_user = User.objects.create(
             scim_external_id=str(uuid.uuid4()),
             username="existing",
@@ -219,13 +218,13 @@ class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCase):
         m.assert_called_with(
             {
                 "kanaal": "users",
-                "hoofdObject": data["meta"]["location"],
+                "hoofdObject": data["url"],
                 "resource": "user",
-                "resourceUrl": data["meta"]["location"],
+                "resourceUrl": data["url"],
                 "actie": "create",
-                "aanmaakdatum": "2025-10-09T00:00:00+00:00",
+                "aanmaakdatum": "2025-10-09T02:00:00+02:00",
                 "kenmerken": {
-                    "scim_external_id": str(data["externalId"]),
+                    "scimExternalId": str(data["externalId"]),
                     "username": "Bob",
                     "email": "Bob@gmail.com",
                 },
@@ -262,9 +261,9 @@ class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCase):
                 "resource": "user",
                 "resourceUrl": data["meta"]["location"],
                 "actie": "update",
-                "aanmaakdatum": "2025-10-09T00:00:00+00:00",
+                "aanmaakdatum": "2025-10-09T02:00:00+02:00",
                 "kenmerken": {
-                    "scim_external_id": data["externalId"],
+                    "scimExternalId": data["externalId"],
                     "username": data["userName"],
                     "email": data["emails"][0]["value"],
                 },

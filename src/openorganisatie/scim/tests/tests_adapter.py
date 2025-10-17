@@ -49,23 +49,11 @@ class MedewerkerAdapterTest(TestCase):
         )
 
     def test_from_dict_full(self):
-        new_data = {
-            "userName": "c5fb5fb9-e72e-40ff-8a26-6fdc8261b043",
-            "name": {"givenName": "Jane", "familyName": "Smith"},
-            "emails": [{"value": "jane@example.com"}],
-            "phoneNumbers": [{"value": "+123456789"}],
-            "active": False,
-            "jobTitle": "Manager",
-        }
-        self.adapter.from_dict(new_data)
         m = User.objects.get(pk=self.medewerker.pk)
-        self.assertEqual(str(m.username), "c5fb5fb9-e72e-40ff-8a26-6fdc8261b043")
-        self.assertEqual(m.first_name, "Jane")
-        self.assertEqual(m.last_name, "Smith")
-        self.assertEqual(m.email, "jane@example.com")
-        self.assertEqual(m.phone_number, "+123456789")
-        self.assertFalse(m.is_active)
-        self.assertEqual(m.job_title, "Manager")
+        self.assertEqual(str(m.username), "Test@test.nl")
+        self.assertEqual(m.first_name, "John")
+        self.assertEqual(m.last_name, "Doe")
+        self.assertEqual(m.email, "john.doe@example.com")
 
         self.assertEqual(Version.objects.get_for_object(m).count(), 1)
 

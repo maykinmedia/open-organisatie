@@ -207,6 +207,7 @@ NOTIFICATIONS_DISABLED = config(
 )
 
 
+SITE_DOMAIN = config("SITE_DOMAIN", default="localhost:8000")
 #
 # SCIM
 #
