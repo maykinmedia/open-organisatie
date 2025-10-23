@@ -35,10 +35,7 @@ boltons==25.0.0
 cbor2==5.6.5
     # via webauthn
 celery==5.5.3
-    # via
-    #   flower
-    #   notifications-api-common
-    #   open-api-framework
+    # via notifications-api-common
 certifi==2025.6.15
     # via
     #   elastic-apm
@@ -60,12 +57,8 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-commonground-api-common==2.6.7
+commonground-api-common==2.10.4
     # via open-api-framework
-coreapi==2.3.3
-    # via commonground-api-common
-coreschema==0.0.4
-    # via coreapi
 cryptography==45.0.4
     # via
     #   django-simple-certmanager
@@ -181,7 +174,7 @@ django-sendfile2==0.7.2
     # via django-privates
 django-sessionprofile==3.0.0
     # via open-api-framework
-django-setup-configuration==0.9.0
+django-setup-configuration==0.11.0
     # via open-api-framework
 django-simple-certmanager==2.4.1
     # via zgw-consumers
@@ -193,7 +186,9 @@ django-solo==2.4.0
     #   notifications-api-common
     #   zgw-consumers
 django-structlog==9.1.1
-    # via -r requirements/base.in
+    # via
+    #   -r requirements/base.in
+    #   open-api-framework
 django-two-factor-auth==1.17.0
     # via maykin-2fa
 django-upgrade-check==1.1.0
@@ -236,24 +231,16 @@ elastic-apm==6.23.0
     #   open-api-framework
 face==24.0.0
     # via glom
-flower==2.0.1
-    # via open-api-framework
 furl==2.1.4
     # via ape-pie
 glom==24.11.0
     # via mozilla-django-oidc-db
-humanize==4.12.3
-    # via flower
 idna==3.10
     # via requests
 inflection==0.5.1
     # via drf-spectacular
 iso639-lang==2.6.1
     # via commonground-api-common
-itypes==1.2.0
-    # via coreapi
-jinja2==3.1.6
-    # via coreschema
 josepy==2.0.0
     # via mozilla-django-oidc
 jsonschema==4.24.0
@@ -264,8 +251,6 @@ kombu==5.5.4
     # via celery
 markdown==3.8.2
     # via django-markup
-markupsafe==3.0.2
-    # via jinja2
 maykin-2fa==1.0.2
     # via
     #   -r requirements/base.in
@@ -283,7 +268,7 @@ nh3==0.2.21
     # via textile
 notifications-api-common==0.7.3
     # via commonground-api-common
-open-api-framework==0.11.0
+open-api-framework==0.13.1
     # via -r requirements/base.in
 orderedmultidict==1.0.1
     # via furl
@@ -299,8 +284,6 @@ pillow==11.2.1
     # via -r requirements/base.in
 polib==1.2.0
     # via django-rosetta
-prometheus-client==0.22.1
-    # via flower
 prompt-toolkit==3.0.51
     # via click-repl
 psycopg==3.2.9
@@ -346,8 +329,6 @@ python-dotenv==1.1.1
     #   pydantic-settings
 python-ipware==3.0.0
     # via django-ipware
-pytz==2025.2
-    # via flower
 pyyaml==6.0.2
     # via
     #   drf-spectacular
@@ -367,7 +348,6 @@ requests==2.32.4
     # via
     #   ape-pie
     #   commonground-api-common
-    #   coreapi
     #   django-log-outgoing-requests
     #   django-rosetta
     #   mozilla-django-oidc
@@ -401,11 +381,11 @@ smartypants==2.0.2
 sqlparse==0.5.3
     # via django
 structlog==25.4.0
-    # via django-structlog
+    # via
+    #   django-structlog
+    #   open-api-framework
 textile==4.0.3
     # via django-markup
-tornado==6.5.1
-    # via flower
 typing-extensions==4.14.0
     # via
     #   mozilla-django-oidc-db
@@ -424,9 +404,7 @@ typing-inspection==0.4.1
 tzdata==2025.2
     # via kombu
 uritemplate==4.2.0
-    # via
-    #   coreapi
-    #   drf-spectacular
+    # via drf-spectacular
 urllib3==2.5.0
     # via
     #   elastic-apm

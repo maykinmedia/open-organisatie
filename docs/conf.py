@@ -96,6 +96,9 @@ todo_include_todos = True
 linkcheck_ignore = [
     r"https?://.*\.example.com*",
     r"http://localhost:\d+/",
+    r"http://127\.0\.0\.1:\d+/",
+    r"https?://.*\.gemeente.nl",
+    r"http://localhost:\d+,https?://.*\.gemeente.nl",
     r"https://.*sentry.*",
 ]
 

@@ -92,46 +92,20 @@ CACHES = {
 # APPLICATIONS enabled for this project
 #
 
-INSTALLED_APPS = [
-    "django.contrib.auth",
-    "django.contrib.sessions",
-    "django.contrib.contenttypes",
+INSTALLED_APPS += [
     # NOTE: If enabled, at least one Site object is required and
     # uncomment SITE_ID above.
     # 'django.contrib.sites',
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
     "django_structlog",
     # Two-factor authentication in the Django admin, enforced.
-    "django_otp",
-    "django_otp.plugins.otp_static",
-    "django_otp.plugins.otp_totp",
-    "two_factor",
-    "two_factor.plugins.webauthn",  # USB key/token support
-    "maykin_2fa",
     # Optional applications.
-    "vng_api_common",
-    "zgw_consumers",
-    "simple_certmanager",
-    "ordered_model",
-    "django_admin_index",
-    "django.contrib.admin",
     "django_scim",
-    "rest_framework",
     "rest_framework.authtoken",
     "django_extensions",
-    "drf_spectacular",
-    "drf_spectacular_sidecar",
-    # OIDC applications.
-    "django_jsonform",
-    "solo",
-    "mozilla_django_oidc",
-    "mozilla_django_oidc_db",
     # 'django.contrib.admindocs',
     # 'django.contrib.humanize',
     # 'django.contrib.sitemaps',
     # External applications.
-    "axes",
     "hijack",
     "hijack.contrib.admin",
     "maykin_common",
