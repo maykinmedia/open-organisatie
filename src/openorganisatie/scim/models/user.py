@@ -8,6 +8,8 @@ from django_scim.models import AbstractSCIMUserMixin
 from openorganisatie.scim.models.attr_mapping_config import AttribuutMappingConfig
 from openorganisatie.scim.models.medewerker import Medewerker
 
+from ..constants import ATTRIBUUT_MEDEWERKER_MAPPING
+
 logger = structlog.get_logger(__name__)
 
 
@@ -21,7 +23,7 @@ class User(AbstractSCIMUserMixin, models.Model):
     employee_number = models.CharField(
         max_length=100,
         blank=True,
-        help_text=_("Unieke employeeNumber uit Entra / SCIM."),
+        help_text=_("EmployeeNumber uit Entra / SCIM."),
     )
     first_name = models.CharField(
         max_length=100,
@@ -93,10 +95,7 @@ class User(AbstractSCIMUserMixin, models.Model):
 
     def koppel_medewerker(self):
         """Link User to Medewerker based on configuration."""
-        config = AttribuutMappingConfig.objects.filter(actief=True).first()
-        if not config:
-            logger.warning("geen_actieve_mapping_config_gevonden")
-            return
+        config = AttribuutMappingConfig.get_solo()
 
         attribuut = config.medewerker_koppel_attribuut
         value = getattr(self, attribuut, None)
@@ -104,19 +103,30 @@ class User(AbstractSCIMUserMixin, models.Model):
             logger.debug("geen_waarden_gevonden", attribuut=attribuut)
             return
 
-        mapping = {
-            "employee_number": "medewerker_id",
-            "email": "emailadres",
-            "username": "emailadres",
-        }
-        medewerker_field = mapping.get(attribuut)
+        medewerker_field = ATTRIBUUT_MEDEWERKER_MAPPING.get(attribuut)
         if not medewerker_field:
             logger.warning("ongeldige_mapping_keuze", attribuut=attribuut)
             return
 
-        try:
-            medewerker = Medewerker.objects.get(**{medewerker_field: value})
-            if self.medewerker_id != medewerker.id:
+        medewerkers = Medewerker.objects.filter(**{medewerker_field: value})
+
+        if not medewerkers.exists():
+            logger.info(
+                "geen_medewerker_gevonden",
+                username=self.username,
+                attribuut=attribuut,
+                waarde=value,
+            )
+        elif medewerkers.count() > 1:
+            logger.info(
+                "meerdere_medewerkers_gevonden",
+                username=self.username,
+                attribuut=attribuut,
+                waarde=value,
+            )
+        else:
+            medewerker = medewerkers.first()
+            if self.medewerker != medewerker:
                 self.medewerker = medewerker
                 self.save(update_fields=["medewerker"])
                 logger.info(
@@ -125,10 +135,3 @@ class User(AbstractSCIMUserMixin, models.Model):
                     medewerker_id=medewerker.medewerker_id,
                     mapping_choice=attribuut,
                 )
-        except Medewerker.DoesNotExist:
-            logger.info(
-                "geen_medewerker_gevonden",
-                username=self.username,
-                attribuut=attribuut,
-                waarde=value,
-            )
