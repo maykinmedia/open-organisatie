@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
+from reversion.models import Version
 
 from openorganisatie.scim.models.factories.functie import FunctieFactory
 from openorganisatie.scim.models.factories.organisatorische_eenheid import (
@@ -10,6 +11,7 @@ from openorganisatie.scim.models.factories.organisatorische_eenheid import (
 )
 from openorganisatie.scim.models.factories.vestiging import VestigingFactory
 
+from ...models.organisatorische_eenheid import OrganisatorischeEenheid
 from .api_testcase import APITestCase
 
 
@@ -228,3 +230,30 @@ class OrganisatorischeEenheidAPITests(APITestCase):
             "Een organisatorische eenheid kan niet naar zichzelf verwijzen.",
             val.exception.message_dict["hoofd_organisatorische_eenheid"][0],
         )
+
+    def test_history(self):
+        url = reverse("scim_api:organisatorischeeenheid-list")
+        data = {"identificatie": "test", "naam": "test", "soortOrganisatie": "test"}
+
+        with self.subTest("create"):
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            oe = OrganisatorischeEenheid.objects.get()
+            self.assertEqual(Version.objects.get_for_object(oe).count(), 1)
+
+        detail_url = reverse(
+            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+        )
+
+        with self.subTest("update"):
+            response = self.client.put(detail_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(oe).count(), 2)
+
+        with self.subTest("partial update"):
+            response = self.client.patch(detail_url, {"naam": "abc"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(oe).count(), 3)

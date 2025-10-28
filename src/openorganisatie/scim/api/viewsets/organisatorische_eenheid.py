@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.organisatorische_eenheid import OrganisatorischeEenheid
 from openorganisatie.utils.bearer import BearerTokenAuthentication
@@ -36,7 +37,7 @@ from ..serializers.organisatorische_eenheid import OrganisatorischeEenheidSerial
         description="Verwijder een specifieke organisatorische eenheid.",
     ),
 )
-class OrganisatorischeEenheidViewSet(viewsets.ModelViewSet):
+class OrganisatorischeEenheidViewSet(RevisionMixin, viewsets.ModelViewSet):
     queryset = OrganisatorischeEenheid.objects.all()
     serializer_class = OrganisatorischeEenheidSerializer
     filterset_class = OrganisatorischeEenheidFilter

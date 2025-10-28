@@ -2,12 +2,14 @@ from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
+from reversion.models import Version
 
 from openorganisatie.scim.models.factories.functie import (
     FunctieFactory,
     FunctieTypeFactory,
 )
 
+from ...models import Functie
 from .api_testcase import APITestCase
 
 
@@ -70,3 +72,32 @@ class FunctieAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(functie1.uuid))
+
+    def test_history(self):
+        url = reverse("scim_api:functie-list")
+        data = {
+            "functieOmschrijving": "1234",
+            "beginDatum": "2025-10-10",
+            "functietypeUuid": str(FunctieTypeFactory.create().uuid),
+        }
+
+        with self.subTest("create"):
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            functie = Functie.objects.get()
+            self.assertEqual(Version.objects.get_for_object(functie).count(), 1)
+
+        detail_url = reverse("scim_api:functie-detail", kwargs={"uuid": functie.uuid})
+
+        with self.subTest("update"):
+            response = self.client.put(detail_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(functie).count(), 2)
+
+        with self.subTest("partial update"):
+            response = self.client.patch(detail_url, {"functieOmschrijving": "abc"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(functie).count(), 3)

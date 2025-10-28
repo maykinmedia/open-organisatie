@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.team import Team
 from openorganisatie.utils.bearer import BearerTokenAuthentication
@@ -36,7 +37,7 @@ from ..serializers.team import TeamSerializer
         description="Verwijder een specifiek team.",
     ),
 )
-class TeamViewSet(viewsets.ModelViewSet):
+class TeamViewSet(RevisionMixin, viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
     filterset_class = TeamFilter

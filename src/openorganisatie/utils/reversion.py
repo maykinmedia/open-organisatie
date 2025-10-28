@@ -28,4 +28,4 @@ class ReadOnlyCompareVersionAdmin(CompareVersionAdmin):
         return reversion_urls + urls
 
     def has_change_permission(self, request, obj=None):
-        return False
+        return request.resolver_match.func.__name__ != "revision_view"

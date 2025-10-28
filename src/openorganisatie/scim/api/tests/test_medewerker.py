@@ -2,12 +2,14 @@ from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
+from reversion.models import Version
 
 from openorganisatie.scim.enums.enums import GenderIndicator
 from openorganisatie.scim.models.factories.functie import FunctieFactory
 from openorganisatie.scim.models.factories.medewerker import MedewerkerFactory
 from openorganisatie.scim.models.factories.team import TeamFactory
 
+from ...models import Medewerker
 from .api_testcase import APITestCase
 
 
@@ -91,3 +93,35 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
+
+    def test_history(self):
+        url = reverse("scim_api:medewerker-list")
+        data = {
+            "medewerkerId": "test",
+            "voornaam": "test",
+            "achternaam": "test",
+            "emailadres": "test@gmail.com",
+        }
+
+        with self.subTest("create"):
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            medewerker = Medewerker.objects.get()
+            self.assertEqual(Version.objects.get_for_object(medewerker).count(), 1)
+
+        detail_url = reverse(
+            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+        )
+
+        with self.subTest("update"):
+            response = self.client.put(detail_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(medewerker).count(), 2)
+
+        with self.subTest("partial update"):
+            response = self.client.patch(detail_url, {"voornaam": "abc"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(medewerker).count(), 3)
