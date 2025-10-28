@@ -11,6 +11,7 @@ exclude = [
     "migrations",
     "static",
     "media",
+    "bin",
 ]
 
 [tool.ruff.lint]

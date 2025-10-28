@@ -169,14 +169,6 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
             operations=operations,
         )
 
-    def construct_message(
-        self, data, instance=None, kanaal=None, model=None, action=None
-    ):
-        message_data = super().construct_message(data, instance, kanaal, model, action)
-        if "kenmerken" in message_data:
-            message_data["kenmerken"] = dict(message_data["kenmerken"])
-        return dict(message_data)
-
     def save(self):
         self._is_create = self.obj._state.adding
         super().save()

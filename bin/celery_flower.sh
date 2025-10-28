@@ -1,2 +1,2 @@
 #!/bin/bash
-exec celery flower --app openorganisatie --workdir src
+exec celery --app openorganisatie --workdir src flower
