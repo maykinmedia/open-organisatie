@@ -199,24 +199,13 @@ SETUP_CONFIGURATION_STEPS = (
 # Override the default to be `True`, to make notifications opt-in
 NOTIFICATIONS_DISABLED = config(
     "NOTIFICATIONS_DISABLED",
-    default=False,
+    default=True,
     help_text=(
         "Indicates whether or not notifications should be sent to the Notificaties API "
         "for operations on the API endpoints."
     ),
 )
 
-#
-# CELERY
-#
-
-# amount of days to keep when the 'Prune timeline logs' task is called.
-PRUNE_LOGS_TASK_KEEP_DAYS = 30
-
-CELERY_BROKER_URL = "redis://localhost:6379/0"  # Redis broker
-
-
-SITE_DOMAIN = config("SITE_DOMAIN", default="localhost:8000")
 #
 # SCIM
 #

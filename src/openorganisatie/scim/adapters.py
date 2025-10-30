@@ -35,7 +35,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return self.queryset
+        return super().get_queryset()
 
     @classmethod
     def get_extra_actions(cls):
@@ -43,7 +43,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
 
     @property
     def action(self):
-        return "create" if getattr(self, "_is_create", None) else "update"
+        return "create" if getattr(self, "_is_create", False) else "update"
 
     def delete(self, *args, **kwargs):
         logger.info("scim_user_deleted", username=self.id)
@@ -170,7 +170,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
         )
 
     def save(self):
-        self._is_create = self.obj._state.adding
+        self._is_create = self.obj.pk is None
         super().save()
 
         try:
@@ -190,7 +190,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
             logger.info(
                 "scim_user_notification_sent",
                 username=str(self.obj.username),
-                action="create" if self._is_create else "update",
+                action=self.action,
             )
         except Exception as e:
             logger.warning(
