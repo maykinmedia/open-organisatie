@@ -13,4 +13,4 @@ development, staging and production environments.
     dev
     staging
     production
-    config/openorganisatie_config
+    config/index

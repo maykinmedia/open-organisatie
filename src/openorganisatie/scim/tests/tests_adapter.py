@@ -49,6 +49,8 @@ class MedewerkerAdapterTest(TestCase):
         )
 
     def test_from_dict_full(self):
+        adapter = self.adapter
+        adapter.save()
         m = User.objects.get(pk=self.medewerker.pk)
         self.assertEqual(str(m.username), "Test@test.nl")
         self.assertEqual(m.first_name, "John")

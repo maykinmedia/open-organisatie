@@ -16,7 +16,7 @@ from openorganisatie.scim.models.factories.medewerker import (
 )
 from openorganisatie.scim.models.user import User
 
-from .api_testcase import APITestCase
+from .api_testcase import APITestCase, APITestCaseBearer
 
 
 class NotificationsConfigTestCase:
@@ -176,7 +176,7 @@ class SendNotificationMedewerkerTestCase(NotificationsConfigTestCase, APITestCas
 @freeze_time("2025-10-09T00:00:00Z")
 @patch("notifications_api_common.viewsets.send_notification.delay")
 @override_settings(NOTIFICATIONS_DISABLED=False)
-class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCase):
+class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCaseBearer):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()

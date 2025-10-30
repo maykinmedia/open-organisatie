@@ -1,8 +1,8 @@
 .. _installation_configuration:
 
-=====================================
+======================================
 Open Organisatie configuration (admin)
-=====================================
+======================================
 
 Before you can work with Open Organisatie after installation, a few settings need to be
 configured first.
@@ -84,6 +84,7 @@ must first be registered via Open Organisatie.
 Register the required channels:
 
 .. code-block:: bash
+
     python src/manage.py register_kanalen
 
 
@@ -109,17 +110,15 @@ Making an API call
 ==================
 
 Open Organisatie
---------------
+----------------
 We can now make an HTTP request to one of the APIs of Open Organisatie. For this
 example, we have used `curl`_ to make the request.
 
 .. code-block:: bash
+
    curl --request GET \
-   --header 'Authorization: Bearer 1d4df96cfe14543558118805c5e9252629e805a0' \
+   --header 'Authorization: Token 1d4df96cfe14543558118805c5e9252629e805a0' \
    --header 'Content-Type: application/json' \
    {{base_url}}/medewerkers/api/v0/medewerker
-
-The example above uses the same value configured in
-:ref:`installation_configuration_sites`.
 
 .. _Curl: https://curl.se/docs/manpage.html

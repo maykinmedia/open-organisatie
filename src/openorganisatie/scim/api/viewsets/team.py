@@ -1,10 +1,10 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.team import Team
-from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..filterset.team import TeamFilter
 from ..serializers.team import TeamSerializer
@@ -42,5 +42,5 @@ class TeamViewSet(RevisionMixin, viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     filterset_class = TeamFilter
     lookup_field = "uuid"
-    authentication_classes = (BearerTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)

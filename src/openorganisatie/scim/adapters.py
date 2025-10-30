@@ -35,7 +35,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return super().get_queryset()
+        return self.queryset
 
     @classmethod
     def get_extra_actions(cls):
@@ -125,10 +125,6 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
         if enterprise_ext:
             self.obj.employee_number = enterprise_ext.get("employeeNumber")
 
-        self.save()
-
-        self.obj.koppel_medewerker()
-
         logger.info(
             "add_scim_medewerker",
             username=str(self.obj.username),
@@ -172,6 +168,8 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
     def save(self):
         self._is_create = self.obj.pk is None
         super().save()
+
+        self.obj.koppel_medewerker()
 
         try:
             serializer = self.serializer_class(

@@ -1,12 +1,12 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from notifications_api_common.viewsets import NotificationViewSetMixin
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from reversion.views import RevisionMixin
 
 from openorganisatie.scim.kanalen import KANAAL_ORGANISATIE
 from openorganisatie.scim.models.medewerker import Medewerker
-from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..filterset.medewerker import MedewerkerFilter
 from ..serializers.medewerker import MedewerkerSerializer
@@ -39,11 +39,11 @@ from ..serializers.medewerker import MedewerkerSerializer
         description="Verwijder een specifieke medewerker.",
     ),
 )
-class MedewerkerViewSet(NotificationViewSetMixin, RevisionMixin, viewsets.ModelViewSet):
+class MedewerkerViewSet(RevisionMixin, NotificationViewSetMixin, viewsets.ModelViewSet):
     queryset = Medewerker.objects.all()
     serializer_class = MedewerkerSerializer
     filterset_class = MedewerkerFilter
     lookup_field = "uuid"
-    authentication_classes = (BearerTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     notifications_kanaal = KANAAL_ORGANISATIE
