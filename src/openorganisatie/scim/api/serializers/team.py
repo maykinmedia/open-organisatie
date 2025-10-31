@@ -7,6 +7,7 @@ from openorganisatie.scim.models.vestiging import Vestiging
 from openorganisatie.utils.fields import UUIDRelatedField
 
 from .functie import NestedFunctieSerializer
+from .organisatorische_eenheid import NestedMedewerkerSerializer
 from .vestiging import VestigingSerializer
 
 
@@ -17,6 +18,11 @@ class NestedTeamSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
+    contactpersoon = NestedMedewerkerSerializer(
+        read_only=True,
+        required=False,
+        help_text=get_help_text("scim.Team", "vestigingen"),
+    )
     vestigingen = VestigingSerializer(
         many=True,
         read_only=True,
@@ -52,6 +58,7 @@ class TeamSerializer(serializers.ModelSerializer):
             "uuid",
             "naam",
             "omschrijving",
+            "contactpersoon",
             "vestigingen",
             "vestigingen_uuid",
             "functies",

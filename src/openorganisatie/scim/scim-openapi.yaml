@@ -8,233 +8,6 @@ info:
     name: Maykin Media
     email: support@maykinmedia.nl
 paths:
-  /contactpersoon:
-    get:
-      operationId: contactpersoon_list
-      description: Deze lijst kan gefilterd worden met query-string parameters.
-      summary: Alle contactpersonen opvragen.
-      parameters:
-      - in: query
-        name: medewerkerUuid
-        schema:
-          type: string
-          format: uuid
-        description: UUID van de gekoppelde medewerker.
-      - in: query
-        name: organisatorischeEenhedenUuid
-        schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: UUID's van de gekoppelde organisatorische eenheden.
-        explode: false
-        style: form
-      - name: page
-        required: false
-        in: query
-        description: Een pagina binnen de gepagineerde set resultaten.
-        schema:
-          type: integer
-      - name: pageSize
-        required: false
-        in: query
-        description: 'Het aantal resultaten terug te geven per pagina. (default: 100).'
-        schema:
-          type: integer
-      - in: query
-        name: teamsUuid
-        schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: UUID's van de gekoppelde teams.
-        explode: false
-        style: form
-      tags:
-      - Contactpersonen
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedContactpersoonList'
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/PaginatedContactpersoonList'
-          description: ''
-    post:
-      operationId: contactpersoon_create
-      description: Voeg een nieuwe contactpersoon toe aan het systeem.
-      summary: Nieuwe contactpersoon aanmaken.
-      tags:
-      - Contactpersonen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Contactpersoon'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '201':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-          description: ''
-  /contactpersoon/{uuid}:
-    get:
-      operationId: contactpersoon_retrieve
-      description: Een specifieke contactpersoon opvragen via UUID.
-      summary: Een specifieke contactpersoon opvragen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4)
-        required: true
-      tags:
-      - Contactpersonen
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-          description: ''
-    put:
-      operationId: contactpersoon_update
-      description: Werk alle gegevens van een contactpersoon bij.
-      summary: Contactpersoon volledig bijwerken.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4)
-        required: true
-      tags:
-      - Contactpersonen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Contactpersoon'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-          description: ''
-    patch:
-      operationId: contactpersoon_partial_update
-      description: Werk enkele gegevens van een contactpersoon bij.
-      summary: Contactpersoon gedeeltelijk bijwerken.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4)
-        required: true
-      tags:
-      - Contactpersonen
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedContactpersoon'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Contactpersoon'
-          description: ''
-    delete:
-      operationId: contactpersoon_destroy
-      description: Verwijder een specifieke contactpersoon.
-      summary: Contactpersoon verwijderen.
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4)
-        required: true
-      tags:
-      - Contactpersonen
-      security:
-      - tokenAuth: []
-      responses:
-        '204':
-          headers:
-            API-version:
-              schema:
-                type: string
-              description: 'Geeft een specifieke API-versie aan in de context van
-                een specifieke aanroep. Voorbeeld: 1.2.1.'
-          description: No response body
   /functie:
     get:
       operationId: functie_list
@@ -1812,58 +1585,6 @@ components:
     BlankEnum:
       enum:
       - ''
-    Contactpersoon:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4)
-        medewerker:
-          allOf:
-          - $ref: '#/components/schemas/NestedMedewerker'
-          readOnly: true
-          description: De medewerker die aan deze rol gekoppeld is.
-        medewerkerUuid:
-          type: string
-          format: uuid
-          writeOnly: true
-          description: UUID van de gekoppelde medewerker.
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedTeam'
-          readOnly: true
-          description: Teams waaraan de medewerker gekoppeld is.
-        teamsUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-            nullable: true
-          writeOnly: true
-          description: UUID's van de gekoppelde teams.
-        organisatorischeEenheden:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
-          readOnly: true
-          description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
-        organisatorischeEenhedenUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-            nullable: true
-          writeOnly: true
-          description: UUID's van de gekoppelde organisatorsiche eenheden.
-      required:
-      - medewerker
-      - medewerkerUuid
-      - organisatorischeEenheden
-      - teams
     Functie:
       type: object
       properties:
@@ -2129,55 +1850,6 @@ components:
       - emailadres
       - medewerkerId
       - voornaam
-    NestedOrganisatorischeEenheid:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4)
-        identificatie:
-          type: string
-          description: Unieke interne identificatie van de organisatorische eenheid.
-          maxLength: 50
-        naam:
-          type: string
-          description: Volledige naam van de organisatorische eenheid.
-          maxLength: 100
-        soortOrganisatie:
-          type: string
-          description: Soort organisatorische eenheid.
-          maxLength: 50
-        verkorteNaam:
-          type: string
-          description: Afkorting of verkorte naam van de organisatorische eenheid.
-          maxLength: 50
-        omschrijving:
-          type: string
-          description: Optionele omschrijving van de organisatorische eenheid.
-        emailadres:
-          type: string
-          format: email
-          description: E-mailadres van de organisatorische eenheid.
-          maxLength: 254
-        telefoonnummer:
-          type: string
-          description: Telefoonnummer van de organisatorische eenheid.
-          maxLength: 50
-        datumOpheffing:
-          type: string
-          format: date
-          nullable: true
-          description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
-        hoofdOrganisatorischeEenheid:
-          type: string
-          format: uuid
-          nullable: true
-          description: UUID van de bovenliggende organisatorische eenheid (optioneel).
-      required:
-      - identificatie
-      - naam
-      - soortOrganisatie
     NestedTeam:
       type: object
       properties:
@@ -2234,6 +1906,11 @@ components:
           format: date
           nullable: true
           description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
+        contactpersoon:
+          allOf:
+          - $ref: '#/components/schemas/NestedMedewerker'
+          readOnly: true
+          description: Vestigingen waaraan de medewerker gekoppeld is.
         vestigingen:
           type: array
           items:
@@ -2268,34 +1945,12 @@ components:
           nullable: true
           description: UUID van de bovenliggende organisatorische eenheid (optioneel).
       required:
+      - contactpersoon
       - functies
       - identificatie
       - naam
       - soortOrganisatie
       - vestigingen
-    PaginatedContactpersoonList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Contactpersoon'
     PaginatedFunctieList:
       type: object
       required:
@@ -2480,53 +2135,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Vestiging'
-    PatchedContactpersoon:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4)
-        medewerker:
-          allOf:
-          - $ref: '#/components/schemas/NestedMedewerker'
-          readOnly: true
-          description: De medewerker die aan deze rol gekoppeld is.
-        medewerkerUuid:
-          type: string
-          format: uuid
-          writeOnly: true
-          description: UUID van de gekoppelde medewerker.
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedTeam'
-          readOnly: true
-          description: Teams waaraan de medewerker gekoppeld is.
-        teamsUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-            nullable: true
-          writeOnly: true
-          description: UUID's van de gekoppelde teams.
-        organisatorischeEenheden:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
-          readOnly: true
-          description: Organisatorische eenheden waaraan de medewerker gekoppeld is.
-        organisatorischeEenhedenUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-            nullable: true
-          writeOnly: true
-          description: UUID's van de gekoppelde organisatorsiche eenheden.
     PatchedFunctie:
       type: object
       properties:
@@ -2698,6 +2306,11 @@ components:
           format: date
           nullable: true
           description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
+        contactpersoon:
+          allOf:
+          - $ref: '#/components/schemas/NestedMedewerker'
+          readOnly: true
+          description: Vestigingen waaraan de medewerker gekoppeld is.
         vestigingen:
           type: array
           items:
@@ -2745,6 +2358,11 @@ components:
         omschrijving:
           type: string
           description: Optionele omschrijving van het team.
+        contactpersoon:
+          allOf:
+          - $ref: '#/components/schemas/NestedMedewerker'
+          readOnly: true
+          description: Vestigingen waaraan de medewerker gekoppeld is.
         vestigingen:
           type: array
           items:
@@ -2826,6 +2444,11 @@ components:
         omschrijving:
           type: string
           description: Optionele omschrijving van het team.
+        contactpersoon:
+          allOf:
+          - $ref: '#/components/schemas/NestedMedewerker'
+          readOnly: true
+          description: Vestigingen waaraan de medewerker gekoppeld is.
         vestigingen:
           type: array
           items:
@@ -2855,6 +2478,7 @@ components:
           writeOnly: true
           description: Functies die binnen dit team actief zijn.
       required:
+      - contactpersoon
       - functies
       - naam
       - vestigingen

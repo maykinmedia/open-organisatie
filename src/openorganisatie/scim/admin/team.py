@@ -5,13 +5,16 @@ from ..models.team import Team
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ("naam", "display_medewerkers")
+    list_display = ("naam", "display_medewerkers", "contactpersoon")
     search_fields = ("naam", "omschrijving")
     readonly_fields = ("display_medewerkers", "uuid")
     filter_horizontal = ("vestigingen", "functies")
 
     fieldsets = (
-        ("Algemene informatie", {"fields": ("uuid", "naam", "omschrijving")}),
+        (
+            "Algemene informatie",
+            {"fields": ("uuid", "naam", "omschrijving", "contactpersoon")},
+        ),
         (
             "Medewerkers",
             {

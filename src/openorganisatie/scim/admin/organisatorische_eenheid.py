@@ -5,7 +5,7 @@ from ..models.organisatorische_eenheid import OrganisatorischeEenheid
 
 @admin.register(OrganisatorischeEenheid)
 class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
-    list_display = ("naam", "soort_organisatie", "verkorte_naam")
+    list_display = ("naam", "soort_organisatie", "verkorte_naam", "contactpersoon")
     search_fields = ("naam", "omschrijving", "verkorte_naam", "soort_organisatie")
     list_filter = ("soort_organisatie",)
     readonly_fields = ("uuid",)
@@ -23,6 +23,7 @@ class OrganisatorischeEenheidAdmin(admin.ModelAdmin):
                     "soort_organisatie",
                     "omschrijving",
                     "datum_opheffing",
+                    "contactpersoon",
                     "hoofd_organisatorische_eenheid",
                 )
             },
