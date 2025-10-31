@@ -778,16 +778,6 @@ paths:
           * `M` - Man
           * `V` - Vrouw
           * `X` - Anders
-      - in: query
-        name: organisatorischeEenhedenUuid
-        schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: UUID's van de gekoppelde organisatorische eenheden.
-        explode: false
-        style: form
       - name: page
         required: false
         in: query
@@ -2036,20 +2026,6 @@ components:
             writeOnly: true
           writeOnly: true
           description: UUID’s van gekoppelde functies.
-        organisatorischeEenheden:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
-          readOnly: true
-          description: Organisatorische eenheden waartoe de medewerker behoort.
-        organisatorischeEenhedenUuids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde organisatorische eenheden.
         datumToegevoegd:
           type: string
           format: date-time
@@ -2067,7 +2043,6 @@ components:
       - emailadres
       - functies
       - medewerkerId
-      - organisatorischeEenheden
       - teams
       - voornaam
     NestedFunctie:
@@ -2673,20 +2648,6 @@ components:
             writeOnly: true
           writeOnly: true
           description: UUID’s van gekoppelde functies.
-        organisatorischeEenheden:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
-          readOnly: true
-          description: Organisatorische eenheden waartoe de medewerker behoort.
-        organisatorischeEenhedenUuids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde organisatorische eenheden.
         datumToegevoegd:
           type: string
           format: date-time

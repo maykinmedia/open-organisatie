@@ -54,12 +54,6 @@ class Medewerker(models.Model):
         blank=True,
         help_text=_("Teams van de medewerker."),
     )
-    organisatorische_eenheden = models.ManyToManyField(
-        "scim.OrganisatorischeEenheid",
-        related_name="medewerkers",
-        blank=True,
-        help_text=_("Organisatorische eenheden waartoe de medewerker behoort."),
-    )
     functies = models.ManyToManyField(
         "scim.Functie",
         related_name="medewerkers",
