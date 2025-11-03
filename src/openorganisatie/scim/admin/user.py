@@ -29,6 +29,7 @@ class UserAdmin(admin.ModelAdmin):
             "Algemene informatie",
             {
                 "fields": (
+                    "employee_number",
                     "username",
                     "first_name",
                     "last_name",
@@ -40,7 +41,7 @@ class UserAdmin(admin.ModelAdmin):
         ),
         (
             "Relaties",
-            {"fields": ("groups",)},
+            {"fields": ("groups", "medewerker")},
         ),
         (
             "Status",

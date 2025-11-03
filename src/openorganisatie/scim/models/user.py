@@ -2,7 +2,15 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+import structlog
 from django_scim.models import AbstractSCIMUserMixin
+
+from openorganisatie.scim.models.attr_mapping_config import AttribuutMappingConfig
+from openorganisatie.scim.models.medewerker import Medewerker
+
+from ..constants import ATTRIBUUT_MEDEWERKER_MAPPING
+
+logger = structlog.get_logger(__name__)
 
 
 class User(AbstractSCIMUserMixin, models.Model):
@@ -11,6 +19,11 @@ class User(AbstractSCIMUserMixin, models.Model):
         max_length=100,
         verbose_name=_("User principal name"),
         help_text=_("User principal name van de medewerker."),
+    )
+    employee_number = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text=_("EmployeeNumber uit Entra / SCIM."),
     )
     first_name = models.CharField(
         max_length=100,
@@ -62,6 +75,16 @@ class User(AbstractSCIMUserMixin, models.Model):
         verbose_name=_("Laatst gewijzigd"),
         help_text=_("Datum waarop de medewerker voor het laatst is gewijzigd."),
     )
+    medewerker = models.ForeignKey(
+        "scim.Medewerker",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="users",
+        help_text=_(
+            "De gekoppelde medewerker (optioneel, wordt automatisch gekoppeld)."
+        ),
+    )
 
     class Meta:
         verbose_name = "User"
@@ -69,3 +92,46 @@ class User(AbstractSCIMUserMixin, models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def koppel_medewerker(self):
+        """Link User to Medewerker based on configuration."""
+        config = AttribuutMappingConfig.get_solo()
+
+        attribuut = config.medewerker_koppel_attribuut
+        value = getattr(self, attribuut, None)
+        if not value:
+            logger.debug("geen_waarden_gevonden", attribuut=attribuut)
+            return
+
+        medewerker_field = ATTRIBUUT_MEDEWERKER_MAPPING.get(attribuut)
+        if not medewerker_field:
+            logger.warning("ongeldige_mapping_keuze", attribuut=attribuut)
+            return
+
+        medewerkers = Medewerker.objects.filter(**{medewerker_field: value})
+
+        if not medewerkers.exists():
+            logger.info(
+                "geen_medewerker_gevonden",
+                username=self.username,
+                attribuut=attribuut,
+                waarde=value,
+            )
+        elif medewerkers.count() > 1:
+            logger.info(
+                "meerdere_medewerkers_gevonden",
+                username=self.username,
+                attribuut=attribuut,
+                waarde=value,
+            )
+        else:
+            medewerker = medewerkers.first()
+            if self.medewerker != medewerker:
+                self.medewerker = medewerker
+                self.save(update_fields=["medewerker"])
+                logger.info(
+                    "medewerker_koppeling_gemaakt",
+                    username=self.username,
+                    medewerker_id=medewerker.medewerker_id,
+                    mapping_choice=attribuut,
+                )
