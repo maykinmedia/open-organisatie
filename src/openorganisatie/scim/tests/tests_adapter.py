@@ -5,6 +5,7 @@ from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
+from reversion.models import Version
 
 from ..adapters import GroupAdapter, UserAdapter
 from ..models.group import Group
@@ -65,6 +66,8 @@ class MedewerkerAdapterTest(TestCase):
         self.assertEqual(m.phone_number, "+123456789")
         self.assertFalse(m.is_active)
         self.assertEqual(m.job_title, "Manager")
+
+        self.assertEqual(Version.objects.get_for_object(m).count(), 1)
 
     def test_handle_operations_replace_active(self):
         ops = [{"op": "replace", "path": "active", "value": False}]

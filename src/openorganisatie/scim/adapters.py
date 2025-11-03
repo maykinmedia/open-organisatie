@@ -4,6 +4,7 @@ from django.urls import reverse
 
 import structlog
 from django_scim.adapters import SCIMGroup, SCIMUser
+from reversion import create_revision, set_comment
 
 from .models.group import Group
 from .models.user import User
@@ -11,7 +12,16 @@ from .models.user import User
 logger = structlog.stdlib.get_logger(__name__)
 
 
-class UserAdapter(SCIMUser):
+class ReversionSCIMMixin:
+    def save(self):
+        with create_revision():
+            result = super().save()
+
+            set_comment("update via SCIM")
+        return result
+
+
+class UserAdapter(ReversionSCIMMixin, SCIMUser):
     model = User
     id_field = "scim_external_id"
     url_name = "scim:user-detail"
@@ -95,7 +105,7 @@ class UserAdapter(SCIMUser):
         if enterprise_ext:
             self.obj.employee_number = enterprise_ext.get("employeeNumber")
 
-        self.obj.save()
+        self.save()
 
         self.obj.koppel_medewerker()
 
@@ -131,7 +141,7 @@ class UserAdapter(SCIMUser):
                 if path == "username":
                     self.obj.username = ""
 
-        self.obj.save()
+        self.save()
 
         logger.info(
             "scim_medewerker_operations_applied",
@@ -140,7 +150,7 @@ class UserAdapter(SCIMUser):
         )
 
 
-class GroupAdapter(SCIMGroup):
+class GroupAdapter(ReversionSCIMMixin, SCIMGroup):
     model = Group
     url_name = "scim:group-detail"
     id_field = "scim_external_id"
