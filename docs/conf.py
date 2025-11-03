@@ -15,6 +15,8 @@ sys.path.insert(0, os.path.abspath("../src"))
 os.environ["LOG_REQUESTS"] = "false"
 
 import openorganisatie  # noqa isort:skip
+
+
 from openorganisatie.setup import setup_env  # noqa isort:skip
 # from objects.setup import setup_env  # noqa isort:skip
 
@@ -43,9 +45,11 @@ release = openorganisatie.__version__
 # ones.
 extensions = [
     "sphinx.ext.todo",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.intersphinx",
     "sphinx_tabs.tabs",
     "recommonmark",
-    "sphinx_markdown_tables",
+    "sphinx.ext.autodoc",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -92,5 +96,10 @@ todo_include_todos = True
 linkcheck_ignore = [
     r"https?://.*\.example.com*",
     r"http://localhost:\d+/",
+    r"http://127\.0\.0\.1:\d+/",
+    r"https?://.*\.gemeente.nl",
+    r"http://localhost:\d+,https?://.*\.gemeente.nl",
     r"https://.*sentry.*",
 ]
+
+sphinx_tabs_valid_builders = ["linkcheck"]

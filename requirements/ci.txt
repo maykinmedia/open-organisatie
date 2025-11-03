@@ -53,7 +53,6 @@ bleach==6.2.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
-    #   open-api-framework
 boltons==25.0.0
     # via
     #   -c requirements/base.txt
@@ -69,9 +68,7 @@ celery==5.5.3
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   flower
     #   notifications-api-common
-    #   open-api-framework
 certifi==2025.6.15
     # via
     #   -c requirements/base.txt
@@ -112,23 +109,12 @@ click-repl==0.3.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   celery
-commonground-api-common==2.6.7
+commonground-api-common==2.10.4
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 commonmark==0.9.1
     # via recommonmark
-coreapi==2.3.3
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   commonground-api-common
-coreschema==0.0.4
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   coreapi
 coverage==7.9.1
     # via -r requirements/test-tools.in
 cryptography==45.0.4
@@ -207,12 +193,10 @@ django-cors-headers==4.7.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 django-csp==4.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 django-extensions==4.1
     # via
     #   -c requirements/base.txt
@@ -253,7 +237,6 @@ django-markup==1.9.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 django-ordered-model==3.7.4
     # via
     #   -c requirements/base.txt
@@ -278,7 +261,6 @@ django-redis==6.0.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 django-relativedelta==2.0.0
     # via
     #   -c requirements/base.txt
@@ -307,7 +289,7 @@ django-sessionprofile==3.0.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
-django-setup-configuration==0.9.0
+django-setup-configuration==0.11.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -363,12 +345,10 @@ djangorestframework-gis==1.2.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 djangorestframework-inclusions==1.2.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 docutils==0.21.2
     # via
     #   -c requirements/base.txt
@@ -415,11 +395,6 @@ factory-boy==3.3.3
     # via -r requirements/test-tools.in
 faker==37.4.0
     # via factory-boy
-flower==2.0.1
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   open-api-framework
 freezegun==1.5.2
     # via -r requirements/test-tools.in
 furl==2.1.4
@@ -432,11 +407,6 @@ glom==24.11.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   mozilla-django-oidc-db
-humanize==4.12.3
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   flower
 idna==3.10
     # via
     #   -c requirements/base.txt
@@ -454,17 +424,8 @@ iso639-lang==2.6.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
-itypes==1.2.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   coreapi
 jinja2==3.1.6
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   coreschema
-    #   sphinx
+    # via sphinx
 josepy==2.0.0
     # via
     #   -c requirements/base.txt
@@ -494,10 +455,7 @@ markdown==3.8.2
     #   django-markup
     #   sphinx-markdown-tables
 markupsafe==3.0.2
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   jinja2
+    # via jinja2
 maykin-2fa==1.0.2
     # via
     #   -c requirements/base.txt
@@ -527,7 +485,7 @@ notifications-api-common==0.7.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
-open-api-framework==0.11.0
+open-api-framework==0.13.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -562,11 +520,6 @@ polib==1.2.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-rosetta
-prometheus-client==0.22.1
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   flower
 prompt-toolkit==3.0.51
     # via
     #   -c requirements/base.txt
@@ -656,11 +609,6 @@ python-ipware==3.0.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-ipware
-pytz==2025.2
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   flower
 pyyaml==6.0.2
     # via
     #   -c requirements/base.txt
@@ -697,7 +645,6 @@ requests==2.32.4
     #   -r requirements/base.txt
     #   ape-pie
     #   commonground-api-common
-    #   coreapi
     #   django-log-outgoing-requests
     #   django-rosetta
     #   mozilla-django-oidc
@@ -771,7 +718,7 @@ sphinx-rtd-theme==3.0.2
     # via -r requirements/test-tools.in
 sphinx-tabs==3.4.7
     # via -r requirements/test-tools.in
-sphinxcontrib-applehelp==1.0.1
+sphinxcontrib-applehelp==2.0.0
     # via
     #   -r requirements/test-tools.in
     #   sphinx
@@ -779,7 +726,7 @@ sphinxcontrib-devhelp==1.0.1
     # via
     #   -r requirements/test-tools.in
     #   sphinx
-sphinxcontrib-htmlhelp==2.0.0
+sphinxcontrib-htmlhelp==2.1.0
     # via
     #   -r requirements/test-tools.in
     #   sphinx
@@ -812,11 +759,6 @@ textile==4.0.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
-tornado==6.5.1
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   flower
 typing-extensions==4.14.0
     # via
     #   -c requirements/base.txt
@@ -847,7 +789,6 @@ uritemplate==4.2.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   coreapi
     #   drf-spectacular
 urllib3==2.5.0
     # via
@@ -860,7 +801,6 @@ uwsgi==2.0.30
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   open-api-framework
 vine==5.1.0
     # via
     #   -c requirements/base.txt
