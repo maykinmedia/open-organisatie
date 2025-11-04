@@ -66,6 +66,8 @@ cryptography==45.0.4
     #   mozilla-django-oidc
     #   pyopenssl
     #   webauthn
+diff-match-patch==20241021
+    # via django-reversion-compare
 django==5.2.3
     # via
     #   -r requirements/base.in
@@ -88,6 +90,8 @@ django==5.2.3
     #   django-redis
     #   django-relativedelta
     #   django-rest-framework-condition
+    #   django-reversion
+    #   django-reversion-compare
     #   django-rosetta
     #   django-scim2
     #   django-sendfile2
@@ -166,6 +170,12 @@ django-relativedelta==2.0.0
     # via zgw-consumers
 django-rest-framework-condition==0.1.1
     # via commonground-api-common
+django-reversion==6.0.0
+    # via
+    #   -r requirements/base.in
+    #   django-reversion-compare
+django-reversion-compare==0.19.0
+    # via -r requirements/base.in
 django-rosetta==0.10.2
     # via -r requirements/base.in
 django-scim2==0.19.1
@@ -258,6 +268,8 @@ maykin-2fa==1.0.2
     #   open-api-framework
 maykin-common==0.4.0
     # via -r requirements/base.in
+mdurl==0.1.2
+    # via markdown-it-py
 mozilla-django-oidc==4.0.1
     # via mozilla-django-oidc-db
 mozilla-django-oidc-db==0.23.0
@@ -303,7 +315,9 @@ pydantic-core==2.33.2
 pydantic-settings==2.10.1
     # via django-setup-configuration
 pygments==2.19.2
-    # via django-markup
+    # via
+    #   django-markup
+    #   rich
 pyjwt==2.10.1
     # via
     #   commonground-api-common
@@ -353,6 +367,8 @@ requests==2.32.4
     #   mozilla-django-oidc
     #   open-api-framework
     #   zgw-consumers
+rich==14.1.0
+    # via django-reversion-compare
 rpds-py==0.26.0
     # via
     #   jsonschema

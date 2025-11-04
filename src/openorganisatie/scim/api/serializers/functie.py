@@ -27,13 +27,11 @@ class FunctieSerializer(serializers.ModelSerializer):
         read_only=True,
         help_text=get_help_text("scim.Functie", "functie_type"),
     )
-    functietype_uuids = UUIDRelatedField(
+    functietype_uuid = UUIDRelatedField(
         queryset=FunctieType.objects.all(),
         write_only=True,
         source="functie_type",
-        many=True,
-        required=False,
-        help_text=_("UUID’s van gekoppelde functie type."),
+        help_text=_("UUID van de gekoppelde medewerker."),
     )
 
     class Meta:
@@ -44,5 +42,5 @@ class FunctieSerializer(serializers.ModelSerializer):
             "begin_datum",
             "eind_datum",
             "functie_type",
-            "functietype_uuids",
+            "functietype_uuid",
         ]

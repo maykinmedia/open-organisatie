@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.functietype import FunctieType
 
 
 @admin.register(FunctieType)
-class FunctieTypeAdmin(admin.ModelAdmin):
+class FunctieTypeAdmin(ReadOnlyCompareVersionAdmin):
     list_display = ("uuid", "naam", "slug")
     search_fields = ("naam", "slug")
     prepopulated_fields = {"slug": ("naam",)}

@@ -19,6 +19,8 @@ mozilla-django-oidc-db
 django-scim2
 django_extensions
 django-structlog
+django-reversion
+django-reversion-compare
 
 # API libraries
 # djangorestframework

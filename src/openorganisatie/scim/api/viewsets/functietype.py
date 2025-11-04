@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.functietype import FunctieType
 from openorganisatie.utils.bearer import BearerTokenAuthentication
@@ -35,7 +36,7 @@ from ..serializers.functietype import FunctieTypeSerializer
         description="Verwijder een specifiek functietype.",
     ),
 )
-class FunctieTypeViewSet(viewsets.ModelViewSet):
+class FunctieTypeViewSet(RevisionMixin, viewsets.ModelViewSet):
     queryset = FunctieType.objects.all()
     serializer_class = FunctieTypeSerializer
     filterset_fields = {

@@ -108,6 +108,8 @@ INSTALLED_APPS += [
     # External applications.
     "hijack",
     "hijack.contrib.admin",
+    "reversion",
+    "reversion_compare",
     "maykin_common",
     # Project applications.
     "openorganisatie.accounts",
@@ -673,6 +675,12 @@ ELASTIC_APM = {
 if not ELASTIC_APM_SERVER_URL:
     ELASTIC_APM["ENABLED"] = False
     ELASTIC_APM["SERVER_URL"] = "http://localhost:8200"
+
+# reversion-compare
+ADD_REVERSION_ADMIN = True
+
+REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID = False
+REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
 
 # Subpath (optional)
 # This environment variable can be configured during deployment.

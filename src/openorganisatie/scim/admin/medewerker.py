@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.medewerker import Medewerker
 
 
 @admin.register(Medewerker)
-class MedewerkerAdmin(admin.ModelAdmin):
+class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
     list_display = (
         "voornaam",
         "achternaam",

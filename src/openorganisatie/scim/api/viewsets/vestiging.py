@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.vestiging import Vestiging
 from openorganisatie.utils.bearer import BearerTokenAuthentication
@@ -35,7 +36,7 @@ from ..serializers.vestiging import VestigingSerializer
         description="Verwijder een specifieke vestiging.",
     ),
 )
-class VestigingViewSet(viewsets.ModelViewSet):
+class VestigingViewSet(RevisionMixin, viewsets.ModelViewSet):
     queryset = Vestiging.objects.all()
     serializer_class = VestigingSerializer
     filterset_fields = {

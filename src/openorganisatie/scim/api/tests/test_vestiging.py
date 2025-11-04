@@ -2,9 +2,11 @@ from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
+from reversion.models import Version
 
 from openorganisatie.scim.models.factories.vestiging import VestigingFactory
 
+from ...models import Vestiging
 from .api_testcase import APITestCase
 
 
@@ -103,3 +105,30 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["landcode"], v1.landcode)
+
+    def test_history(self):
+        url = reverse("scim_api:vestiging-list")
+        data = {"vestigingsnummer": "1234", "naam": "test"}
+
+        with self.subTest("create"):
+            response = self.client.post(url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            vestiging = Vestiging.objects.get()
+            self.assertEqual(Version.objects.get_for_object(vestiging).count(), 1)
+
+        detail_url = reverse(
+            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+        )
+
+        with self.subTest("update"):
+            response = self.client.put(detail_url, data)
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(vestiging).count(), 2)
+
+        with self.subTest("partial update"):
+            response = self.client.patch(detail_url, {"naam": "abc"})
+
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(Version.objects.get_for_object(vestiging).count(), 3)

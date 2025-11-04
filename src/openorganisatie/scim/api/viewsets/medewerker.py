@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.medewerker import Medewerker
 from openorganisatie.utils.bearer import BearerTokenAuthentication
@@ -36,7 +37,7 @@ from ..serializers.medewerker import MedewerkerSerializer
         description="Verwijder een specifieke medewerker.",
     ),
 )
-class MedewerkerViewSet(viewsets.ModelViewSet):
+class MedewerkerViewSet(RevisionMixin, viewsets.ModelViewSet):
     queryset = Medewerker.objects.all()
     serializer_class = MedewerkerSerializer
     filterset_class = MedewerkerFilter

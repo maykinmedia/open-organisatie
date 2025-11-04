@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.group import Group
 
 
 @admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(ReadOnlyCompareVersionAdmin):
     list_display = ("name", "active", "display_users")
     search_fields = ("name", "description")
     list_filter = ("active",)
