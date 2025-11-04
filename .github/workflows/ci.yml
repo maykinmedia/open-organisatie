@@ -120,7 +120,7 @@ jobs:
     needs:
       - store-reusable-workflow-vars
     with:
-      main-branch: 'master'
+      main-branch: 'main'
       run-docs: true
       python-version: '3.12'
       docker-image-name: ${{ needs.store-reusable-workflow-vars.outputs.image-name }}
