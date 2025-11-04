@@ -12,15 +12,3 @@ pyquery  # integrates with webtest
 # vcrpy  # 'mocking' http requests
 tblib
 ruff
-
-# Documentation
-recommonmark
-sphinx
-sphinx-markdown-tables==0.0.15
-sphinx-rtd-theme
-sphinxcontrib-applehelp>=2.0.0
-sphinxcontrib-devhelp==1.0.1
-sphinxcontrib-htmlhelp==2.1.0
-sphinxcontrib-qthelp==1.0.2
-sphinxcontrib-serializinghtml==2.0.0
-sphinx-tabs==3.4.7

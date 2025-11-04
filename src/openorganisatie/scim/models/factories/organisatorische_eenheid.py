@@ -1,16 +1,19 @@
 import uuid
 
 import factory
+from faker import Faker
 
 from openorganisatie.scim.models.organisatorische_eenheid import OrganisatorischeEenheid
+
+fake = Faker()
 
 
 class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
     uuid = factory.LazyFunction(uuid.uuid4)
     identificatie = factory.Sequence(lambda n: f"OE{n:03d}")
-    naam = factory.Faker("name")
-    soort_organisatie = factory.Faker("job")
-    verkorte_naam = factory.Faker("company_suffix")
+    naam = factory.LazyAttribute(lambda o: fake.name()[:50])
+    soort_organisatie = factory.LazyAttribute(lambda o: fake.job()[:50])
+    verkorte_naam = factory.LazyAttribute(lambda o: fake.company_suffix()[:50])
     omschrijving = factory.Faker("text", max_nb_chars=50)
     emailadres = factory.Faker("email")
     telefoonnummer = factory.Faker("phone_number")
