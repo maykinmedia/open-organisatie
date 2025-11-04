@@ -50,6 +50,8 @@ extensions = [
     "sphinx_tabs.tabs",
     "recommonmark",
     "sphinx.ext.autodoc",
+    "sphinx.ext.graphviz",
+    "vng_api_common.diagrams.uml_images",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -74,6 +76,9 @@ activate("en")
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 source_suffix = [".rst", ".md"]
+
+# Datamodel image settings
+graphviz_output_format = "png"
 
 # -- Options for HTML output -------------------------------------------------
 
