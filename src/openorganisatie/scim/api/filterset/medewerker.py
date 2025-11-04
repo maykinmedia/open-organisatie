@@ -15,12 +15,6 @@ class MedewerkerFilter(django_filters.FilterSet):
         distinct=True,
         help_text=_("UUID's van de gekoppelde teams."),
     )
-    organisatorische_eenheden_uuid = UUIDFInFilter(
-        field_name="organisatorische_eenheden__uuid",
-        lookup_expr="in",
-        distinct=True,
-        help_text=_("UUID's van de gekoppelde organisatorische eenheden."),
-    )
     functies_uuid = UUIDFInFilter(
         field_name="functies__uuid",
         lookup_expr="in",

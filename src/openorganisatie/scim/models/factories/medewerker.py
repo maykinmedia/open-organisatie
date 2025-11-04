@@ -34,13 +34,6 @@ class MedewerkerFactory(factory.django.DjangoModelFactory):
             self.teams.set(extracted)
 
     @factory.post_generation
-    def organisatorische_eenheden(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.organisatorische_eenheden.set(extracted)
-
-    @factory.post_generation
     def functies(self, create, extracted, **kwargs):
         if not create:
             return

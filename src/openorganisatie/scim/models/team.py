@@ -19,6 +19,14 @@ class Team(models.Model):
         blank=True,
         help_text=_("Optionele omschrijving van het team."),
     )
+    contactpersoon = models.ForeignKey(
+        "scim.Medewerker",
+        on_delete=models.SET_NULL,
+        related_name="teams_als_contactpersoon",
+        null=True,
+        blank=True,
+        help_text=_("De medewerker die contactpersoon is voor dit team."),
+    )
     vestigingen = models.ManyToManyField(
         "scim.Vestiging",
         related_name="teams",

@@ -6,9 +6,6 @@ from rest_framework.test import APIClient
 from openorganisatie.scim.enums.enums import GenderIndicator
 from openorganisatie.scim.models.factories.functie import FunctieFactory
 from openorganisatie.scim.models.factories.medewerker import MedewerkerFactory
-from openorganisatie.scim.models.factories.organisatorische_eenheid import (
-    OrganisatorischeEenheidFactory,
-)
 from openorganisatie.scim.models.factories.team import TeamFactory
 
 from .api_testcase import APITestCase
@@ -28,10 +25,7 @@ class MedewerkerAPITests(APITestCase):
     def test_read_medewerker_detail(self):
         team = TeamFactory()
         functie = FunctieFactory()
-        org = OrganisatorischeEenheidFactory()
-        medewerker = MedewerkerFactory(
-            teams=[team], functies=[functie], organisatorische_eenheden=[org]
-        )
+        medewerker = MedewerkerFactory(teams=[team], functies=[functie])
 
         detail_url = reverse(
             "scim_api:medewerker-detail", kwargs={"uuid": str(medewerker.uuid)}
@@ -50,7 +44,6 @@ class MedewerkerAPITests(APITestCase):
 
         self.assertIn("teams", data)
         self.assertIn("functies", data)
-        self.assertIn("organisatorischeEenheden", data)
 
     def test_authentication_required(self):
         client = APIClient()
@@ -82,21 +75,6 @@ class MedewerkerAPITests(APITestCase):
 
         url = reverse("scim_api:medewerker-list")
         response = self.client.get(url, {"teams_uuid": str(team1.uuid)})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
-
-    def test_filter_organisatorische_eenheden_uuid(self):
-        org1 = OrganisatorischeEenheidFactory()
-        org2 = OrganisatorischeEenheidFactory()
-        m1 = MedewerkerFactory()
-        m1.organisatorische_eenheden.add(org1)
-        MedewerkerFactory().organisatorische_eenheden.add(org2)
-
-        url = reverse("scim_api:medewerker-list")
-        response = self.client.get(
-            url, {"organisatorische_eenheden_uuid": str(org1.uuid)}
-        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))

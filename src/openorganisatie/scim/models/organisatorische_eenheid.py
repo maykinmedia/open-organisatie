@@ -51,6 +51,16 @@ class OrganisatorischeEenheid(models.Model):
             "Optionele datum waarop de organisatorische eenheid wordt opgeheven."
         ),
     )
+    contactpersoon = models.ForeignKey(
+        "scim.Medewerker",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="organisatorische_eenheden_als_contactpersoon",
+        help_text=_(
+            "De medewerker die contactpersoon is voor deze organisatorische eenheid."
+        ),
+    )
     vestigingen = models.ManyToManyField(
         "scim.Vestiging",
         related_name="organisatorische_eenheden",

@@ -15,7 +15,7 @@ class MedewerkerAdmin(admin.ModelAdmin):
     )
     readonly_fields = ("datum_toegevoegd", "datum_aangepast")
     search_fields = ("voornaam", "achternaam", "emailadres")
-    filter_horizontal = ("teams", "functies", "organisatorische_eenheden")
+    filter_horizontal = ("teams", "functies")
 
     fieldsets = (
         (
@@ -36,7 +36,6 @@ class MedewerkerAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "teams",
-                    "organisatorische_eenheden",
                     "functies",
                 )
             },
@@ -54,8 +53,4 @@ class MedewerkerAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        return (
-            super()
-            .get_queryset(request)
-            .prefetch_related("teams", "organisatorische_eenheden", "functies")
-        )
+        return super().get_queryset(request).prefetch_related("teams", "functies")
