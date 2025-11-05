@@ -13,6 +13,17 @@ from .api_testcase import APITestCase
 
 
 class TeamAPITests(APITestCase):
+    def test_create_team(self):
+        url = reverse("scim_api:team-list")
+        data = {"naam": "Nieuw Team", "omschrijving": "Omschrijving van het team"}
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        team = Team.objects.get(uuid=response.data["uuid"])
+        self.assertEqual(team.naam, data["naam"])
+        self.assertEqual(team.omschrijving, data["omschrijving"])
+
     def test_list_teams(self):
         url = reverse("scim_api:team-list")
         TeamFactory.create_batch(3)
@@ -45,6 +56,37 @@ class TeamAPITests(APITestCase):
 
         self.assertIn("vestigingen", data)
         self.assertIn("functies", data)
+
+    def test_update_team(self):
+        team = TeamFactory()
+        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+
+        data = {"naam": "Bijgewerkt Team", "omschrijving": "Bijgewerkte omschrijving"}
+        response = self.client.put(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        team.refresh_from_db()
+        self.assertEqual(team.naam, data["naam"])
+        self.assertEqual(team.omschrijving, data["omschrijving"])
+
+    def test_partial_update_team(self):
+        team = TeamFactory()
+        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+
+        patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
+        response = self.client.patch(detail_url, patch_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        team.refresh_from_db()
+        self.assertEqual(team.naam, patch_data["naam"])
+
+    def test_delete_team(self):
+        team = TeamFactory()
+        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Team.objects.filter(uuid=team.uuid).exists())
 
     def test_authentication_required(self):
         client = APIClient()
