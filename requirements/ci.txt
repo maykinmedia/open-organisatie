@@ -143,7 +143,6 @@ django==5.2.3
     #   django-axes
     #   django-cors-headers
     #   django-csp
-    #   django-extensions
     #   django-filter
     #   django-formtools
     #   django-hijack
@@ -201,10 +200,6 @@ django-cors-headers==4.7.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
 django-csp==4.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-django-extensions==4.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt

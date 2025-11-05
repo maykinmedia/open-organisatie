@@ -15,3 +15,4 @@ django-extensions
 # Documentation
 sphinx
 sphinx_rtd_theme
+pygraphviz

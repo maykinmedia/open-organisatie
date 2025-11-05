@@ -101,7 +101,7 @@ INSTALLED_APPS += [
     # Optional applications.
     "django_scim",
     "rest_framework.authtoken",
-    "django_extensions",
+    # "django_extensions",
     # 'django.contrib.admindocs',
     # 'django.contrib.humanize',
     # 'django.contrib.sitemaps',

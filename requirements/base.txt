@@ -77,7 +77,6 @@ django==5.2.3
     #   django-axes
     #   django-cors-headers
     #   django-csp
-    #   django-extensions
     #   django-filter
     #   django-formtools
     #   django-hijack
@@ -131,8 +130,6 @@ django-cors-headers==4.7.0
     # via open-api-framework
 django-csp==4.0
     # via open-api-framework
-django-extensions==4.1
-    # via -r requirements/base.in
 django-filter==25.1
     # via
     #   commonground-api-common
@@ -261,6 +258,8 @@ kombu==5.5.4
     # via celery
 markdown==3.8.2
     # via django-markup
+markdown-it-py==4.0.0
+    # via rich
 maykin-2fa==1.0.2
     # via
     #   -r requirements/base.in
