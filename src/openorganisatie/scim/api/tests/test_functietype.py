@@ -11,6 +11,16 @@ from .api_testcase import APITestCase
 
 
 class FunctieTypeAPITests(APITestCase):
+    def test_create_functietype(self):
+        url = reverse("scim_api:functietype-list")
+        data = {"naam": "Nieuw Functietype", "slug": "nieuw-functietype"}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        functietype = FunctieType.objects.get(uuid=response.data["uuid"])
+        self.assertEqual(functietype.naam, data["naam"])
+        self.assertEqual(functietype.slug, data["slug"])
+
     def test_list_functietypes(self):
         url = reverse("scim_api:functietype-list")
         FunctieTypeFactory.create_batch(3)

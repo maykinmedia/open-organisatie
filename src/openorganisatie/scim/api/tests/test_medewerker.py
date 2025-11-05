@@ -14,6 +14,23 @@ from .api_testcase import APITestCase
 
 
 class MedewerkerAPITests(APITestCase):
+    def test_create_medewerker(self):
+        url = reverse("scim_api:medewerker-list")
+        data = {
+            "medewerkerId": "test123",
+            "voornaam": "Jan",
+            "achternaam": "Jansen",
+            "emailadres": "jan.jansen@example.com",
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        medewerker = Medewerker.objects.get(uuid=response.data["uuid"])
+        self.assertEqual(medewerker.medewerker_id, data["medewerkerId"])
+        self.assertEqual(medewerker.voornaam, data["voornaam"])
+        self.assertEqual(medewerker.achternaam, data["achternaam"])
+        self.assertEqual(medewerker.emailadres, data["emailadres"])
+
     def test_list_medewerkers(self):
         url = reverse("scim_api:medewerker-list")
         MedewerkerFactory.create_batch(2)
@@ -46,6 +63,49 @@ class MedewerkerAPITests(APITestCase):
 
         self.assertIn("teams", data)
         self.assertIn("functies", data)
+
+    def test_update_medewerker(self):
+        medewerker = MedewerkerFactory()
+        detail_url = reverse(
+            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+        )
+
+        data = {
+            "medewerkerId": medewerker.medewerker_id,
+            "voornaam": "Pieter",
+            "achternaam": "Pietersen",
+            "emailadres": "pieter.pietersen@example.com",
+        }
+        response = self.client.put(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        medewerker.refresh_from_db()
+        self.assertEqual(medewerker.voornaam, data["voornaam"])
+        self.assertEqual(medewerker.achternaam, data["achternaam"])
+        self.assertEqual(medewerker.emailadres, data["emailadres"])
+
+    def test_partial_update_medewerker(self):
+        medewerker = MedewerkerFactory()
+        detail_url = reverse(
+            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+        )
+
+        patch_data = {"voornaam": "Klaas"}
+        response = self.client.patch(detail_url, patch_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        medewerker.refresh_from_db()
+        self.assertEqual(medewerker.voornaam, patch_data["voornaam"])
+
+    def test_delete_medewerker(self):
+        medewerker = MedewerkerFactory()
+        detail_url = reverse(
+            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+        )
+
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Medewerker.objects.filter(uuid=medewerker.uuid).exists())
 
     def test_authentication_required(self):
         client = APIClient()

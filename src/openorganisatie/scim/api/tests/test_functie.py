@@ -18,6 +18,20 @@ class FunctieAPITests(APITestCase):
         super().setUp()
         self.functie_type = FunctieTypeFactory()
 
+    def test_create_functie(self):
+        url = reverse("scim_api:functie-list")
+        data = {
+            "functieOmschrijving": "Nieuwe Functie",
+            "beginDatum": "2025-11-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        functie = Functie.objects.get(uuid=response.data["uuid"])
+        self.assertEqual(functie.functie_omschrijving, data["functieOmschrijving"])
+        self.assertEqual(functie.begin_datum.isoformat(), data["beginDatum"])
+
     def test_list_functies(self):
         url = reverse("scim_api:functie-list")
         FunctieFactory.create_batch(3)
