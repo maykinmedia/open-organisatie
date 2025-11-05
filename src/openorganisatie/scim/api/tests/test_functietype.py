@@ -39,6 +39,43 @@ class FunctieTypeAPITests(APITestCase):
         self.assertEqual(data["naam"], functietype.naam)
         self.assertEqual(data["slug"], functietype.slug)
 
+    def test_update_functietype(self):
+        functietype = FunctieTypeFactory()
+        detail_url = reverse(
+            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+        )
+
+        data = {"naam": "Bijgewerkt Functietype", "slug": "bijgewerkt-functietype"}
+        response = self.client.put(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functietype.refresh_from_db()
+        self.assertEqual(functietype.naam, data["naam"])
+        self.assertEqual(functietype.slug, data["slug"])
+
+    def test_partial_update_functietype(self):
+        functietype = FunctieTypeFactory()
+        detail_url = reverse(
+            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+        )
+
+        patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
+        response = self.client.patch(detail_url, patch_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functietype.refresh_from_db()
+        self.assertEqual(functietype.naam, patch_data["naam"])
+
+    def test_delete_functietype(self):
+        functietype = FunctieTypeFactory()
+        detail_url = reverse(
+            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+        )
+
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(FunctieType.objects.filter(uuid=functietype.uuid).exists())
+
     def test_authentication_required(self):
         client = APIClient()
         url = reverse("scim_api:functietype-list")
