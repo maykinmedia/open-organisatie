@@ -16,6 +16,21 @@ from .api_testcase import APITestCase
 
 
 class OrganisatorischeEenheidAPITests(APITestCase):
+    def test_create_organisatorische_eenheid(self):
+        url = reverse("scim_api:organisatorischeeenheid-list")
+        data = {
+            "identificatie": "1234",
+            "naam": "Financiële Afdeling",
+            "soortOrganisatie": "Type1",
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        oe = OrganisatorischeEenheid.objects.get(uuid=response.data["uuid"])
+        self.assertEqual(oe.identificatie, data["identificatie"])
+        self.assertEqual(oe.naam, data["naam"])
+        self.assertEqual(oe.soort_organisatie, data["soortOrganisatie"])
+
     def test_list_organisatorische_eenheden(self):
         url = reverse("scim_api:organisatorischeeenheid-list")
         OrganisatorischeEenheidFactory.create_batch(2)
@@ -52,6 +67,47 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         self.assertIn("functies", data)
         self.assertIn("vestigingen", data)
+
+    def test_update_organisatorische_eenheid(self):
+        oe = OrganisatorischeEenheidFactory()
+        detail_url = reverse(
+            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+        )
+
+        data = {
+            "identificatie": oe.identificatie,
+            "naam": "Bijgewerkt Naam",
+            "soortOrganisatie": "Type2",
+        }
+        response = self.client.put(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        oe.refresh_from_db()
+        self.assertEqual(oe.naam, data["naam"])
+        self.assertEqual(oe.soort_organisatie, data["soortOrganisatie"])
+
+    def test_partial_update_organisatorische_eenheid(self):
+        oe = OrganisatorischeEenheidFactory()
+        detail_url = reverse(
+            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+        )
+
+        patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
+        response = self.client.patch(detail_url, patch_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        oe.refresh_from_db()
+        self.assertEqual(oe.naam, patch_data["naam"])
+
+    def test_delete_organisatorische_eenheid(self):
+        oe = OrganisatorischeEenheidFactory()
+        detail_url = reverse(
+            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+        )
+
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(OrganisatorischeEenheid.objects.filter(uuid=oe.uuid).exists())
 
     def test_authentication_required(self):
         client = APIClient()

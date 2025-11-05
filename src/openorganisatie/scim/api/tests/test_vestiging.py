@@ -11,6 +11,21 @@ from .api_testcase import APITestCase
 
 
 class VestigingAPITests(APITestCase):
+    def test_create_vestiging(self):
+        url = reverse("scim_api:vestiging-list")
+        data = {
+            "vestigingsnummer": "9999",
+            "naam": "Nieuwe Vestiging",
+            "landcode": "NL",
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        vestiging = Vestiging.objects.get(uuid=response.data["uuid"])
+        self.assertEqual(vestiging.vestigingsnummer, data["vestigingsnummer"])
+        self.assertEqual(vestiging.naam, data["naam"])
+        self.assertEqual(vestiging.landcode, data["landcode"])
+
     def test_list_vestigingen(self):
         url = reverse("scim_api:vestiging-list")
         VestigingFactory.create_batch(2)
@@ -35,6 +50,47 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(data["vestigingsnummer"], vestiging.vestigingsnummer)
         self.assertEqual(data["naam"], vestiging.naam)
         self.assertEqual(data["landcode"], vestiging.landcode)
+
+    def test_update_vestiging(self):
+        vestiging = VestigingFactory()
+        detail_url = reverse(
+            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+        )
+
+        data = {
+            "vestigingsnummer": vestiging.vestigingsnummer,
+            "naam": "Bijgewerkte Vestiging",
+            "landcode": "BE",
+        }
+        response = self.client.put(detail_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        vestiging.refresh_from_db()
+        self.assertEqual(vestiging.naam, data["naam"])
+        self.assertEqual(vestiging.landcode, data["landcode"])
+
+    def test_partial_update_vestiging(self):
+        vestiging = VestigingFactory()
+        detail_url = reverse(
+            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+        )
+
+        patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
+        response = self.client.patch(detail_url, patch_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        vestiging.refresh_from_db()
+        self.assertEqual(vestiging.naam, patch_data["naam"])
+
+    def test_delete_vestiging(self):
+        vestiging = VestigingFactory()
+        detail_url = reverse(
+            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+        )
+
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Vestiging.objects.filter(uuid=vestiging.uuid).exists())
 
     def test_authentication_required(self):
         client = APIClient()
