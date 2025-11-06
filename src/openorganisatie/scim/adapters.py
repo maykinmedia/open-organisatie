@@ -35,7 +35,8 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return self.queryset
+        if hasattr(self, "request") and self.request:
+            return self.queryset
 
     @classmethod
     def get_extra_actions(cls):
