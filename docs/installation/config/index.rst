@@ -7,5 +7,6 @@ Configuration
    :maxdepth: 1
 
    openorganisatie_config
+   openorganisatie_config_cli
    env_config
    

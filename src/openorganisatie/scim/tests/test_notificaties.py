@@ -16,7 +16,7 @@ from openorganisatie.scim.models.factories.medewerker import (
 )
 from openorganisatie.scim.models.user import User
 
-from .api_testcase import APITestCase, APITestCaseBearer
+from ..api.tests.api_testcase import APITestCase, APITestCaseBearer
 
 
 class NotificationsConfigTestCase:

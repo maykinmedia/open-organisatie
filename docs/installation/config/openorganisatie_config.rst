@@ -11,6 +11,16 @@ configured first.
 
     This document describes the manual configuration via the admin.
 
+.. _installation_configuration_sites:
+
+Setting the domain
+==================
+
+.. warning::  
+   
+   Ensure that the ``SITE_DOMAIN`` environment variable is correctly set.
+   For more details, see :ref:`Environment configuration reference <installation_env_config>`.
+
 .. _installation_configuration_notificaties_api:
 
 Configure Notificaties API

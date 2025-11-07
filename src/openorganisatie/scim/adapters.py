@@ -6,6 +6,7 @@ import structlog
 from django_scim.adapters import SCIMGroup, SCIMUser
 from notifications_api_common.viewsets import NotificationMixin
 from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 from reversion import create_revision, set_comment
 
 from openorganisatie.scim.kanalen import KANAAL_IDENTITEIT
@@ -35,8 +36,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        if hasattr(self, "request") and self.request:
-            return self.queryset
+        return self.queryset
 
     @classmethod
     def get_extra_actions(cls):
@@ -177,7 +177,10 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
                 instance=self.obj,
                 context={"request": self.request},
             )
-            response = Response(serializer.data, status=201 if self._is_create else 200)
+            response = Response(
+                serializer.data,
+                status=HTTP_201_CREATED if self._is_create else HTTP_200_OK,
+            )
             data = response.data
             data["url"] = self.location
 
