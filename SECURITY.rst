@@ -1,14 +1,17 @@
-# Security policy
+.. _security:
+
+Open Organisatie's security policies
+====================================
 
 The development team is strongly committed to responsible reporting and 
 disclosure of security-related issues. As such, we've adopted and follow a set 
 of policies which conform to that ideal and are geared toward allowing us to 
 deliver timely security updates to the official distribution of the product.
 
-## Reporting security issues
+Reporting security issues
+-------------------------
 
-**Short version: please report security issues by emailing 
-security@maykinmedia.nl.**
+**Short version: please report security issues by emailing security@maykinmedia.nl.**
 
 If you discover security issues in the product or related projects under the 
 same organization, we request you to disclose these in a *responsible* way by 
@@ -25,7 +28,8 @@ Once you've submitted an issue via email, you should receive an acknowledgment
 from a member of the security team as soon as possible, and depending on the 
 action to be taken, you may receive further followup emails.
 
-# Timeline of the process
+Timeline of the process
+-----------------------
 
 The product's community support is provided by [Maykin]. The community support 
 team is responsible for the handling of security issues.
@@ -44,7 +48,7 @@ team is responsible for the handling of security issues.
    visible to the repository administrators and community support team. 
    Severity and impact will be established here.
 
-5. If appropriate, we request a [CVE identifier][CVE_identifier] from Github.
+5. If appropriate, we request a `CVE identifier`_ from Github.
 
 6. A patch is implemented, reviewed and tested in a private fork.
 
@@ -57,5 +61,5 @@ team is responsible for the handling of security issues.
    channels.
 
 
-[CVE_identifier]: https://cve.mitre.org/cve/identifiers/
-[Maykin]: https://www.maykinmedia.nl
+.. _CVE identifier: https://cve.mitre.org/cve/identifiers/
+.. _commonground.nl: https://commonground.nl
