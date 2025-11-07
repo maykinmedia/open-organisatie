@@ -14,7 +14,7 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
         "datum_toegevoegd",
         "datum_aangepast",
     )
-    readonly_fields = ("datum_toegevoegd", "datum_aangepast")
+    readonly_fields = ("uuid", "datum_toegevoegd", "datum_aangepast")
     search_fields = ("voornaam", "achternaam", "emailadres")
     filter_horizontal = ("teams", "functies")
 
@@ -23,6 +23,7 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
             "Algemene informatie",
             {
                 "fields": (
+                    "uuid",
                     "medewerker_id",
                     "voornaam",
                     "achternaam",
