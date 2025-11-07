@@ -4,7 +4,7 @@ Provisioning a superuser
 ========================
 
 A clean installation of Open Organisatie has no existing data, it's up to the service provider
-and/or the users to set up Open Product to your liking.
+and/or the users to set up Open Organisatie to your liking.
 
 To be able to do anything in the Open Organisatie admin interface, you need a user account
 with sufficient permissions, typically a superuser. Open Organisatie has a couple of mechanisms

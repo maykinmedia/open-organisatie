@@ -68,6 +68,7 @@ celery==5.5.3
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   flower
     #   notifications-api-common
 certifi==2025.6.15
     # via
@@ -422,6 +423,11 @@ glom==24.11.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   mozilla-django-oidc-db
+humanize==4.14.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   flower
 idna==3.10
     # via
     #   -c requirements/base.txt
@@ -545,6 +551,11 @@ polib==1.2.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-rosetta
+prometheus-client==0.23.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   flower
 prompt-toolkit==3.0.51
     # via
     #   -c requirements/base.txt
@@ -635,6 +646,11 @@ python-ipware==3.0.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-ipware
+pytz==2025.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   flower
 pyyaml==6.0.2
     # via
     #   -c requirements/base.txt
@@ -780,6 +796,11 @@ textile==4.0.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
+tornado==6.5.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   flower
 typing-extensions==4.14.0
     # via
     #   -c requirements/base.txt
