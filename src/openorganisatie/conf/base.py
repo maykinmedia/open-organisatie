@@ -109,7 +109,8 @@ INSTALLED_APPS += [
     # Project applications.
     "openorganisatie.accounts",
     "openorganisatie.utils",
-    "openorganisatie.scim",
+    "openorganisatie.organisatie",
+    "openorganisatie.identiteit",
 ]
 
 MIDDLEWARE += [

@@ -59,12 +59,25 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path(
-        f"medewerkers/api/v{settings.SCIM_API_MAJOR_VERSION}/",
-        include(("openorganisatie.scim.api.urls", "scim_api"), namespace="scim_api"),
+        f"organisatie/api/v{settings.SCIM_API_MAJOR_VERSION}/",
+        include(
+            ("openorganisatie.organisatie.api.urls", "organisatie_api"),
+            namespace="organisatie_api",
+        ),
+    ),
+    path(
+        f"identiteit/api/v{settings.SCIM_API_MAJOR_VERSION}/",
+        include(
+            ("openorganisatie.identiteit.api.urls", "identiteit_api"),
+            namespace="identiteit_api",
+        ),
     ),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="index.html"), name="root"),
-    path("scim/v2/", include(("openorganisatie.scim.urls", "scim"), namespace="scim")),
+    path(
+        "scim/v2/",
+        include(("openorganisatie.identiteit.urls", "scim"), namespace="scim"),
+    ),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run

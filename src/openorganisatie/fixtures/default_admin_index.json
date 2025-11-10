@@ -4,17 +4,17 @@
         "fields": {
             "order": 0,
             "translations": {
-                "en": "Scim"
+                "en": "Identity"
             },
-            "name": "Scim",
-            "slug": "scim",
+            "name": "Identiteit",
+            "slug": "identiteit",
             "models": [
                 [
-                    "scim",
+                    "identiteit",
                     "user"
                 ],
                 [
-                    "scim",
+                    "identiteit",
                     "group"
                 ]
             ]
@@ -31,31 +31,27 @@
             "slug": "Organisatie",
             "models": [
                 [
-                    "scim",
+                    "organisatie",
                     "medewerker"
                 ],
                 [
-                    "scim",
+                    "organisatie",
                     "organisatorischeeenheid"
                 ],
                 [
-                    "scim",
+                    "organisatie",
                     "team"
                 ],
                 [
-                    "scim",
+                    "organisatie",
                     "vestiging"
                 ],
                 [
-                    "scim",
-                    "contactpersoon"
-                ],
-                [
-                    "scim",
+                    "organisatie",
                     "functie"
                 ],
                 [
-                    "scim",
+                    "organisatie",
                     "functietype"
                 ]
             ]
