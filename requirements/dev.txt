@@ -83,6 +83,7 @@ celery==5.5.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   flower
     #   notifications-api-common
 certifi==2025.6.15
     # via
@@ -474,6 +475,11 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via bump-my-version
+humanize==4.14.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flower
 idna==3.10
     # via
     #   -c requirements/ci.txt
@@ -611,6 +617,11 @@ polib==1.2.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-rosetta
+prometheus-client==0.23.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flower
 prompt-toolkit==3.0.51
     # via
     #   -c requirements/ci.txt
@@ -708,6 +719,11 @@ python-ipware==3.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-ipware
+pytz==2025.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flower
 pyyaml==6.0.2
     # via
     #   -c requirements/ci.txt
@@ -909,6 +925,11 @@ textile==4.0.3
     #   django-markup
 tomlkit==0.13.3
     # via bump-my-version
+tornado==6.5.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   flower
 typing-extensions==4.14.0
     # via
     #   -c requirements/ci.txt
