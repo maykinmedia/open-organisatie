@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath("../src"))
 os.environ["LOG_REQUESTS"] = "false"
 
 import openorganisatie  # noqa isort:skip
-
+from importlib.metadata import version as _version
 
 from openorganisatie.setup import setup_env  # noqa isort:skip
 # from objects.setup import setup_env  # noqa isort:skip
@@ -110,3 +110,11 @@ linkcheck_ignore = [
 ]
 
 sphinx_tabs_valid_builders = ["linkcheck"]
+
+django_structlog_version = _version("django-structlog")
+intersphinx_mapping = {
+    "django-structlog": (
+        f"https://django-structlog.readthedocs.io/en/{django_structlog_version}",
+        None,
+    ),
+}

@@ -16,3 +16,4 @@ configured to make all API's accessible.
    
    scim
    api-authorizations
+   logging
