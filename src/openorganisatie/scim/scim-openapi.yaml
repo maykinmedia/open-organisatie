@@ -2614,4 +2614,4 @@ components:
       name: Authorization
       description: Token-based authentication with required prefix "Token"
 servers:
-- url: /medewerkers/api/v0
+- url: /organisatie/api/v0

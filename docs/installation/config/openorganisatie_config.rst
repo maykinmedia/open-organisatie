@@ -129,6 +129,6 @@ example, we have used `curl`_ to make the request.
    curl --request GET \
    --header 'Authorization: Token 1d4df96cfe14543558118805c5e9252629e805a0' \
    --header 'Content-Type: application/json' \
-   {{base_url}}/medewerkers/api/v0/medewerker
+   {{base_url}}/organisatie/api/v0/medewerker
 
 .. _Curl: https://curl.se/docs/manpage.html
