@@ -14,6 +14,8 @@ configured to make all API's accessible.
    :maxdepth: 1
    :caption: Further reading
    
+   general
+   users
    scim
    mapping
    api-authorizations
