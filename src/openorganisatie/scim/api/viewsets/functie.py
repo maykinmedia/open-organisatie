@@ -1,10 +1,10 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.functie import Functie
-from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..filterset.functie import FunctieFilter
 from ..serializers.functie import FunctieSerializer
@@ -42,5 +42,5 @@ class FunctieViewSet(RevisionMixin, viewsets.ModelViewSet):
     serializer_class = FunctieSerializer
     filterset_class = FunctieFilter
     lookup_field = "uuid"
-    authentication_classes = (BearerTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)

@@ -1,10 +1,10 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from reversion.views import RevisionMixin
 
 from openorganisatie.scim.models.vestiging import Vestiging
-from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..serializers.vestiging import VestigingSerializer
 
@@ -48,5 +48,5 @@ class VestigingViewSet(RevisionMixin, viewsets.ModelViewSet):
         "landcode",
     }
     lookup_field = "uuid"
-    authentication_classes = (BearerTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)

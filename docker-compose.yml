@@ -18,9 +18,10 @@ services:
       - open-organisatie-dev 
 
   web:
-    build: .
-    image: maykinmedia/openorganisatie:latest
-    environment:
+    build: &web_build
+      context: .
+    image: maykinmedia/open-organisatie:latest
+    environment: &web_env
       - DJANGO_SETTINGS_MODULE=openorganisatie.conf.docker
       - SECRET_KEY=${SECRET_KEY:-django-insecure-scl%uga+2ji^oa)1_*bdm^40dpn4*+gw83mw3a5=6l4(k%by&}
       - DB_NAME=openorganisatie
@@ -28,6 +29,8 @@ services:
       - DB_HOST=db
       - CACHE_DEFAULT=redis:6379/0
       - CACHE_AXES=redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
       # Only allow all hosts for development/testing purposes!
       - ALLOWED_HOSTS=*
     ports:
@@ -37,6 +40,47 @@ services:
     labels:
       - app=open-organisatie
       - service=api
+    networks:
+      - open-organisatie-dev
+
+  celery:
+    build: *web_build
+    image: maykinmedia/open-organisatie:latest
+    environment: *web_env
+    command: /celery_worker.sh
+    healthcheck:
+      test: [ "CMD", "python", "/app/bin/check_celery_worker_liveness.py" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      - db
+      - redis
+      - web
+    networks:
+      - open-organisatie-dev
+
+  celery-beat:
+    build: *web_build
+    image: maykinmedia/open-organisatie:latest
+    environment: *web_env
+    command: /celery_beat.sh
+    depends_on:
+      - celery
+    networks:
+      - open-organisatie-dev
+
+  celery-flower:
+    build: *web_build
+    image: maykinmedia/open-organisatie:latest
+    environment: *web_env
+    command: /celery_flower.sh
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery
     networks:
       - open-organisatie-dev
 

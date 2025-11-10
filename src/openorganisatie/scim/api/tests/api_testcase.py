@@ -8,10 +8,16 @@ User = get_user_model()
 
 
 class APITestCase(TestCase):
+    auth_type = "Token"
+
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
             username="testuser", password="password123"
         )
         self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token.key}")
+        self.client.credentials(HTTP_AUTHORIZATION=f"{self.auth_type} {self.token.key}")
+
+
+class APITestCaseBearer(APITestCase):
+    auth_type = "Bearer"

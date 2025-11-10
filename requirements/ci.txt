@@ -406,6 +406,10 @@ factory-boy==3.3.3
     # via -r requirements/test-tools.in
 faker==37.4.0
     # via factory-boy
+flower==2.0.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 freezegun==1.5.2
     # via -r requirements/test-tools.in
 furl==2.1.4
@@ -501,7 +505,7 @@ nh3==0.2.21
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   textile
-notifications-api-common==0.7.3
+notifications-api-common==0.9.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt

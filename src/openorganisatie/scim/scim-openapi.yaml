@@ -1676,6 +1676,14 @@ components:
     Medewerker:
       type: object
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          minLength: 1
+          maxLength: 1000
+          description: URL-referentie naar dit object. Dit is de unieke identificatie
+            en locatie van dit object.
         uuid:
           type: string
           format: uuid
@@ -1763,6 +1771,7 @@ components:
       - functies
       - medewerkerId
       - teams
+      - url
       - voornaam
     NestedFunctie:
       type: object
@@ -2182,6 +2191,14 @@ components:
     PatchedMedewerker:
       type: object
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          minLength: 1
+          maxLength: 1000
+          description: URL-referentie naar dit object. Dit is de unieke identificatie
+            en locatie van dit object.
         uuid:
           type: string
           format: uuid
@@ -2480,6 +2497,14 @@ components:
     User:
       type: object
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          minLength: 1
+          maxLength: 1000
+          description: URL-referentie naar dit object. Dit is de unieke identificatie
+            en locatie van dit object.
         scimExternalId:
           type: string
           format: uuid
@@ -2537,6 +2562,7 @@ components:
       - isActive
       - laatstGewijzigd
       - scimExternalId
+      - url
       - username
       - voornaam
     Vestiging:
@@ -2583,7 +2609,9 @@ components:
       - vestigingsnummer
   securitySchemes:
     tokenAuth:
-      type: http
-      scheme: bearer
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
 servers:
 - url: /medewerkers/api/v0

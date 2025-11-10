@@ -71,9 +71,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
 # Uncomment if you use celery
-# COPY ./bin/celery_worker.sh /celery_worker.sh
-# COPY ./bin/celery_beat.sh /celery_beat.sh
-# COPY ./bin/celery_flower.sh /celery_flower.sh
+COPY ./bin/celery_worker.sh /celery_worker.sh
+COPY ./bin/celery_beat.sh /celery_beat.sh
+COPY ./bin/celery_flower.sh /celery_flower.sh
 COPY ./bin/uwsgi.ini /
 RUN mkdir /app/bin /app/log /app/media
 
@@ -83,7 +83,7 @@ VOLUME ["/app/log", "/app/media"]
 COPY --from=backend-build /usr/local/lib/python3.12 /usr/local/lib/python3.12
 COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
 # Uncomment if you use celery
-# COPY --from=backend-build /usr/local/bin/celery /usr/local/bin/celery
+COPY --from=backend-build /usr/local/bin/celery /usr/local/bin/celery
 COPY --from=backend-build /app/src/ /app/src/
 
 # copy frontend build statics

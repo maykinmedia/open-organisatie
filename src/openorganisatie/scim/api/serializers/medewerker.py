@@ -13,6 +13,9 @@ from ..serializers.team import NestedTeamSerializer
 
 
 class MedewerkerSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name="scim_api:medewerker-detail", lookup_field="uuid"
+    )
     teams = NestedTeamSerializer(
         many=True,
         read_only=True,
@@ -43,6 +46,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medewerker
         fields = [
+            "url",
             "uuid",
             "medewerker_id",
             "voornaam",

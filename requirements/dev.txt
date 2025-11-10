@@ -446,6 +446,10 @@ faker==37.4.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   factory-boy
+flower==2.0.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 freezegun==1.5.2
     # via
     #   -c requirements/ci.txt
@@ -567,7 +571,7 @@ nh3==0.2.21
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   textile
-notifications-api-common==0.7.3
+notifications-api-common==0.9.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt

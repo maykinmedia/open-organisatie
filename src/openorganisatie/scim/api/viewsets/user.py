@@ -1,9 +1,9 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from openorganisatie.scim.models.user import User
-from openorganisatie.utils.bearer import BearerTokenAuthentication
 
 from ..filterset.user import UserFilter
 from ..serializers.user import UserSerializer
@@ -25,5 +25,5 @@ class UserReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     filterset_class = UserFilter
     lookup_field = "scim_external_id"
-    authentication_classes = (BearerTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
