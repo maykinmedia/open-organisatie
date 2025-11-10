@@ -15,5 +15,6 @@ configured to make all API's accessible.
    :caption: Further reading
    
    scim
+   mapping
    api-authorizations
    logging

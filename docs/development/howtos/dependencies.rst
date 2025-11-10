@@ -42,7 +42,7 @@ arguments supplied are forwarded to the underlying ``pip-compile`` calls.
 
 This works for base, ci and dev dependencies.
 
-.. note:: You can constraint versions, such as ``--upgrade-package django~=2.2.0`` to get the latest
+.. note:: You can constraint versions, such as ``--upgrade-package django~=5.4.0`` to get the latest
    patch version, or ``--upgrade-package djangorestframework<3.13`` for example.
 
 .. _uv: https://docs.astral.sh/uv/
