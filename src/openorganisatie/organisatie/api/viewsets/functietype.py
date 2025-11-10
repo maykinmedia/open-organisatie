@@ -55,28 +55,28 @@ class FunctieTypeViewSet(RevisionMixin, viewsets.ModelViewSet):
     @transaction.atomic
     def perform_create(self, serializer):
         super().perform_create(serializer)
-        functieType = serializer.instance
+        functietype = serializer.instance
         logger.info(
-            "functieType_created",
-            uuid=str(functieType.uuid),
-            naam=functieType.naam,
+            "functietype_created",
+            uuid=str(functietype.uuid),
+            naam=functietype.naam,
         )
 
     @transaction.atomic
     def perform_update(self, serializer):
         super().perform_update(serializer)
-        functieType = serializer.instance
+        functietype = serializer.instance
         logger.info(
-            "functieType_updated",
-            uuid=str(functieType.uuid),
-            naam=functieType.naam,
+            "functietype_updated",
+            uuid=str(functietype.uuid),
+            naam=functietype.naam,
         )
 
     @transaction.atomic
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
         logger.info(
-            "functieType_deleted",
+            "functietype_deleted",
             uuid=str(instance.uuid),
             naam=instance.naam,
         )
