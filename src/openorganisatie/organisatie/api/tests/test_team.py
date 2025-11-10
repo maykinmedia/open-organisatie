@@ -14,7 +14,7 @@ from .api_testcase import APITestCase
 
 class TeamAPITests(APITestCase):
     def test_create_team(self):
-        url = reverse("scim_api:team-list")
+        url = reverse("organisatie_api:team-list")
         data = {"naam": "Nieuw Team", "omschrijving": "Omschrijving van het team"}
         response = self.client.post(url, data)
 
@@ -25,7 +25,7 @@ class TeamAPITests(APITestCase):
         self.assertEqual(team.omschrijving, data["omschrijving"])
 
     def test_list_teams(self):
-        url = reverse("scim_api:team-list")
+        url = reverse("organisatie_api:team-list")
         TeamFactory.create_batch(3)
 
         response = self.client.get(url)
@@ -45,7 +45,7 @@ class TeamAPITests(APITestCase):
 
         team = TeamFactory(vestigingen=[vest1], functies=[func])
 
-        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+        detail_url = reverse("organisatie_api:team-detail", kwargs={"uuid": team.uuid})
         response = self.client.get(detail_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -59,7 +59,7 @@ class TeamAPITests(APITestCase):
 
     def test_update_team(self):
         team = TeamFactory()
-        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+        detail_url = reverse("organisatie_api:team-detail", kwargs={"uuid": team.uuid})
 
         data = {"naam": "Bijgewerkt Team", "omschrijving": "Bijgewerkte omschrijving"}
         response = self.client.put(detail_url, data)
@@ -71,7 +71,7 @@ class TeamAPITests(APITestCase):
 
     def test_partial_update_team(self):
         team = TeamFactory()
-        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+        detail_url = reverse("organisatie_api:team-detail", kwargs={"uuid": team.uuid})
 
         patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
         response = self.client.patch(detail_url, patch_data)
@@ -82,7 +82,7 @@ class TeamAPITests(APITestCase):
 
     def test_delete_team(self):
         team = TeamFactory()
-        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+        detail_url = reverse("organisatie_api:team-detail", kwargs={"uuid": team.uuid})
 
         response = self.client.delete(detail_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -90,7 +90,7 @@ class TeamAPITests(APITestCase):
 
     def test_authentication_required(self):
         client = APIClient()
-        url = reverse("scim_api:team-list")
+        url = reverse("organisatie_api:team-list")
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -98,7 +98,7 @@ class TeamAPITests(APITestCase):
         team1 = TeamFactory(naam="Finance Team")
         TeamFactory(naam="HR Team")
 
-        url = reverse("scim_api:team-list")
+        url = reverse("organisatie_api:team-list")
         response = self.client.get(url, {"naam": "Finance Team"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -112,7 +112,7 @@ class TeamAPITests(APITestCase):
         team1 = TeamFactory(vestigingen=[vest1])
         TeamFactory(vestigingen=[vest2])
 
-        url = reverse("scim_api:team-list")
+        url = reverse("organisatie_api:team-list")
         response = self.client.get(url, {"vestigingenUuid": str(vest1.uuid)})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -128,7 +128,7 @@ class TeamAPITests(APITestCase):
         team1.functies.add(functie1)
         team2.functies.add(functie2)
 
-        url = reverse("scim_api:team-list")
+        url = reverse("organisatie_api:team-list")
         response = self.client.get(url, {"functiesUuid": str(functie1.uuid)})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -137,7 +137,7 @@ class TeamAPITests(APITestCase):
         self.assertEqual(data["results"][0]["uuid"], str(team1.uuid))
 
     def test_history(self):
-        url = reverse("scim_api:team-list")
+        url = reverse("organisatie_api:team-list")
         data = {"naam": "test"}
 
         with self.subTest("create"):
@@ -147,7 +147,7 @@ class TeamAPITests(APITestCase):
             team = Team.objects.get()
             self.assertEqual(Version.objects.get_for_object(team).count(), 1)
 
-        detail_url = reverse("scim_api:team-detail", kwargs={"uuid": team.uuid})
+        detail_url = reverse("organisatie_api:team-detail", kwargs={"uuid": team.uuid})
 
         with self.subTest("update"):
             response = self.client.put(detail_url, data)

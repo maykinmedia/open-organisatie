@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from openorganisatie.organisatie.models.factories.group import GroupFactory
+from openorganisatie.identiteit.models.factories.group import GroupFactory
 
 from .api_testcase import APITestCase
 
@@ -41,7 +41,7 @@ class GroupAPITests(APITestCase):
 
     def test_authentication_required(self):
         client = APIClient()
-        url = reverse("identiteit_api:team-list")
+        url = reverse("identiteit_api:group-list")
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 

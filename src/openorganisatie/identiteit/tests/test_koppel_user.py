@@ -1,8 +1,11 @@
 from django.test import TestCase
 
+from openorganisatie.organisatie.models.attr_mapping_config import (
+    AttribuutMappingConfig,
+)
+from openorganisatie.organisatie.models.factories.medewerker import MedewerkerFactory
+
 from ..constants import AttribuutChoices
-from ..models.attr_mapping_config import AttribuutMappingConfig
-from ..models.factories.medewerker import MedewerkerFactory
 from ..models.factories.user import UserFactory
 
 

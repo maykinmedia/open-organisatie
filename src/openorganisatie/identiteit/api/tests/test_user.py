@@ -7,8 +7,8 @@ from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from openorganisatie.organisatie.models.factories.group import GroupFactory
-from openorganisatie.organisatie.models.factories.user import UserFactory
+from openorganisatie.identiteit.models.factories.group import GroupFactory
+from openorganisatie.identiteit.models.factories.user import UserFactory
 
 from .api_testcase import APITestCase
 

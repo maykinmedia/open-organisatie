@@ -12,7 +12,7 @@ from .api_testcase import APITestCase
 
 class FunctieTypeAPITests(APITestCase):
     def test_create_functietype(self):
-        url = reverse("scim_api:functietype-list")
+        url = reverse("organisatie_api:functietype-list")
         data = {"naam": "Nieuw Functietype", "slug": "nieuw-functietype"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -22,7 +22,7 @@ class FunctieTypeAPITests(APITestCase):
         self.assertEqual(functietype.slug, data["slug"])
 
     def test_list_functietypes(self):
-        url = reverse("scim_api:functietype-list")
+        url = reverse("organisatie_api:functietype-list")
         FunctieTypeFactory.create_batch(3)
 
         response = self.client.get(url)
@@ -38,7 +38,7 @@ class FunctieTypeAPITests(APITestCase):
     def test_read_functietype_detail(self):
         functietype = FunctieTypeFactory()
         detail_url = reverse(
-            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+            "organisatie_api:functietype-detail", kwargs={"uuid": functietype.uuid}
         )
 
         response = self.client.get(detail_url)
@@ -52,7 +52,7 @@ class FunctieTypeAPITests(APITestCase):
     def test_update_functietype(self):
         functietype = FunctieTypeFactory()
         detail_url = reverse(
-            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+            "organisatie_api:functietype-detail", kwargs={"uuid": functietype.uuid}
         )
 
         data = {"naam": "Bijgewerkt Functietype", "slug": "bijgewerkt-functietype"}
@@ -66,7 +66,7 @@ class FunctieTypeAPITests(APITestCase):
     def test_partial_update_functietype(self):
         functietype = FunctieTypeFactory()
         detail_url = reverse(
-            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+            "organisatie_api:functietype-detail", kwargs={"uuid": functietype.uuid}
         )
 
         patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
@@ -79,7 +79,7 @@ class FunctieTypeAPITests(APITestCase):
     def test_delete_functietype(self):
         functietype = FunctieTypeFactory()
         detail_url = reverse(
-            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+            "organisatie_api:functietype-detail", kwargs={"uuid": functietype.uuid}
         )
 
         response = self.client.delete(detail_url)
@@ -88,7 +88,7 @@ class FunctieTypeAPITests(APITestCase):
 
     def test_authentication_required(self):
         client = APIClient()
-        url = reverse("scim_api:functietype-list")
+        url = reverse("organisatie_api:functietype-list")
 
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -97,7 +97,7 @@ class FunctieTypeAPITests(APITestCase):
         ft1 = FunctieTypeFactory(naam="Manager HR")
         FunctieTypeFactory(naam="Developer")
 
-        url = reverse("scim_api:functietype-list")
+        url = reverse("organisatie_api:functietype-list")
         response = self.client.get(url, {"naam": "Manager HR"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -108,7 +108,7 @@ class FunctieTypeAPITests(APITestCase):
         ft1 = FunctieTypeFactory(slug="finance")
         FunctieTypeFactory(slug="marketing")
 
-        url = reverse("scim_api:functietype-list")
+        url = reverse("organisatie_api:functietype-list")
         response = self.client.get(url, {"slug": "finance"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -116,7 +116,7 @@ class FunctieTypeAPITests(APITestCase):
         self.assertEqual(response.data["results"][0]["uuid"], str(ft1.uuid))
 
     def test_history(self):
-        url = reverse("scim_api:functietype-list")
+        url = reverse("organisatie_api:functietype-list")
         data = {"naam": "abc", "slug": "abc"}
 
         with self.subTest("create"):
@@ -127,7 +127,7 @@ class FunctieTypeAPITests(APITestCase):
             self.assertEqual(Version.objects.get_for_object(functietype).count(), 1)
 
         detail_url = reverse(
-            "scim_api:functietype-detail", kwargs={"uuid": functietype.uuid}
+            "organisatie_api:functietype-detail", kwargs={"uuid": functietype.uuid}
         )
 
         with self.subTest("update"):

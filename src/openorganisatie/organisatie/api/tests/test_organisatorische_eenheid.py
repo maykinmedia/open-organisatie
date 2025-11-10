@@ -17,7 +17,7 @@ from .api_testcase import APITestCase
 
 class OrganisatorischeEenheidAPITests(APITestCase):
     def test_create_organisatorische_eenheid(self):
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         data = {
             "identificatie": "1234",
             "naam": "Financiële Afdeling",
@@ -32,7 +32,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(oe.soort_organisatie, data["soortOrganisatie"])
 
     def test_list_organisatorische_eenheden(self):
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         OrganisatorischeEenheidFactory.create_batch(2)
 
         response = self.client.get(url)
@@ -52,7 +52,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         org = OrganisatorischeEenheidFactory(vestigingen=[vest], functies=[func])
 
         detail_url = reverse(
-            "scim_api:organisatorischeeenheid-detail",
+            "organisatie_api:organisatorischeeenheid-detail",
             kwargs={"uuid": org.uuid},
         )
 
@@ -71,7 +71,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
     def test_update_organisatorische_eenheid(self):
         oe = OrganisatorischeEenheidFactory()
         detail_url = reverse(
-            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+            "organisatie_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
         )
 
         data = {
@@ -89,7 +89,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
     def test_partial_update_organisatorische_eenheid(self):
         oe = OrganisatorischeEenheidFactory()
         detail_url = reverse(
-            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+            "organisatie_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
         )
 
         patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
@@ -102,7 +102,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
     def test_delete_organisatorische_eenheid(self):
         oe = OrganisatorischeEenheidFactory()
         detail_url = reverse(
-            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+            "organisatie_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
         )
 
         response = self.client.delete(detail_url)
@@ -111,7 +111,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
     def test_authentication_required(self):
         client = APIClient()
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -119,7 +119,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         org1 = OrganisatorischeEenheidFactory(identificatie="12345")
         OrganisatorischeEenheidFactory(identificatie="6789")
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"identificatie": "12345"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -130,7 +130,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         org1 = OrganisatorischeEenheidFactory(naam="ORG1")
         OrganisatorischeEenheidFactory(naam="ORG2")
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"naam": "ORG1"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -141,7 +141,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         org1 = OrganisatorischeEenheidFactory(soort_organisatie="Type1")
         OrganisatorischeEenheidFactory(soort_organisatie="Type2")
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"soortOrganisatie": "Type1"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -152,7 +152,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         org1 = OrganisatorischeEenheidFactory(verkorte_naam="FIN")
         OrganisatorischeEenheidFactory(verkorte_naam="HR")
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"verkorteNaam": "FIN"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -167,7 +167,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         OrganisatorischeEenheidFactory().vestigingen.add(vest2)
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"vestigingen_uuid": str(vest1.uuid)})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -182,7 +182,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         OrganisatorischeEenheidFactory().functies.add(functie2)
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"functies_uuid": str(functie1.uuid)})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -195,7 +195,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         child2 = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
         OrganisatorischeEenheidFactory()
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -213,7 +213,8 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         child = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
 
         url = reverse(
-            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": child.uuid}
+            "organisatie_api:organisatorischeeenheid-detail",
+            kwargs={"uuid": child.uuid},
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -229,7 +230,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         child1b = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=root1)
         child2a = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=root2)
 
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -288,7 +289,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         )
 
     def test_history(self):
-        url = reverse("scim_api:organisatorischeeenheid-list")
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
         data = {"identificatie": "test", "naam": "test", "soortOrganisatie": "test"}
 
         with self.subTest("create"):
@@ -299,7 +300,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
             self.assertEqual(Version.objects.get_for_object(oe).count(), 1)
 
         detail_url = reverse(
-            "scim_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
+            "organisatie_api:organisatorischeeenheid-detail", kwargs={"uuid": oe.uuid}
         )
 
         with self.subTest("update"):

@@ -12,7 +12,7 @@ from .api_testcase import APITestCase
 
 class VestigingAPITests(APITestCase):
     def test_create_vestiging(self):
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         data = {
             "vestigingsnummer": "9999",
             "naam": "Nieuwe Vestiging",
@@ -27,7 +27,7 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(vestiging.landcode, data["landcode"])
 
     def test_list_vestigingen(self):
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         VestigingFactory.create_batch(2)
 
         response = self.client.get(url)
@@ -40,7 +40,7 @@ class VestigingAPITests(APITestCase):
         vestiging = VestigingFactory()
 
         detail_url = reverse(
-            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+            "organisatie_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
         )
 
         response = self.client.get(detail_url)
@@ -54,7 +54,7 @@ class VestigingAPITests(APITestCase):
     def test_update_vestiging(self):
         vestiging = VestigingFactory()
         detail_url = reverse(
-            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+            "organisatie_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
         )
 
         data = {
@@ -72,7 +72,7 @@ class VestigingAPITests(APITestCase):
     def test_partial_update_vestiging(self):
         vestiging = VestigingFactory()
         detail_url = reverse(
-            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+            "organisatie_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
         )
 
         patch_data = {"naam": "Gedeeltelijk Bijgewerkt"}
@@ -85,7 +85,7 @@ class VestigingAPITests(APITestCase):
     def test_delete_vestiging(self):
         vestiging = VestigingFactory()
         detail_url = reverse(
-            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+            "organisatie_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
         )
 
         response = self.client.delete(detail_url)
@@ -94,7 +94,7 @@ class VestigingAPITests(APITestCase):
 
     def test_authentication_required(self):
         client = APIClient()
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -102,7 +102,7 @@ class VestigingAPITests(APITestCase):
         v1 = VestigingFactory(vestigingsnummer="123")
         VestigingFactory(vestigingsnummer="456")
 
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         response = self.client.get(url, {"vestigingsnummer": "123"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -114,7 +114,7 @@ class VestigingAPITests(APITestCase):
         v1 = VestigingFactory(naam="Amsterdam")
         VestigingFactory(naam="Rotterdam")
 
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         response = self.client.get(url, {"naam": "Amsterdam"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -124,7 +124,7 @@ class VestigingAPITests(APITestCase):
         v1 = VestigingFactory(verkorte_naam="AMS")
         VestigingFactory(verkorte_naam="RTM")
 
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         response = self.client.get(url, {"verkorteNaam": "AMS"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -135,7 +135,7 @@ class VestigingAPITests(APITestCase):
         v1 = VestigingFactory(adres="Straat 1")
         VestigingFactory(adres="Straat 2")
 
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         response = self.client.get(url, {"adres": "Straat 1"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -145,7 +145,7 @@ class VestigingAPITests(APITestCase):
         v1 = VestigingFactory(post_adres="1000AB")
         VestigingFactory(post_adres="2000CD")
 
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         response = self.client.get(url, {"postAdres": "1000AB"})
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -156,14 +156,14 @@ class VestigingAPITests(APITestCase):
         v1 = VestigingFactory(landcode="NL")
         VestigingFactory(landcode="BE")
 
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         response = self.client.get(url, {"landcode": "NL"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["landcode"], v1.landcode)
 
     def test_history(self):
-        url = reverse("scim_api:vestiging-list")
+        url = reverse("organisatie_api:vestiging-list")
         data = {"vestigingsnummer": "1234", "naam": "test"}
 
         with self.subTest("create"):
@@ -174,7 +174,7 @@ class VestigingAPITests(APITestCase):
             self.assertEqual(Version.objects.get_for_object(vestiging).count(), 1)
 
         detail_url = reverse(
-            "scim_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
+            "organisatie_api:vestiging-detail", kwargs={"uuid": vestiging.uuid}
         )
 
         with self.subTest("update"):

@@ -15,7 +15,7 @@ from .api_testcase import APITestCase
 
 class MedewerkerAPITests(APITestCase):
     def test_create_medewerker(self):
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("organisatie_api:medewerker-list")
         data = {
             "medewerkerId": "test123",
             "voornaam": "Jan",
@@ -32,7 +32,7 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(medewerker.emailadres, data["emailadres"])
 
     def test_list_medewerkers(self):
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("organisatie_api:medewerker-list")
         MedewerkerFactory.create_batch(2)
 
         response = self.client.get(url)
@@ -47,7 +47,7 @@ class MedewerkerAPITests(APITestCase):
         medewerker = MedewerkerFactory(teams=[team], functies=[functie])
 
         detail_url = reverse(
-            "scim_api:medewerker-detail", kwargs={"uuid": str(medewerker.uuid)}
+            "organisatie_api:medewerker-detail", kwargs={"uuid": str(medewerker.uuid)}
         )
 
         response = self.client.get(detail_url)
@@ -67,7 +67,7 @@ class MedewerkerAPITests(APITestCase):
     def test_update_medewerker(self):
         medewerker = MedewerkerFactory()
         detail_url = reverse(
-            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+            "organisatie_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
         )
 
         data = {
@@ -87,7 +87,7 @@ class MedewerkerAPITests(APITestCase):
     def test_partial_update_medewerker(self):
         medewerker = MedewerkerFactory()
         detail_url = reverse(
-            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+            "organisatie_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
         )
 
         patch_data = {"voornaam": "Klaas"}
@@ -100,7 +100,7 @@ class MedewerkerAPITests(APITestCase):
     def test_delete_medewerker(self):
         medewerker = MedewerkerFactory()
         detail_url = reverse(
-            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+            "organisatie_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
         )
 
         response = self.client.delete(detail_url)
@@ -110,7 +110,7 @@ class MedewerkerAPITests(APITestCase):
     def test_authentication_required(self):
         client = APIClient()
 
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("organisatie_api:medewerker-list")
         response = client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -119,7 +119,7 @@ class MedewerkerAPITests(APITestCase):
         m1 = MedewerkerFactory(geslachtsaanduiding=GenderIndicator.MAN)
         MedewerkerFactory(geslachtsaanduiding=GenderIndicator.VROUW)
 
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("organisatie_api:medewerker-list")
         response = self.client.get(url, {"geslachtsaanduiding": GenderIndicator.MAN})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -135,7 +135,7 @@ class MedewerkerAPITests(APITestCase):
         m1.teams.add(team1)
         MedewerkerFactory().teams.add(team2)
 
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("organisatie_api:medewerker-list")
         response = self.client.get(url, {"teams_uuid": str(team1.uuid)})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -148,14 +148,14 @@ class MedewerkerAPITests(APITestCase):
         m1.functies.add(functie1)
         MedewerkerFactory().functies.add(functie2)
 
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("organisatie_api:medewerker-list")
         response = self.client.get(url, {"functiesUuid": str(functie1.uuid)})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
 
     def test_history(self):
-        url = reverse("scim_api:medewerker-list")
+        url = reverse("organisatie_api:medewerker-list")
         data = {
             "medewerkerId": "test",
             "voornaam": "test",
@@ -171,7 +171,7 @@ class MedewerkerAPITests(APITestCase):
             self.assertEqual(Version.objects.get_for_object(medewerker).count(), 1)
 
         detail_url = reverse(
-            "scim_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
+            "organisatie_api:medewerker-detail", kwargs={"uuid": medewerker.uuid}
         )
 
         with self.subTest("update"):
