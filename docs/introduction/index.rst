@@ -10,6 +10,7 @@ TODO
    :caption: Further reading
 
    team
+   architecture
    uml-diagram
    open-source/index
 
