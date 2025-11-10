@@ -1,3 +1,6 @@
+from django.db import transaction
+
+import structlog
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
@@ -10,6 +13,8 @@ from openorganisatie.organisatie.models.organisatorische_eenheid import (
 
 from ..filterset.organisatorische_eenheid import OrganisatorischeEenheidFilter
 from ..serializers.organisatorische_eenheid import OrganisatorischeEenheidSerializer
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 @extend_schema(tags=["Organisatorische Eenheden"])
@@ -46,3 +51,35 @@ class OrganisatorischeEenheidViewSet(RevisionMixin, viewsets.ModelViewSet):
     lookup_field = "uuid"
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        organisatie = serializer.instance
+        logger.info(
+            "organisatorische_eenheid_created",
+            uuid=str(organisatie.uuid),
+            identificatie=organisatie.identificatie,
+            naam=organisatie.naam,
+        )
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        organisatie = serializer.instance
+        logger.info(
+            "organisatorische_eenheid_updated",
+            uuid=str(organisatie.uuid),
+            identificatie=organisatie.identificatie,
+            naam=organisatie.naam,
+        )
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        logger.info(
+            "organisatorische_eenheid_deleted",
+            uuid=str(instance.uuid),
+            identificatie=instance.identificatie,
+            naam=instance.naam,
+        )

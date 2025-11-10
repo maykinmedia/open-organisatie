@@ -1,3 +1,6 @@
+from django.db import transaction
+
+import structlog
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
@@ -7,6 +10,8 @@ from reversion.views import RevisionMixin
 from openorganisatie.organisatie.models.vestiging import Vestiging
 
 from ..serializers.vestiging import VestigingSerializer
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 @extend_schema(tags=["Vestigingen"])
@@ -50,3 +55,35 @@ class VestigingViewSet(RevisionMixin, viewsets.ModelViewSet):
     lookup_field = "uuid"
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        vestiging = serializer.instance
+        logger.info(
+            "vestiging_created",
+            uuid=str(vestiging.uuid),
+            vestigingsnummer=vestiging.vestigingsnummer,
+            naam=vestiging.naam,
+        )
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        vestiging = serializer.instance
+        logger.info(
+            "vestiging_updated",
+            uuid=str(vestiging.uuid),
+            vestigingsnummer=vestiging.vestigingsnummer,
+            naam=vestiging.naam,
+        )
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        logger.info(
+            "vestiging_deleted",
+            uuid=str(instance.uuid),
+            vestigingsnummer=instance.vestigingsnummer,
+            naam=instance.naam,
+        )

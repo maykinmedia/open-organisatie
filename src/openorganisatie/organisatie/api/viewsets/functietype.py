@@ -1,3 +1,6 @@
+from django.db import transaction
+
+import structlog
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
@@ -7,6 +10,8 @@ from reversion.views import RevisionMixin
 from openorganisatie.organisatie.models.functietype import FunctieType
 
 from ..serializers.functietype import FunctieTypeSerializer
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 @extend_schema(tags=["Functietypes"])
@@ -46,3 +51,32 @@ class FunctieTypeViewSet(RevisionMixin, viewsets.ModelViewSet):
     lookup_field = "uuid"
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        functieType = serializer.instance
+        logger.info(
+            "functieType_created",
+            uuid=str(functieType.uuid),
+            naam=functieType.naam,
+        )
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        functieType = serializer.instance
+        logger.info(
+            "functieType_updated",
+            uuid=str(functieType.uuid),
+            naam=functieType.naam,
+        )
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        logger.info(
+            "functieType_deleted",
+            uuid=str(instance.uuid),
+            naam=instance.naam,
+        )
