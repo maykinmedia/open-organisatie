@@ -9,5 +9,5 @@ This section contains UML diagrams for resources per components.
     but not all attributes are the exact same as in the API.
 
 .. uml_images::
-    :apps: scim 
+    :apps: identiteit organisatie 
     :excluded_models: AbstractSCIMGroupMixin, AbstractSCIMUserMixin, AbstractsScimCommonAttributesMixin, AttribuutMappingConfig, SingletonModel

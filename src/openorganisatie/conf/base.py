@@ -109,7 +109,8 @@ INSTALLED_APPS += [
     # Project applications.
     "openorganisatie.accounts",
     "openorganisatie.utils",
-    "openorganisatie.scim",
+    "openorganisatie.organisatie",
+    "openorganisatie.identiteit",
 ]
 
 MIDDLEWARE += [
@@ -209,24 +210,8 @@ NOTIFICATIONS_DISABLED = config(
 #
 # SCIM
 #
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.ngrok-free.app",
-]
-DJANGO_SCIM_ADAPTERS = {
-    "User": "scim.adapters.MedewerkerAdapter",
-    "Group": "scim.adapters.GroepenAdapter",
-}
-SCIM_USER_ADAPTER = "scim.adapters.MedewerkerAdapter"
-SCIM_GROUP_ADAPTER = "scim.adapters.GroepenAdapter"
 SCIM_SERVICE_PROVIDER = {
-    "NETLOC": "localhost:8000",
-    "AUTHENTICATION_SCHEMES": [
-        {
-            "type": "oauth2",
-            "name": "OAuth 2",
-            "description": "Oauth 2 implemented with bearer token",
-        },
-    ],
+    "NETLOC": config("SCIM_NETLOC", default="localhost:8000"),
 }
 
 # Translations
