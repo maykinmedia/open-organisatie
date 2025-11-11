@@ -108,15 +108,16 @@ Optional
 * ``CSRF_COOKIE_SAMESITE``: The value of the SameSite flag on the CSRF cookie. This flag prevents the cookie from being sent in cross-site requests. Defaults to: ``Strict``.
 * ``ENVIRONMENT``:  Defaults to: ``(empty string)``.
 * ``SUBPATH``:  Defaults to: ``None``.
-* ``RELEASE``:  Defaults to: ``d289f5c170a42c3df8c24e8bcb2fd3599645f3de``.
+* ``RELEASE``:  Defaults to: ``7d0dded974ed7fcc0d039f01ef46c31671e21bbe``.
 * ``NUM_PROXIES``: the number of reverse proxies in front of the application, as an integer. This is used to determine the actual client IP adres. On Kubernetes with an ingress you typically want to set this to 2. Defaults to: ``1``.
 * ``CSRF_TRUSTED_ORIGINS``: A list of trusted origins for unsafe requests (e.g. POST). Defaults to: ``[]``.
-* ``NOTIFICATIONS_DISABLED``: indicates whether or not notifications should be sent to the Notificaties API for operations on the API endpoints. Defaults to ``True`` for the ``dev`` environment, otherwise defaults to ``False``.
+* ``NOTIFICATIONS_DISABLED``: Indicates whether or not notifications should be sent to the Notificaties API for operations on the API endpoints. Defaults to: ``True``.
 * ``SITE_DOMAIN``: Defines the primary domain where the application is hosted. Defaults to: ``(empty string)``.
 * ``SENTRY_DSN``:  Defaults to: ``None``.
 * ``ELASTIC_APM_SECRET_TOKEN``:  Defaults to: ``default``.
 * ``DISABLE_2FA``:  Defaults to: ``False``.
 * ``DB_ENGINE``:  Defaults to: ``django.db.backends.postgresql``.
+* ``SCIM_NETLOC``:  Defaults to: ``localhost:8000``.
 * ``ENVIRONMENT_LABEL``:  Defaults to: ``development``.
 * ``ENVIRONMENT_BACKGROUND_COLOR``:  Defaults to: ``orange``.
 * ``ENVIRONMENT_FOREGROUND_COLOR``:  Defaults to: ``black``.
