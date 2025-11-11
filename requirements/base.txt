@@ -35,7 +35,10 @@ boltons==25.0.0
 cbor2==5.6.5
     # via webauthn
 celery==5.5.3
-    # via notifications-api-common
+    # via
+    #   flower
+    #   notifications-api-common
+    #   open-api-framework
 certifi==2025.6.15
     # via
     #   elastic-apm
@@ -68,7 +71,7 @@ cryptography==45.0.4
     #   webauthn
 diff-match-patch==20241021
     # via django-reversion-compare
-django==5.2.3
+django==5.2.8
     # via
     #   -r requirements/base.in
     #   commonground-api-common
@@ -193,7 +196,9 @@ django-solo==2.4.0
     #   notifications-api-common
     #   zgw-consumers
 django-structlog==9.1.1
-    # via open-api-framework
+    # via
+    #   -r requirements/base.in
+    #   open-api-framework
 django-two-factor-auth==1.17.0
     # via maykin-2fa
 django-upgrade-check==1.1.0
@@ -236,10 +241,14 @@ elastic-apm==6.23.0
     #   open-api-framework
 face==24.0.0
     # via glom
+flower==2.0.1
+    # via open-api-framework
 furl==2.1.4
     # via ape-pie
 glom==24.11.0
     # via mozilla-django-oidc-db
+humanize==4.14.0
+    # via flower
 idna==3.10
     # via requests
 inflection==0.5.1
@@ -293,6 +302,8 @@ pillow==11.2.1
     # via -r requirements/base.in
 polib==1.2.0
     # via django-rosetta
+prometheus-client==0.23.1
+    # via flower
 prompt-toolkit==3.0.51
     # via click-repl
 psycopg==3.2.9
@@ -340,6 +351,8 @@ python-dotenv==1.1.1
     #   pydantic-settings
 python-ipware==3.0.0
     # via django-ipware
+pytz==2025.2
+    # via flower
 pyyaml==6.0.2
     # via
     #   drf-spectacular
@@ -399,6 +412,8 @@ structlog==25.4.0
     #   open-api-framework
 textile==4.0.3
     # via django-markup
+tornado==6.5.2
+    # via flower
 typing-extensions==4.14.0
     # via
     #   mozilla-django-oidc-db
