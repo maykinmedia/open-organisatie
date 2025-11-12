@@ -1,3 +1,6 @@
+from django.db import transaction
+
+import structlog
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
@@ -8,6 +11,8 @@ from openorganisatie.organisatie.models.team import Team
 
 from ..filterset.team import TeamFilter
 from ..serializers.team import TeamSerializer
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 @extend_schema(tags=["Team"])
@@ -44,3 +49,32 @@ class TeamViewSet(RevisionMixin, viewsets.ModelViewSet):
     lookup_field = "uuid"
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        team = serializer.instance
+        logger.info(
+            "team_created",
+            uuid=str(team.uuid),
+            naam=team.naam,
+        )
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        team = serializer.instance
+        logger.info(
+            "team_updated",
+            uuid=str(team.uuid),
+            naam=team.naam,
+        )
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        logger.info(
+            "team_deleted",
+            uuid=str(instance.uuid),
+            naam=instance.naam,
+        )

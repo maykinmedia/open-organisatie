@@ -1,3 +1,6 @@
+from django.db import transaction
+
+import structlog
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from notifications_api_common.viewsets import NotificationViewSetMixin
 from rest_framework import viewsets
@@ -10,6 +13,8 @@ from openorganisatie.organisatie.models.medewerker import Medewerker
 
 from ..filterset.medewerker import MedewerkerFilter
 from ..serializers.medewerker import MedewerkerSerializer
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 @extend_schema(tags=["Medewerkers"])
@@ -47,3 +52,35 @@ class MedewerkerViewSet(RevisionMixin, NotificationViewSetMixin, viewsets.ModelV
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     notifications_kanaal = KANAAL_ORGANISATIE
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        medewerker = serializer.instance
+        logger.info(
+            "medewerker_created",
+            uuid=str(medewerker.uuid),
+            naam=medewerker.voornaam,
+            medewerker_id=medewerker.medewerker_id,
+        )
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        medewerker = serializer.instance
+        logger.info(
+            "medewerker_updated",
+            uuid=str(medewerker.uuid),
+            naam=medewerker.voornaam,
+            medewerker_id=medewerker.medewerker_id,
+        )
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        logger.info(
+            "medewerker_deleted",
+            uuid=str(instance.uuid),
+            naam=instance.voornaam,
+            medewerker_id=instance.medewerker_id,
+        )
