@@ -56,3 +56,17 @@ class GroupAPITests(APITestCase):
         data = response.json()
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["naam"], group1.name)
+
+    def test_filter_actief(self):
+        active_group = GroupFactory(active=True)
+        GroupFactory(active=False)
+
+        url = reverse("identiteit_api:group-list")
+        response = self.client.get(url, {"actief": "true"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["scim_external_id"],
+            str(active_group.scim_external_id),
+        )
