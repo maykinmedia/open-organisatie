@@ -61,7 +61,7 @@ class UserAPITests(APITestCase):
         UserFactory().groups.add(group2)
 
         url = reverse("identiteit_api:user-list")
-        response = self.client.get(url, {"groups": [group1.scim_external_id]})
+        response = self.client.get(url, {"groupsUuid": [group1.scim_external_id]})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)

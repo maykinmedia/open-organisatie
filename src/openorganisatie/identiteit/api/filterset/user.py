@@ -1,8 +1,12 @@
+from django.utils.translation import gettext_lazy as _
+
 import django_filters
 from vng_api_common.utils import get_help_text
 
-from openorganisatie.identiteit.models.group import Group
 from openorganisatie.identiteit.models.user import User
+from openorganisatie.utils.filters import (
+    UUIDFInFilter,
+)
 
 
 class UserFilter(django_filters.FilterSet):
@@ -17,12 +21,13 @@ class UserFilter(django_filters.FilterSet):
         label="Actief",
         help_text=get_help_text("identiteit.User", "is_active"),
     )
-    groups = django_filters.ModelMultipleChoiceFilter(
+    groups_uuid = UUIDFInFilter(
         field_name="groups__scim_external_id",
-        queryset=Group.objects.all(),
-        to_field_name="scim_external_id",
-        label="Groups",
-        help_text=get_help_text("identiteit.User", "groups"),
+        lookup_expr="in",
+        distinct=True,
+        help_text=_(
+            "scim_external_id's van de gekoppelde groepen (via SCIM external ID)."
+        ),
     )
     datum_toegevoegd = django_filters.IsoDateTimeFilter(
         field_name="date_joined",
