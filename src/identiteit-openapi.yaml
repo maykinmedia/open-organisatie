@@ -124,14 +124,15 @@ paths:
           type: string
         description: Functie van de medewerker (optioneel).
       - in: query
-        name: groups
+        name: groupsUuid
         schema:
           type: array
           items:
             type: string
-            nullable: true
-        description: Groups van de user.
-        explode: true
+            format: uuid
+        description: scim_external_id's van de gekoppelde groepen (via SCIM external
+          ID).
+        explode: false
         style: form
       - name: page
         required: false

@@ -61,7 +61,7 @@ class UserAPITests(APITestCase):
         UserFactory().groups.add(group2)
 
         url = reverse("identiteit_api:user-list")
-        response = self.client.get(url, {"groups": [group1.scim_external_id]})
+        response = self.client.get(url, {"groupsUuid": [group1.scim_external_id]})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -76,4 +76,55 @@ class UserAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(
             response.data["results"][0]["datum_toegevoegd"], m1.date_joined.isoformat()
+        )
+
+    def test_filter_datum_toegevoegd_gt(self):
+        UserFactory(date_joined=make_aware(datetime(2024, 12, 31)))
+        u2 = UserFactory(date_joined=make_aware(datetime(2025, 2, 1)))
+
+        url = reverse("identiteit_api:user-list")
+        response = self.client.get(url, {"datum_toegevoegd__gt": "2025-01-01"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["datum_toegevoegd"], u2.date_joined.isoformat()
+        )
+
+    def test_filter_datum_toegevoegd_lt(self):
+        u1 = UserFactory(date_joined=make_aware(datetime(2024, 12, 31)))
+        UserFactory(date_joined=make_aware(datetime(2025, 3, 1)))
+
+        url = reverse("identiteit_api:user-list")
+        response = self.client.get(url, {"datum_toegevoegd__lt": "2025-01-31"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["datum_toegevoegd"], u1.date_joined.isoformat()
+        )
+
+    def test_filter_functie(self):
+        u1 = UserFactory(job_title="Developer")
+        UserFactory(job_title="Manager")
+
+        url = reverse("identiteit_api:user-list")
+        response = self.client.get(url, {"functie": "dev"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["scim_external_id"], str(u1.scim_external_id)
+        )
+
+    def test_filter_actief(self):
+        active_user = UserFactory(is_active=True)
+        UserFactory(is_active=False)
+
+        url = reverse("identiteit_api:user-list")
+        response = self.client.get(url, {"actief": "true"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["scim_external_id"],
+            str(active_user.scim_external_id),
         )
