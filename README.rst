@@ -81,8 +81,8 @@ Quickstart
 Links
 =====
 
-* `Documentatie <https://openorganisatie.readthedocs.io/>`_
-* `Docker image <https://hub.docker.com/r/maykinmedia/openorganisatie>`_
+* `Documentatie <https://open-organisatie.readthedocs.io/>`_
+* `Docker image <https://hub.docker.com/r/maykinmedia/open-organisatie>`_
 * `Issues <https://github.com/maykinmedia/open-organisatie/issues>`_
 * `Code <https://github.com/maykinmedia/open-organisatie>`_
 
@@ -105,7 +105,7 @@ Licensed under the EUPL_
     :alt: Build status
     :target: https://github.com/maykinmedia/open-organisatie/actions/workflows/ci.yml
 
-.. |docs| image:: https://readthedocs.org/projects/openo-rganisatie/badge/?version=latest
+.. |docs| image:: https://readthedocs.org/projects/open-organisatie/badge/?version=latest
     :target: https://open-organisatie.readthedocs.io/
     :alt: Documentation Status
 
@@ -117,9 +117,9 @@ Licensed under the EUPL_
     :target: https://github.com/astral-sh/ruff
     :alt: Ruff
 
-.. |docker| image:: https://img.shields.io/docker/v/maykinmedia/openor-ganisatie?sort=semver
+.. |docker| image:: https://img.shields.io/docker/v/maykinmedia/open-organisatie?sort=semver
     :alt: Docker image
-    :target: https://hub.docker.com/r/maykinmedia/openor-ganisatie
+    :target: https://hub.docker.com/r/maykinmedia/open-organisatie
 
 .. |python-versions| image:: https://img.shields.io/badge/python-3.12%2B-blue.svg
     :alt: Supported Python version
