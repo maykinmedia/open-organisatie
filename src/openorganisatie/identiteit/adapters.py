@@ -23,7 +23,12 @@ class ReversionSCIMMixin:
         with create_revision():
             result = super().save()
 
-            set_comment("update via SCIM")
+            try:
+                comment_location = self.location
+                set_comment(f"Updated via SCIM - {comment_location}")
+            except Exception:
+                set_comment("Updated via SCIM")
+
         return result
 
 
