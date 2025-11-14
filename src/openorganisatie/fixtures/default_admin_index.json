@@ -2,7 +2,32 @@
     {
         "model": "admin_index.appgroup",
         "fields": {
-            "order": 0,
+            "order": 1,
+            "translations": {
+                "en": "API Authorisations"
+            },
+            "name": "API Autorisaties",
+            "slug": "api-autorisaties",
+            "models": [
+                [
+                    "authtoken",
+                    "tokenproxy"
+                ],
+                [
+                    "zgw_consumers",
+                    "certificate"
+                ],
+                [
+                    "zgw_consumers",
+                    "service"
+                ]
+            ]
+        }
+    },
+    {
+        "model": "admin_index.appgroup",
+        "fields": {
+            "order": 2,
             "translations": {
                 "en": "Identity"
             },
@@ -23,7 +48,7 @@
     {
         "model": "admin_index.appgroup",
         "fields": {
-            "order": 1,
+            "order": 3,
             "translations": {
                 "en": "Organisation"
             },
@@ -60,7 +85,7 @@
     {
         "model": "admin_index.appgroup",
         "fields": {
-            "order": 2,
+            "order": 4,
             "translations": {
                 "en": "Configuration"
             },
@@ -76,6 +101,10 @@
                     "outgoingrequestslogconfig"
                 ],
                 [
+                    "organisatie",
+                    "attribuutmappingconfig"
+                ],
+                [
                     "notifications_api_common",
                     "notificationsconfig"
                 ]
@@ -85,32 +114,7 @@
     {
         "model": "admin_index.appgroup",
         "fields": {
-            "order": 3,
-            "translations": {
-                "en": "API Authorisations"
-            },
-            "name": "API Autorisaties",
-            "slug": "api-autorisaties",
-            "models": [
-                [
-                    "authtoken",
-                    "tokenproxy"
-                ],
-                [
-                    "zgw_consumers",
-                    "certificate"
-                ],
-                [
-                    "zgw_consumers",
-                    "service"
-                ]
-            ]
-        }
-    },
-    {
-        "model": "admin_index.appgroup",
-        "fields": {
-            "order": 4,
+            "order": 5,
             "translations": {
                 "nl": "Gebruikers"
             },
@@ -151,7 +155,7 @@
     {
         "model": "admin_index.appgroup",
         "fields": {
-            "order": 5,
+            "order": 6,
             "translations": {
                 "nl": "logs"
             },
