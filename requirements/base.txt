@@ -60,7 +60,7 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
-commonground-api-common==2.10.4
+commonground-api-common==2.10.5
     # via open-api-framework
 cryptography==45.0.4
     # via
@@ -394,6 +394,7 @@ semantic-version==2.10.0
 sentry-sdk==2.30.0
     # via
     #   -r requirements/base.in
+    #   commonground-api-common
     #   open-api-framework
 six==1.17.0
     # via
