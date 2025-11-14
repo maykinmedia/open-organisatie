@@ -3,7 +3,7 @@ Open Organisatie
 ================
 
 :Version: 0.1.0
-:Source: https://github.com/maykinmedia/openorganisatie
+:Source: https://github.com/maykinmedia/open-organisatie
 :Keywords: ``organisation``
 
 |docs| |docker|
@@ -26,20 +26,39 @@ from Azure Entra ID or other applications.
 In Open Organisatie, employees and teams are stored. An employee contains data such as name, email address,  
 job title, and contact information. A team is a group of employees who together form a specific role or department within the organisation.
 
+Information model
+=================
+
+.. image:: docs/introduction/assets/informatiemodel-diagram.png
+   :alt: Open Organisatie informatiemodel
 
 API specification
 =================
 
-|oas|
+Identity
+--------
 
 ==============  ==============  =============================
-Version         Release date    API specification
+API version     Release date   API specification
 ==============  ==============  =============================
-latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/openorganisatie/api/openapi.yaml>`_,
-                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/openorganisatie/api/openapi.yaml>`_,
-                                (`diff <https://github.com/maykinmedia/open-organisatie/compare/0.1.0..main#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
-0.1.0           YYYY-MM-DD      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/openorganisatie/api/openapi.yaml>`_,
-                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/openorganisatie/api/openapi.yaml>`_
+latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/identiteit-openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/identiteit-openapi.yaml>`_,
+                                (`diff <https://github.com/maykinmedia/open-organisatie/compare/0.1.0..main>`_)
+0.1.0           YYYY-MM-DD      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/identiteit-openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/identiteit-openapi.yaml>`_
+==============  ==============  =============================
+
+Organisation
+-----------
+
+==============  ==============  =============================
+API version     Release date   API specification
+==============  ==============  =============================
+latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/organisatie-openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/organisatie-openapi.yaml>`_,
+                                (`diff <https://github.com/maykinmedia/open-organisatie/compare/0.1.0..main>`_)
+0.1.0           YYYY-MM-DD      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/organisatie-openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/organisatie-openapi.yaml>`_
 ==============  ==============  =============================
 
 Previous versions are supported for 6 month after the next version is released.
