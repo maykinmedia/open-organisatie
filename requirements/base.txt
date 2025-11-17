@@ -192,7 +192,6 @@ django-solo==2.4.0
     # via
     #   commonground-api-common
     #   django-log-outgoing-requests
-    #   mozilla-django-oidc-db
     #   notifications-api-common
     #   zgw-consumers
 django-structlog==9.1.1
@@ -286,7 +285,7 @@ mdurl==0.1.2
     # via markdown-it-py
 mozilla-django-oidc==4.0.1
     # via mozilla-django-oidc-db
-mozilla-django-oidc-db==0.23.0
+mozilla-django-oidc-db==1.1.0
     # via
     #   -r requirements/base.in
     #   open-api-framework
