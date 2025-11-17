@@ -16,6 +16,14 @@
                 [
                     "identiteit",
                     "group"
+                ],
+                [
+                    "mozilla_django_oidc_db",
+                    "oidcprovider"
+                ],
+                [
+                    "mozilla_django_oidc_db",
+                    "oidcclient"
                 ]
             ]
         }
