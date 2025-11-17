@@ -497,6 +497,7 @@ idna==3.10
     #   anyio
     #   httpx
     #   requests
+    #   yarl
 imagesize==1.4.1
     # via
     #   -c requirements/ci.txt
@@ -587,6 +588,11 @@ mozilla-django-oidc-db==1.1.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   open-api-framework
+multidict==6.7.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   yarl
 nh3==0.2.21
     # via
     #   -c requirements/ci.txt
@@ -722,6 +728,11 @@ prompt-toolkit==3.0.51
     #   -r requirements/ci.txt
     #   click-repl
     #   questionary
+propcache==0.4.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   yarl
 protobuf==6.33.1
     # via
     #   -c requirements/ci.txt
@@ -831,6 +842,7 @@ pyyaml==6.0.2
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
+    #   vcrpy
 qrcode==7.4.2
     # via
     #   -c requirements/ci.txt
@@ -1078,7 +1090,12 @@ urllib3==2.5.0
     #   elastic-apm
     #   requests
     #   sentry-sdk
+    #   vcrpy
 uwsgi==2.0.30
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+vcrpy==7.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -1127,6 +1144,12 @@ wrapt==1.17.2
     #   -r requirements/ci.txt
     #   elastic-apm
     #   opentelemetry-instrumentation
+    #   vcrpy
+yarl==1.22.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   vcrpy
 zgw-consumers==1.0.0
     # via
     #   -c requirements/ci.txt

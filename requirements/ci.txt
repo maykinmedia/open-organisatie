@@ -443,6 +443,7 @@ idna==3.10
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   requests
+    #   yarl
 imagesize==1.4.1
     # via sphinx
 importlib-metadata==8.7.0
@@ -521,6 +522,8 @@ mozilla-django-oidc-db==1.1.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
+multidict==6.7.0
+    # via yarl
 nh3==0.2.21
     # via
     #   -c requirements/base.txt
@@ -655,6 +658,8 @@ prompt-toolkit==3.0.51
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   click-repl
+propcache==0.4.1
+    # via yarl
 protobuf==6.33.1
     # via
     #   -c requirements/base.txt
@@ -758,6 +763,7 @@ pyyaml==6.0.2
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
+    #   vcrpy
 qrcode==7.4.2
     # via
     #   -c requirements/base.txt
@@ -947,10 +953,13 @@ urllib3==2.5.0
     #   elastic-apm
     #   requests
     #   sentry-sdk
+    #   vcrpy
 uwsgi==2.0.30
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+vcrpy==7.0.0
+    # via -r requirements/test-tools.in
 vine==5.1.0
     # via
     #   -c requirements/base.txt
@@ -985,6 +994,9 @@ wrapt==1.17.2
     #   -r requirements/base.txt
     #   elastic-apm
     #   opentelemetry-instrumentation
+    #   vcrpy
+yarl==1.22.0
+    # via vcrpy
 zgw-consumers==1.0.0
     # via
     #   -c requirements/base.txt
