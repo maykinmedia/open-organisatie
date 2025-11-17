@@ -9,6 +9,6 @@ django-webtest
 factory-boy
 freezegun
 pyquery  # integrates with webtest
-# vcrpy  # 'mocking' http requests
+vcrpy  # 'mocking' http requests
 tblib
 ruff
