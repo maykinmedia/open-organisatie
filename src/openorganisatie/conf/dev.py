@@ -16,6 +16,7 @@ os.environ.setdefault("DB_USER", "openorganisatie")
 os.environ.setdefault("DB_PASSWORD", "openorganisatie")
 
 os.environ.setdefault("ENVIRONMENT", "development")
+os.environ.setdefault("DISABLE_2FA", "True")
 os.environ.setdefault("LOG_FORMAT_CONSOLE", "plain_console")
 
 from .base import *  # noqa isort:skip
