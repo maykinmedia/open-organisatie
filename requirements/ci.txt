@@ -317,7 +317,6 @@ django-solo==2.4.0
     #   -r requirements/base.txt
     #   commonground-api-common
     #   django-log-outgoing-requests
-    #   mozilla-django-oidc-db
     #   notifications-api-common
     #   zgw-consumers
 django-structlog==9.1.1
@@ -433,6 +432,7 @@ idna==3.10
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   requests
+    #   yarl
 imagesize==1.4.1
     # via sphinx
 inflection==0.5.1
@@ -501,11 +501,13 @@ mozilla-django-oidc==4.0.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   mozilla-django-oidc-db
-mozilla-django-oidc-db==0.23.0
+mozilla-django-oidc-db==1.1.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   open-api-framework
+multidict==6.7.0
+    # via yarl
 nh3==0.2.21
     # via
     #   -c requirements/base.txt
@@ -561,6 +563,8 @@ prompt-toolkit==3.0.51
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   click-repl
+propcache==0.4.1
+    # via yarl
 psycopg==3.2.9
     # via
     #   -c requirements/base.txt
@@ -658,6 +662,7 @@ pyyaml==6.0.2
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
+    #   vcrpy
 qrcode==7.4.2
     # via
     #   -c requirements/base.txt
@@ -840,10 +845,13 @@ urllib3==2.5.0
     #   elastic-apm
     #   requests
     #   sentry-sdk
+    #   vcrpy
 uwsgi==2.0.30
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+vcrpy==7.0.0
+    # via -r requirements/test-tools.in
 vine==5.1.0
     # via
     #   -c requirements/base.txt
@@ -877,6 +885,9 @@ wrapt==1.17.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   elastic-apm
+    #   vcrpy
+yarl==1.22.0
+    # via vcrpy
 zgw-consumers==1.0.0
     # via
     #   -c requirements/base.txt
