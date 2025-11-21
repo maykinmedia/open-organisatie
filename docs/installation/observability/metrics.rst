@@ -89,13 +89,13 @@ Accounts
 Medewerkers
 -----------
 
-``openorganisatie.medewerkers.creates``
+``openorganisatie.medewerker.creates``
     Reports the number of medewerkers created via the API.
 
-``openorganisatie.medewerkers.updates``
+``openorganisatie.medewerker.updates``
     Reports the number of medewerkers updated via the API.
 
-``openorganisatie.medewerkers.deletes``
+``openorganisatie.medewerker.deletes``
     Reports the number of medewerkers deleted via the API.
 
 The medewerkers metrics show how many entities are created, updated, or deleted via the API,
@@ -105,4 +105,4 @@ helping to monitor load and the most frequent operations, and allow for various 
 
     .. code-block:: promql
 
-        sum by (otel_scope_name) (otel_openorganisatie_medewerkers_updates_total)
+        sum by (otel_scope_name) (otel_openorganisatie_medewerker_updates_total)
