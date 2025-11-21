@@ -19,4 +19,3 @@ configured to make all API's accessible.
    scim
    mapping
    api-authorizations
-   logging
