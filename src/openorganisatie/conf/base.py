@@ -144,7 +144,6 @@ REST_FRAMEWORK["EXCEPTION_HANDLER"] = "vng_api_common.views.exception_handler"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Open Organisatie API",
-    "DESCRIPTION": "......",
     "CONTACT": {
         "url": "https://github.com/maykinmedia/open-organisatie",
         "name": "Maykin Media",
