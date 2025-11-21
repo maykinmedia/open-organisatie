@@ -11,6 +11,11 @@ from reversion.views import RevisionMixin
 from openorganisatie.organisatie.kanalen import KANAAL_ORGANISATIE
 from openorganisatie.organisatie.models.medewerker import Medewerker
 
+from ...metrics import (
+    medewerkers_create_counter,
+    medewerkers_delete_counter,
+    medewerkers_update_counter,
+)
 from ..filterset.medewerker import MedewerkerFilter
 from ..serializers.medewerker import MedewerkerSerializer
 
@@ -63,6 +68,7 @@ class MedewerkerViewSet(RevisionMixin, NotificationViewSetMixin, viewsets.ModelV
             naam=medewerker.voornaam,
             medewerker_id=medewerker.medewerker_id,
         )
+        medewerkers_create_counter.add(1)
 
     @transaction.atomic
     def perform_update(self, serializer):
@@ -74,6 +80,7 @@ class MedewerkerViewSet(RevisionMixin, NotificationViewSetMixin, viewsets.ModelV
             naam=medewerker.voornaam,
             medewerker_id=medewerker.medewerker_id,
         )
+        medewerkers_update_counter.add(1)
 
     @transaction.atomic
     def perform_destroy(self, instance):
@@ -84,3 +91,4 @@ class MedewerkerViewSet(RevisionMixin, NotificationViewSetMixin, viewsets.ModelV
             naam=instance.voornaam,
             medewerker_id=instance.medewerker_id,
         )
+        medewerkers_delete_counter.add(1)
