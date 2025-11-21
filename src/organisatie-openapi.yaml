@@ -1,8 +1,33 @@
 openapi: 3.0.3
 info:
-  title: Open Organisatie API
+  title: Organisatie API
   version: 0.1.0
-  description: '......'
+  description: |2+
+
+    Een API voor Organisaties.
+
+    De Organisatie API heeft de volgende endpoints `medewerkers`, `teams`, `vestigingen`, `organisatorische eenheden`, `functies`, `functietypes`.
+
+    ### Notificaties
+
+    Deze API publiceert notificaties op het kanaal `medewerkers`.
+
+    **Main resource**
+
+    `medewerker`
+
+
+
+    **Kenmerken**
+
+    * `uuid`: Unieke resource identifier (UUID4)
+    * `medewerker_id`: ID van de medewerker.
+    * `voornaam`: Voornaam van de medewerker.
+    * `achternaam`: Achternaam van de medewerker.
+    * `emailadres`: E-mailadres van de medewerker.
+
+    **Resources en acties**
+
   contact:
     url: https://github.com/maykinmedia/open-organisatie
     name: Maykin Media

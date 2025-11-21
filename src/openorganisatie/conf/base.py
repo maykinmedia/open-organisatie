@@ -122,8 +122,10 @@ MIDDLEWARE += [
     "axes.middleware.AxesMiddleware",
 ]
 
-API_VERSION = "0.1.0"
-SCIM_API_MAJOR_VERSION = API_VERSION.split(".")[0]
+IDENTITEIT_API_VERSION = "0.1.0"
+ORGANISATIE_API_VERSION = "0.1.0"
+
+API_VERSION = "0"
 
 REST_FRAMEWORK = BASE_REST_FRAMEWORK.copy()
 
@@ -143,8 +145,6 @@ REST_FRAMEWORK["EXCEPTION_HANDLER"] = "vng_api_common.views.exception_handler"
 
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Open Organisatie API",
-    "DESCRIPTION": "......",
     "CONTACT": {
         "url": "https://github.com/maykinmedia/open-organisatie",
         "name": "Maykin Media",
