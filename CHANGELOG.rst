@@ -2,10 +2,11 @@
 Change history
 ==============
 
+0.1.0 (24-11-2025)
+==================
 
-0.1.0
-=====
+🎉 First release of Open Organisatie.
 
-*<month, day year>*
-
-* Initial release.
+Features:
+* Organisatie API
+* Identiteit API

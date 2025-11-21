@@ -20,9 +20,9 @@ monkeypatch_admin()
 handler500 = "maykin_common.views.server_error"
 
 admin.site.enable_nav_sidebar = False
-admin.site.site_header = "openorganisatie admin"
-admin.site.site_title = "openorganisatie admin"
-admin.site.index_title = "openorganisatie dashboard"
+admin.site.site_header = "Open Organisatie admin"
+admin.site.site_title = "Open Organisatie admin"
+admin.site.index_title = "Open Organisatie dashboard"
 
 
 # URL routing
