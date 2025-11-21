@@ -22,9 +22,12 @@ done
 
 >&2 echo "Database is up."
 
+# Set defaults for OTEL
+export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-openorganisatie}"
+
 # Apply database migrations
 >&2 echo "Apply database migrations"
-python src/manage.py migrate
+OTEL_SDK_DISABLED=True python src/manage.py migrate
 
 # Start server
 >&2 echo "Starting server"
