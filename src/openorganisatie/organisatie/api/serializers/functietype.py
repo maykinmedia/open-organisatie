@@ -7,3 +7,7 @@ class FunctieTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FunctieType
         fields = ["uuid", "naam", "slug"]
+
+        extra_kwargs = {
+            "uuid": {"read_only": True},
+        }

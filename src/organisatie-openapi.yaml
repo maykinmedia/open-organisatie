@@ -1401,6 +1401,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4) voor deze functie.
         functieOmschrijving:
           type: string
@@ -1430,12 +1431,14 @@ components:
       - functieOmschrijving
       - functieType
       - functietypeUuid
+      - uuid
     FunctieType:
       type: object
       properties:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4) voor dit functietype.
         naam:
           type: string
@@ -1449,6 +1452,7 @@ components:
       required:
       - naam
       - slug
+      - uuid
     GeslachtsaanduidingEnum:
       enum:
       - M
@@ -1473,6 +1477,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         medewerkerId:
           type: string
@@ -1558,6 +1563,7 @@ components:
       - medewerkerId
       - teams
       - url
+      - uuid
       - voornaam
     NestedFunctie:
       type: object
@@ -1665,6 +1671,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         identificatie:
           type: string
@@ -1703,7 +1710,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
           readOnly: true
-          description: Vestigingen waaraan de medewerker gekoppeld is.
+          description: De medewerker die contactpersoon is voor dit team.
+        contactpersoonUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+          description: De medewerker die contactpersoon is voor dit team.
         vestigingen:
           type: array
           items:
@@ -1743,6 +1755,7 @@ components:
       - identificatie
       - naam
       - soortOrganisatie
+      - uuid
       - vestigingen
     PaginatedFunctieList:
       type: object
@@ -1888,6 +1901,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4) voor deze functie.
         functieOmschrijving:
           type: string
@@ -1918,6 +1932,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4) voor dit functietype.
         naam:
           type: string
@@ -1942,6 +1957,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         medewerkerId:
           type: string
@@ -2024,6 +2040,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         identificatie:
           type: string
@@ -2062,7 +2079,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
           readOnly: true
-          description: Vestigingen waaraan de medewerker gekoppeld is.
+          description: De medewerker die contactpersoon is voor dit team.
+        contactpersoonUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+          description: De medewerker die contactpersoon is voor dit team.
         vestigingen:
           type: array
           items:
@@ -2102,6 +2124,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         naam:
           type: string
@@ -2114,7 +2137,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
           readOnly: true
-          description: Vestigingen waaraan de medewerker gekoppeld is.
+          description: De medewerker die contactpersoon is voor dit team.
+        contactpersoonUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+          description: De medewerker die contactpersoon is voor dit team.
         vestigingen:
           type: array
           items:
@@ -2149,6 +2177,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         vestigingsnummer:
           type: string
@@ -2188,6 +2217,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         naam:
           type: string
@@ -2200,7 +2230,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
           readOnly: true
-          description: Vestigingen waaraan de medewerker gekoppeld is.
+          description: De medewerker die contactpersoon is voor dit team.
+        contactpersoonUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+          description: De medewerker die contactpersoon is voor dit team.
         vestigingen:
           type: array
           items:
@@ -2233,6 +2268,7 @@ components:
       - contactpersoon
       - functies
       - naam
+      - uuid
       - vestigingen
     Vestiging:
       type: object
@@ -2240,6 +2276,7 @@ components:
         uuid:
           type: string
           format: uuid
+          readOnly: true
           description: Unieke resource identifier (UUID4)
         vestigingsnummer:
           type: string
@@ -2275,6 +2312,7 @@ components:
           maxLength: 2
       required:
       - naam
+      - uuid
       - vestigingsnummer
   securitySchemes:
     tokenAuth:

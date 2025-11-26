@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 from reversion.models import Version
 
 from openorganisatie.organisatie.models.factories.functie import FunctieFactory
+from openorganisatie.organisatie.models.factories.medewerker import MedewerkerFactory
 from openorganisatie.organisatie.models.factories.team import TeamFactory
 from openorganisatie.organisatie.models.factories.vestiging import VestigingFactory
 
@@ -135,6 +136,23 @@ class TeamAPITests(APITestCase):
         data = response.json()
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["uuid"], str(team1.uuid))
+
+    def test_create_team_with_contactpersoon(self):
+        url = reverse("organisatie_api:team-list")
+
+        medewerker = MedewerkerFactory()
+
+        data = {
+            "naam": "Nieuw Team",
+            "omschrijving": "Testteam",
+            "contactpersoon_uuid": str(medewerker.uuid),
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertIn("contactpersoon", response.data)
+        self.assertEqual(response.data["contactpersoon"]["uuid"], str(medewerker.uuid))
 
     def test_history(self):
         url = reverse("organisatie_api:team-list")

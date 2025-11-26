@@ -7,6 +7,8 @@ from openorganisatie.organisatie.models.organisatorische_eenheid import (
     OrganisatorischeEenheid,
 )
 
+from .medewerker import MedewerkerFactory
+
 fake = Faker()
 
 
@@ -21,6 +23,7 @@ class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
     telefoonnummer = factory.Faker("phone_number")
     datum_opheffing = None
     hoofd_organisatorische_eenheid = None
+    contactpersoon = factory.SubFactory(MedewerkerFactory)
 
     class Meta:
         model = OrganisatorischeEenheid

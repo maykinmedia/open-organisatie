@@ -44,3 +44,6 @@ class FunctieSerializer(serializers.ModelSerializer):
             "functie_type",
             "functietype_uuid",
         ]
+        extra_kwargs = {
+            "uuid": {"read_only": True},
+        }
