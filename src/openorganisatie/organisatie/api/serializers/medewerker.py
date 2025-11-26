@@ -62,3 +62,6 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "datum_toegevoegd",
             "datum_aangepast",
         ]
+        extra_kwargs = {
+            "uuid": {"read_only": True},
+        }

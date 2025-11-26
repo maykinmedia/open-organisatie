@@ -17,3 +17,6 @@ class VestigingSerializer(serializers.ModelSerializer):
             "telefoonnummer",
             "landcode",
         ]
+        extra_kwargs = {
+            "uuid": {"read_only": True},
+        }

@@ -61,7 +61,14 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
     contactpersoon = NestedMedewerkerSerializer(
         read_only=True,
         required=False,
-        help_text=get_help_text("organisatie.Team", "vestigingen"),
+        help_text=get_help_text("organisatie.Team", "contactpersoon"),
+    )
+    contactpersoon_uuid = UUIDRelatedField(
+        queryset=Medewerker.objects.all(),
+        write_only=True,
+        required=False,
+        help_text=get_help_text("organisatie.Team", "contactpersoon"),
+        source="contactpersoon",
     )
     vestigingen = VestigingSerializer(
         many=True,
@@ -109,12 +116,16 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
             "telefoonnummer",
             "datum_opheffing",
             "contactpersoon",
+            "contactpersoon_uuid",
             "vestigingen",
             "vestigingen_uuid",
             "functies",
             "functies_uuid",
             "hoofd_organisatorische_eenheid",
         ]
+        extra_kwargs = {
+            "uuid": {"read_only": True},
+        }
 
     def to_representation(self, instance):
         """Ensure hoofd_organisatorische_eenheid is serialized as a string UUID."""

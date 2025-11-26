@@ -6,6 +6,7 @@ from rest_framework.test import APIClient
 from reversion.models import Version
 
 from openorganisatie.organisatie.models.factories.functie import FunctieFactory
+from openorganisatie.organisatie.models.factories.medewerker import MedewerkerFactory
 from openorganisatie.organisatie.models.factories.organisatorische_eenheid import (
     OrganisatorischeEenheidFactory,
 )
@@ -188,6 +189,24 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(org1.uuid))
+
+    def test_create_organisatorische_eenheid_with_contactpersoon(self):
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
+
+        medewerker = MedewerkerFactory()
+
+        data = {
+            "identificatie": "9999",
+            "naam": "Team",
+            "soortOrganisatie": "Dienst",
+            "contactpersoon_uuid": str(medewerker.uuid),
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertIn("contactpersoon", response.data)
+        self.assertEqual(response.data["contactpersoon"]["uuid"], str(medewerker.uuid))
 
     def test_list_children_under_parent(self):
         parent = OrganisatorischeEenheidFactory()
