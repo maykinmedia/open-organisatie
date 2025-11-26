@@ -20,9 +20,9 @@ monkeypatch_admin()
 handler500 = "maykin_common.views.server_error"
 
 admin.site.enable_nav_sidebar = False
-admin.site.site_header = "openorganisatie admin"
-admin.site.site_title = "openorganisatie admin"
-admin.site.index_title = "openorganisatie dashboard"
+admin.site.site_header = "Open Organisatie admin"
+admin.site.site_title = "Open Organisatie admin"
+admin.site.index_title = "Open Organisatie dashboard"
 
 
 # URL routing
@@ -59,14 +59,14 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path(
-        f"organisatie/api/v{settings.SCIM_API_MAJOR_VERSION}/",
+        f"organisatie/api/v{settings.API_VERSION}/",
         include(
             ("openorganisatie.organisatie.api.urls", "organisatie_api"),
             namespace="organisatie_api",
         ),
     ),
     path(
-        f"identiteit/api/v{settings.SCIM_API_MAJOR_VERSION}/",
+        f"identiteit/api/v{settings.API_VERSION}/",
         include(
             ("openorganisatie.identiteit.api.urls", "identiteit_api"),
             namespace="identiteit_api",

@@ -1,8 +1,35 @@
 openapi: 3.0.3
 info:
-  title: Open Organisatie API
+  title: Identiteit API
   version: 0.1.0
-  description: '......'
+  description: |2+
+
+    Een API voor Identiteiten.
+
+    De Identiteiten API heeft 2 endpoints `group` en `users`.
+    Beide endpoints zijn **read-only**, wat betekent dat ze alleen gegevens kunnen ophalen en niet wijzigen.
+
+    Gegevens kunnen wel toegevoegd of gewijzigd worden via **SCIM**.
+
+    ### Notificaties
+
+    Deze API publiceert notificaties op het kanaal `users`.
+
+    **Main resource**
+
+    `user`
+
+
+
+    **Kenmerken**
+
+    * `scim_external_id`: A string that is an identifier for the resource as defined by the provisioning client.
+    * `username`: User principal name van de medewerker.
+    * `email`: E-mailadres van de medewerker.
+
+    **Resources en acties**
+
+
   contact:
     url: https://github.com/maykinmedia/open-organisatie
     name: Maykin Media

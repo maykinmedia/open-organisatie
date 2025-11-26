@@ -45,7 +45,7 @@ API versie      Release datum   API specificatie
 latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/identiteit-openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/identiteit-openapi.yaml>`_,
                                 (`diff <https://github.com/maykinmedia/open-organisatie/compare/0.1.0..main>`_)
-0.1.0           YYYY-MM-DD      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/identiteit-openapi.yaml>`_,
+0.1.0           2025-11-26      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/identiteit-openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/identiteit-openapi.yaml>`_
 ==============  ==============  =============================
 
@@ -58,7 +58,7 @@ API versie      Release datum   API specificatie
 latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/organisatie-openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/main/src/organisatie-openapi.yaml>`_,
                                 (`diff <https://github.com/maykinmedia/open-organisatie/compare/0.1.0..main>`_)
-0.1.0           YYYY-MM-DD      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/organisatie-openapi.yaml>`_,
+0.1.0           2025-11-26      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/organisatie-openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/organisatie-openapi.yaml>`_
 ==============  ==============  =============================
 

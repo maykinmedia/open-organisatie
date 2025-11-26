@@ -1,6 +1,6 @@
 {
   "name": "openorganisatie",
-  "version": "1.0.0-alpha.0",
+  "version": "0.1.0",
   "description": "openorganisatie project",
   "main": "src/static/openorganisatie/js/openorganisatie.js",
   "directories": {
