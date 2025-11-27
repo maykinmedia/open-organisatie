@@ -132,7 +132,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
             self.obj.employee_number = enterprise_ext.get("employeeNumber")
 
         logger.info(
-            "add_scim_medewerker",
+            "add_scim_user",
             username=str(self.obj.username),
             first_name=self.obj.first_name,
             last_name=self.obj.last_name,
@@ -166,7 +166,7 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
         self.save()
 
         logger.info(
-            "scim_medewerker_operations_applied",
+            "update_scim_user",
             username=str(self.obj.username),
             operations=operations,
         )
