@@ -4,6 +4,53 @@ requires-python = "== 3.12"
 [tool.uv.pip]
 emit-index-url = false
 
+# Bumpversion configuration
+
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = false
+tag = false
+pre_commit_hooks = [
+    "npm i", # ensure that package-lock.json is updated
+]
+
+parse = '''
+    (?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)
+    (\-(?P<pre>[a-z]+)\.(?P<build>\d+))?
+    '''
+
+serialize = [
+    "{major}.{minor}.{patch}-{pre}.{build}",
+    "{major}.{minor}.{patch}"
+]
+
+[tool.bumpversion.part.pre]
+first_value = "alpha"
+values = ["alpha", "beta", "rc"]
+
+[[tool.bumpversion.files]]
+filename = "src/openorganisatie/__init__.py"
+
+[[tool.bumpversion.files]]
+filename = "README.rst"
+search = ":Version: {current_version}"
+replace = ":Version: {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "README.EN.rst"
+search = ":Version: {current_version}"
+replace = ":Version: {new_version}"
+
+# [[tool.bumpversion.files]]
+# filename = "publiccode.yaml"
+# search = "softwareVersion: {current_version}"
+# replace = "softwareVersion: {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "package.json"
+search = "\"version\": \"{current_version}\""
+replace = "\"version\": \"{new_version}\""
+
 # Ruff configuration
 [tool.ruff]
 # Exclude folders and files
@@ -90,61 +137,6 @@ section-order = [
 
 [tool.ruff.lint.isort.sections]
 "django" = ["django"]
-
-[tool.bumpversion]
-current_version = "0.1.0"
-parse = """(?x)
-    (?P<major>0|[1-9]\\d*)\\.
-    (?P<minor>0|[1-9]\\d*)\\.
-    (?P<patch>0|[1-9]\\d*)
-    (?:
-        -                             # dash separator for pre-release section
-        (?P<pre_l>[a-zA-Z-]+)\\.      # pre-release label
-        (?P<pre_n>0|[1-9]\\d*)        # pre-release version number
-    )?                                # pre-release section is optional
-"""
-serialize = [
-    "{major}.{minor}.{patch}-{pre_l}.{pre_n}",
-    "{major}.{minor}.{patch}",
-]
-search = "{current_version}"
-replace = "{new_version}"
-regex = false
-ignore_missing_version = false
-ignore_missing_files = false
-tag = false
-sign_tags = false
-tag_name = "{new_version}"
-tag_message = ":arrow_up: Bump version to {new_version} and update changelog"
-allow_dirty = false
-commit = false
-message = ":arrow_up: Bump version to {new_version} and update changelog"
-commit_args = ""
-setup_hooks = []
-pre_commit_hooks = [
-    "npm i",  # ensure that package-lock.json is updated
-]
-post_commit_hooks = []
-
-[tool.bumpversion.parts.pre_l]
-values = ["dev", "beta", "rc", "final"]
-optional_value = "final"
-
-[[tool.bumpversion.files]]
-filename = "src/{{ project_name|lower }}/__init__.py"
-
-[[tool.bumpversion.files]]
-filename = "src/{{ project_name|lower }}/conf/locale/nl/LC_MESSAGES/django.po"
-
-[[tool.bumpversion.files]]
-filename = "README.rst"
-search = ":Version: {current_version}"
-replace = ":Version: {new_version}"
-
-[[tool.bumpversion.files]]
-filename = "package.json"
-search = "    \"version\": \"{current_version}\""
-replace = "    \"version\": \"{new_version}\""
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api.logging]
 msg = "Use `structlog.stdlib.get_logger(__name__)` instead."
