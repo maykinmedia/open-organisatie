@@ -1,10 +1,12 @@
-{% extends "master.html" %}
-{% block content %}
-<div class="title">
-    <h1 class="title__header">{{ settings.PROJECT_NAME }} API</h1>
-    <p class="title__description">{{ settings.SITE_TITLE }}</p>
-</div>
-<div class="container container--center">
+{% extends "maykin_common/api/index_base.html" %}
+{% load i18n %}
+
+
+{% block page_title %}{{ settings.PROJECT_NAME }} API{% endblock %}
+{% block page_subtitle %}{{ settings.SITE_TITLE }}{% endblock page_subtitle %}
+
+
+{% block content_nl %}
     <p>
         Open Organisatie is een applicatie waarin medewerkers en teams centraal beheerd kunnen worden.
         Andere systemen kunnen via een REST API communiceren met Open Organisatie om bijvoorbeeld
@@ -18,26 +20,47 @@
         opgehaald en gesynchroniseerd via het SCIM-protocol (System for Cross-domain Identity
         Management) vanuit Azure Entra ID of andere applicaties.
     </p>
+{% endblock content_nl %}
+
+
+{% block content_en %}
     <p>
-        <b>Licensed under the <a class="link"
-                href="https://github.com/maykinmedia/open-organisatie/blob/main/LICENSE.md">
-                European Union Public License (EUPL) 1.2</a></b>
+        Open Organization is an application in which employees and teams can be managed.
+        Other systems can communicate with Open Organization via a REST API to for example retrieve employee data or manage teams.
     </p>
     <p>
-        <a href="{% url 'identiteit_api:schema-redoc-identiteit' %}" class="button"><i class="fas fa-file-alt"></i>
-            Identiteit
-            API
-            specification</a>
+        In Open Organization, employees and teams are stored. An employee contains information such as name, email address, job position, 
+        and contact details. A team is a group of employees who together form a certain role or department within the organization. 
+        Teams are linked to one or more locations and organizational units.
+        The data of employees and teams is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management) 
+        from Azure Entra ID or other applications.
     </p>
-    <p>
-        <a href="{% url 'organisatie_api:schema-redoc-organisatie' %}" class="button"><i class="fas fa-file-alt"></i>
-            Organisatie
-            API
-            specification</a>
-    </p>
-    <p>
-        <a href="{% url 'admin:index' %}" class="button button--alert"><i class="fas fa-lock"></i>
-            Beheer</a>
-    </p>
-</div>
+{% endblock content_en %}
+
+
+{% block license_link %}https://github.com/maykinmedia/open-organisatie/blob/main/LICENSE.md{% endblock %}
+
+
+{% block api_links %}
+    {% url "schema-redoc-producten" as api_docs_producten %}
+    {% url "schema-redoc-producttypen" as api_docs_producttypen %}
+
+    <a href="{% url 'identiteit_api:schema-redoc-identiteit' %}" class="button">
+        <i class="fas fa-file-alt"></i>
+        {% trans "Identiteit API specification" %}
+    </a>
+
+    <a href="{% url 'organisatie_api:schema-redoc-organisatie' %}" class="button">
+        <i class="fas fa-file-alt"></i>
+        {% trans "Organisatie API specification" %}
+    </a>
+{% endblock %}
+
+{% block extra_buttons %}
+    <div class="button-group">
+        <a href="https://github.com/maykinmedia/open-organisatie/blob/main/src/notificaties.md" class="button">
+            <i class="fas fa-bullhorn"></i>
+            {% trans "Notifications" %}
+        </a>
+    </div>
 {% endblock %}

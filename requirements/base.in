@@ -20,6 +20,7 @@ django-scim2
 django-structlog
 django-reversion
 django-reversion-compare
+django-capture-tag
 
 # API libraries
 # djangorestframework

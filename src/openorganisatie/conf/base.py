@@ -106,6 +106,7 @@ INSTALLED_APPS += [
     "reversion",
     "reversion_compare",
     "maykin_common",
+    "capture_tag",
     # Project applications.
     "openorganisatie.accounts",
     "openorganisatie.utils",
