@@ -42,9 +42,6 @@
 
 
 {% block api_links %}
-    {% url "schema-redoc-producten" as api_docs_producten %}
-    {% url "schema-redoc-producttypen" as api_docs_producttypen %}
-
     <a href="{% url 'identiteit_api:schema-redoc-identiteit' %}" class="button">
         <i class="fas fa-file-alt"></i>
         {% trans "Identiteit API specification" %}
