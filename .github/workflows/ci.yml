@@ -139,3 +139,23 @@ jobs:
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
+
+  test-branch-regex:
+    name: Test branch version regex
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/') }}
+
+    steps:
+      - name: Extract branch name
+        run: |
+          BRANCH="${GITHUB_HEAD_REF}"
+          echo "'$BRANCH'"
+
+          echo "=== Branch regex test ==="
+
+          if [[ "$BRANCH" =~ ^v?[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "Branch '$BRANCH' matches pattern"
+          else
+            echo "Branch '$BRANCH' does NOT match pattern"
+          fi
