@@ -21,7 +21,8 @@
   "homepage": "https://maykinmedia.nl",
   "dependencies": {
     "microscope-sass": "latest",
-    "yargs": "^16.2.0"
+    "yargs": "^16.2.0",
+    "@fortawesome/fontawesome-free": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "latest",

@@ -129,6 +129,8 @@ django-axes==8.0.0
     #   -r requirements/base.in
     #   maykin-common
     #   open-api-framework
+django-capture-tag==1.0
+    # via -r requirements/base.in
 django-cors-headers==4.7.0
     # via open-api-framework
 django-csp==4.0
