@@ -140,22 +140,40 @@ jobs:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
 
-  test-branch-regex:
-    name: Test branch version regex
+  test-stable-version-sorting:
+    name: Test stable version sorting logic
     runs-on: ubuntu-latest
 
-    if: ${{ github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/') }}
-
     steps:
-      - name: Extract branch name
+      - name: Run stable tag logic (list-based)
         run: |
-          BRANCH="${GITHUB_HEAD_REF}"
-          echo "'$BRANCH'"
+          TAG_NAME="10.0.0"  
 
-          echo "=== Branch regex test ==="
+          VERSIONS=(
+            "0.9.9"
+            "1.0.0"
+            "1.2"
+            "1.2.3"
+            "1.10.0"
+            "1.11.0"
+            "2.0"
+            "2.0.1"
+            "10.0.0"
+            "1.2.3-alpha"
+            "v2.1.0"
+          )
 
-          if [[ "$BRANCH" =~ ^v?[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
-            echo "Branch '$BRANCH' matches pattern"
+          if [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            LATEST_TAG=$(printf "%s\n" "${VERSIONS[@]}" | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?$' | sort -V | tail -n1)
+
+
+            if [[ "$TAG_NAME" == "$LATEST_TAG" ]]; then
+              echo "TAG_NAME is latest — stable tag WOULD be pushed"
+            else
+              echo "TAG_NAME is not latest — stable tag would NOT be pushed"
+              exit 1
+            fi
           else
-            echo "Branch '$BRANCH' does NOT match pattern"
+            echo "TAG_NAME is not a stable version"
+            exit 1
           fi
