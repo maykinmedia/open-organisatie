@@ -139,3 +139,41 @@ jobs:
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
+
+  test-stable-version-sorting:
+    name: Test stable version sorting logic
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run stable tag logic (list-based)
+        run: |
+          TAG_NAME="10.0.0"  
+
+          VERSIONS=(
+            "0.9.9"
+            "1.0.0"
+            "1.2"
+            "1.2.3"
+            "1.10.0"
+            "1.11.0"
+            "2.0"
+            "2.0.1"
+            "10.0.0"
+            "1.2.3-alpha"
+            "v2.1.0"
+          )
+
+          if [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            LATEST_TAG=$(printf "%s\n" "${VERSIONS[@]}" | grep -E '^[0-9]+\.[0-9]+(\.[0-9]+)?$' | sort -V | tail -n1)
+
+
+            if [[ "$TAG_NAME" == "$LATEST_TAG" ]]; then
+              echo "TAG_NAME is latest — stable tag WOULD be pushed"
+            else
+              echo "TAG_NAME is not latest — stable tag would NOT be pushed"
+              exit 1
+            fi
+          else
+            echo "TAG_NAME is not a stable version"
+            exit 1
+          fi
