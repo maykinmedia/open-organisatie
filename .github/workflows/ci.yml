@@ -128,7 +128,7 @@ jobs:
       django-settings-module: openorganisatie.conf.ci
 
   open-api-publish:
-    uses: maykinmedia/open-api-workflows/.github/workflows/publish.yml@v6
+    uses: maykinmedia/open-api-workflows/.github/workflows/publish.yml@main
     needs:
       - store-reusable-workflow-vars
       - open-api-ci
