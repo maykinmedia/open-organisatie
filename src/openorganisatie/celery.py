@@ -32,7 +32,7 @@ app.autodiscover_tasks()
 # Use django's logging settings as these are reset by Celery by default
 @setup_logging.connect()
 def receiver_setup_logging(
-    loglevel, logfile, _format, colorize, **kwargs
+    loglevel, logfile, format, colorize, **kwargs
 ):  # pragma: no cover
     logging.config.dictConfig(
         {

@@ -64,7 +64,6 @@ exclude = [
 [tool.ruff.lint]
 extend-select = [
     "B",   # flake8-bugbear
-    "A",   # flake8-builtins
     "DJ",  # django
     "ISC", # flake8-implicit-str-concat
     "LOG", # logging
