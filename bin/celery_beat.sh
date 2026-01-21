@@ -7,8 +7,6 @@ LOGLEVEL=${CELERY_LOGLEVEL:-INFO}
 mkdir -p celerybeat
 
 echo "Starting celery beat"
-exec celery beat \
-    --app openorganisatie \
+exec celery --workdir src --app openorganisatie beat \
     -l $LOGLEVEL \
-    --workdir src \
     -s ../celerybeat/beat
