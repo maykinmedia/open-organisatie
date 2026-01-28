@@ -22,35 +22,54 @@ services:
       context: .
     image: maykinmedia/open-organisatie:latest
     environment: &web_env
-      - DJANGO_SETTINGS_MODULE=openorganisatie.conf.docker
-      - SECRET_KEY=${SECRET_KEY:-django-insecure-scl%uga+2ji^oa)1_*bdm^40dpn4*+gw83mw3a5=6l4(k%by&}
-      - DB_NAME=openorganisatie
-      - DB_USER=openorganisatie
-      - DB_HOST=db
-      - CACHE_DEFAULT=redis:6379/0
-      - CACHE_AXES=redis:6379/0
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      DJANGO_SETTINGS_MODULE: openorganisatie.conf.docker
+      SECRET_KEY: ${SECRET_KEY:-django-insecure-scl%uga+2ji^oa)1_*bdm^40dpn4*+gw83mw3a5=6l4(k%by&}
+      DB_NAME: openorganisatie
+      DB_USER: openorganisatie
+      DB_HOST: db
+      DISABLE_2FA: true
+      CACHE_DEFAULT: redis:6379/0
+      CACHE_AXES: redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
       # Only allow all hosts for development/testing purposes!
-      - ALLOWED_HOSTS=localhost,127.0.0.1,web,web.local
-
+      ALLOWED_HOSTS: localhost,127.0.0.1,web,web.local
       # Enabling Open Telemetry requires the services in docker/docker-compose.observability.yaml
       # to be up and running.
-      - OTEL_SDK_DISABLED=${OTEL_SDK_DISABLED:-true}
-      - OTEL_RESOURCE_ATTRIBUTES=maykin.saas.client=maykin,maykin.saas.target=dev
-      - OTEL_METRIC_EXPORT_INTERVAL=${OTEL_METRIC_EXPORT_INTERVAL:-60000}
-      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4317}  # gRPC
+      OTEL_SDK_DISABLED: ${OTEL_SDK_DISABLED:-true}
+      OTEL_RESOURCE_ATTRIBUTES: maykin.saas.client=maykin,maykin.saas.target=dev
+      OTEL_METRIC_EXPORT_INTERVAL: ${OTEL_METRIC_EXPORT_INTERVAL:-60000}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4317}  # gRPC
       # otel:supersecret, escape spaces and = with percent encoding
-      - OTEL_EXPORTER_OTLP_HEADERS=Authorization=Basic b3RlbDpzdXBlcnNlY3JldA==
-      - OTEL_EXPORTER_OTLP_METRICS_INSECURE=${OTEL_EXPORTER_OTLP_METRICS_INSECURE:-true}
-      - _OTEL_ENABLE_CONTAINER_RESOURCE_DETECTOR=true
+      OTEL_EXPORTER_OTLP_HEADERS: Authorization=Basic b3RlbDpzdXBlcnNlY3JldA==
+      OTEL_EXPORTER_OTLP_METRICS_INSECURE: ${OTEL_EXPORTER_OTLP_METRICS_INSECURE:-true}
+      _OTEL_ENABLE_CONTAINER_RESOURCE_DETECTOR: true
     ports:
       - 8000:8000
     depends_on:
-      - db
+      db:
+        condition: service_started
+      web-init:
+        condition: service_completed_successfully
     labels:
       - app=open-organisatie
       - service=api
+    networks:
+      - open-organisatie-dev
+
+  web-init:
+    build: *web_build
+    image: maykinmedia/open-organisatie:latest
+    environment:
+      <<: *web_env
+      # Django-setup-configuration
+      RUN_SETUP_CONFIG: ${RUN_SETUP_CONFIG:-true}
+    command: sh -c "/setup_configuration.sh"
+    volumes:
+      - ./docker/setup_configuration:/app/setup_configuration
+    depends_on:
+      - db
+      - redis
     networks:
       - open-organisatie-dev
 

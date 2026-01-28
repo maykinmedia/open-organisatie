@@ -70,10 +70,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 
 WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
-# Uncomment if you use celery
+COPY ./bin/wait_for_db.sh /wait_for_db.sh
+
 COPY ./bin/celery_worker.sh /celery_worker.sh
 COPY ./bin/celery_beat.sh /celery_beat.sh
 COPY ./bin/celery_flower.sh /celery_flower.sh
+
+COPY ./bin/setup_configuration.sh /setup_configuration.sh
 COPY ./bin/uwsgi.ini /
 RUN mkdir /app/bin /app/log /app/media
 
