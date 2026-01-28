@@ -78,14 +78,13 @@ COPY ./bin/celery_flower.sh /celery_flower.sh
 
 COPY ./bin/setup_configuration.sh /setup_configuration.sh
 COPY ./bin/uwsgi.ini /
-RUN mkdir /app/bin /app/log /app/media
+RUN mkdir /app/bin /app/log /app/media /app/tmp
 
 VOLUME ["/app/log", "/app/media"]
 
 # copy backend build deps
 COPY --from=backend-build /usr/local/lib/python3.12 /usr/local/lib/python3.12
 COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
-# Uncomment if you use celery
 COPY --from=backend-build /usr/local/bin/celery /usr/local/bin/celery
 COPY --from=backend-build /app/src/ /app/src/
 
