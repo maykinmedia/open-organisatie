@@ -107,6 +107,7 @@ linkcheck_ignore = [
     r"https?://.*\.gemeente.nl",
     r"http://localhost:\d+,https?://.*\.gemeente.nl",
     r"https://.*sentry.*",
+    r"https://opentelemetry\.io/docs/.*",  # times out frequently, even with 30s timeouts
 ]
 
 sphinx_tabs_valid_builders = ["linkcheck"]
