@@ -18,3 +18,4 @@ projects: ["maykinmedia/15"]
   - [ ] Update READMEs with release dates + links
 - [ ] Bump version number with `bin/bump-my-version.sh bump <major|minor|patch>`
 - [ ] Update changelog
+- [ ] Update ``docs/introduction/versioning.rst``

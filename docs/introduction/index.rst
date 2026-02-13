@@ -29,4 +29,5 @@ a separate package, `Open Notificaties`_.
    architecture
    uml-diagram
    open-source/index
+   versioning
 
