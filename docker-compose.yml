@@ -15,12 +15,12 @@ services:
   redis:
     image: redis
     networks:
-      - open-organisatie-dev 
+      - open-organisatie-dev
 
   web:
-    build: &web_build
+    build:
       context: .
-    image: maykinmedia/open-organisatie:latest
+    image: maykinmedia/open-organisatie:${TAG:-latest}
     environment: &web_env
       DJANGO_SETTINGS_MODULE: openorganisatie.conf.docker
       SECRET_KEY: ${SECRET_KEY:-django-insecure-scl%uga+2ji^oa)1_*bdm^40dpn4*+gw83mw3a5=6l4(k%by&}
@@ -58,8 +58,7 @@ services:
       - open-organisatie-dev
 
   web-init:
-    build: *web_build
-    image: maykinmedia/open-organisatie:latest
+    image: maykinmedia/open-organisatie:${TAG:-latest}
     environment:
       <<: *web_env
       # Django-setup-configuration
@@ -74,8 +73,7 @@ services:
       - open-organisatie-dev
 
   celery:
-    build: *web_build
-    image: maykinmedia/open-organisatie:latest
+    image: maykinmedia/open-organisatie:${TAG:-latest}
     environment: *web_env
     command: /celery_worker.sh
     healthcheck:
@@ -92,8 +90,7 @@ services:
       - open-organisatie-dev
 
   celery-beat:
-    build: *web_build
-    image: maykinmedia/open-organisatie:latest
+    image: maykinmedia/open-organisatie:${TAG:-latest}
     environment: *web_env
     command: /celery_beat.sh
     depends_on:
@@ -102,8 +99,7 @@ services:
       - open-organisatie-dev
 
   celery-flower:
-    build: *web_build
-    image: maykinmedia/open-organisatie:latest
+    image: maykinmedia/open-organisatie:${TAG:-latest}
     environment: *web_env
     command: /celery_flower.sh
     ports:
