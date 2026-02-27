@@ -32,7 +32,7 @@ boltons==25.0.0
     # via
     #   face
     #   glom
-cbor2==5.6.5
+cbor2==5.8.0
     # via webauthn
 celery==5.5.3
     # via
@@ -44,7 +44,7 @@ certifi==2025.6.15
     #   elastic-apm
     #   requests
     #   sentry-sdk
-cffi==1.17.1
+cffi==2.0.0
     # via cryptography
 charset-normalizer==3.4.2
     # via requests
@@ -62,7 +62,7 @@ click-repl==0.3.0
     # via celery
 commonground-api-common==2.10.7
     # via open-api-framework
-cryptography==45.0.4
+cryptography==46.0.5
     # via
     #   django-simple-certmanager
     #   josepy
@@ -71,7 +71,7 @@ cryptography==45.0.4
     #   webauthn
 diff-match-patch==20241021
     # via django-reversion-compare
-django==5.2.9
+django==5.2.11
     # via
     #   -r requirements/base.in
     #   commonground-api-common
@@ -367,7 +367,7 @@ prometheus-client==0.23.1
     # via flower
 prompt-toolkit==3.0.51
     # via click-repl
-protobuf==6.33.1
+protobuf==6.33.5
     # via
     #   googleapis-common-protos
     #   opentelemetry-proto
@@ -395,7 +395,7 @@ pyjwt==2.10.1
     # via
     #   commonground-api-common
     #   zgw-consumers
-pyopenssl==25.1.0
+pyopenssl==25.3.0
     # via webauthn
 pypng==0.20220715.0
     # via qrcode
@@ -471,7 +471,7 @@ sly==0.5
     # via scim2-filter-parser
 smartypants==2.0.2
     # via django-markup
-sqlparse==0.5.3
+sqlparse==0.5.5
     # via django
 structlog==25.4.0
     # via
