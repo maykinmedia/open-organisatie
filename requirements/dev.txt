@@ -557,7 +557,6 @@ markdown==3.8.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-markup
-    #   sphinx-markdown-tables
 markdown-it-py==4.0.0
     # via
     #   -c requirements/ci.txt
@@ -892,6 +891,11 @@ rich==14.1.0
     #   rich-click
 rich-click==1.8.9
     # via bump-my-version
+roman-numerals==4.1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   sphinx
 rpds-py==0.26.0
     # via
     #   -c requirements/ci.txt
@@ -960,7 +964,7 @@ soupsieve==2.7
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   beautifulsoup4
-sphinx==8.0.2
+sphinx==9.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -969,11 +973,7 @@ sphinx==8.0.2
     #   sphinx-rtd-theme
     #   sphinx-tabs
     #   sphinxcontrib-jquery
-sphinx-markdown-tables==0.0.15
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-sphinx-rtd-theme==3.0.2
+sphinx-rtd-theme==3.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -987,7 +987,7 @@ sphinxcontrib-applehelp==2.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   sphinx
-sphinxcontrib-devhelp==1.0.1
+sphinxcontrib-devhelp==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -1007,7 +1007,7 @@ sphinxcontrib-jsmath==1.0.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   sphinx
-sphinxcontrib-qthelp==1.0.2
+sphinxcontrib-qthelp==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
