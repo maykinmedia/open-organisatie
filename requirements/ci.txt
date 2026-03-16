@@ -134,7 +134,7 @@ diff-match-patch==20241021
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-reversion-compare
-django==5.2.11
+django==5.2.12
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -709,7 +709,7 @@ pygments==2.19.2
     #   rich
     #   sphinx
     #   sphinx-tabs
-pyjwt==2.10.1
+pyjwt==2.12.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -908,7 +908,7 @@ textile==4.0.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
-tornado==6.5.2
+tornado==6.5.5
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
