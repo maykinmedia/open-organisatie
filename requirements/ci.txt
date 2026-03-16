@@ -134,7 +134,7 @@ diff-match-patch==20241021
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-reversion-compare
-django==5.2.11
+django==5.2.12
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -494,7 +494,6 @@ markdown==3.8.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
-    #   sphinx-markdown-tables
 markdown-it-py==4.0.0
     # via
     #   -c requirements/base.txt
@@ -643,10 +642,6 @@ phonenumberslite==8.13.55
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-two-factor-auth
-pillow==12.0.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
 polib==1.2.0
     # via
     #   -c requirements/base.txt
@@ -709,7 +704,7 @@ pygments==2.19.2
     #   rich
     #   sphinx
     #   sphinx-tabs
-pyjwt==2.10.1
+pyjwt==2.12.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -809,6 +804,8 @@ rich==14.1.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-reversion-compare
+roman-numerals==4.1.0
+    # via sphinx
 rpds-py==0.26.0
     # via
     #   -c requirements/base.txt
@@ -864,22 +861,20 @@ snowballstemmer==3.0.1
     # via sphinx
 soupsieve==2.7
     # via beautifulsoup4
-sphinx==8.0.2
+sphinx==9.1.0
     # via
     #   -r requirements/docs.in
     #   recommonmark
     #   sphinx-rtd-theme
     #   sphinx-tabs
     #   sphinxcontrib-jquery
-sphinx-markdown-tables==0.0.15
-    # via -r requirements/docs.in
-sphinx-rtd-theme==3.0.2
+sphinx-rtd-theme==3.1.0
     # via -r requirements/docs.in
 sphinx-tabs==3.4.7
     # via -r requirements/docs.in
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
-sphinxcontrib-devhelp==1.0.1
+sphinxcontrib-devhelp==2.0.0
     # via sphinx
 sphinxcontrib-htmlhelp==2.1.0
     # via sphinx
@@ -887,7 +882,7 @@ sphinxcontrib-jquery==4.1
     # via sphinx-rtd-theme
 sphinxcontrib-jsmath==1.0.1
     # via sphinx
-sphinxcontrib-qthelp==1.0.2
+sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
@@ -908,7 +903,7 @@ textile==4.0.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-markup
-tornado==6.5.2
+tornado==6.5.5
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
