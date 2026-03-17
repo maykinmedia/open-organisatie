@@ -54,13 +54,13 @@ class MedewerkerSerializer(serializers.ModelSerializer):
             "emailadres",
             "telefoonnummer",
             "geslachtsaanduiding",
-            "datum_uit_dienst",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
             "teams",
             "teams_uuids",
             "functies",
             "functies_uuids",
-            "datum_toegevoegd",
-            "datum_aangepast",
         ]
         extra_kwargs = {
             "uuid": {"read_only": True},

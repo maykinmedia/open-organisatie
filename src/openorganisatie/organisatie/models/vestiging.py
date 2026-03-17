@@ -10,20 +10,21 @@ class Vestiging(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4)"),
     )
-    vestigingsnummer = models.CharField(
-        max_length=50,
-        unique=True,
-        help_text=_("Unieke identificatiecode of nummer van de vestiging."),
-    )
     naam = models.CharField(
         max_length=100,
         unique=True,
         help_text=_("Volledige naam van de vestiging."),
     )
-    verkorte_naam = models.CharField(
+    vestigingsnummer = models.CharField(
+        max_length=50,
+        unique=True,
+        blank=True,
+        help_text=_("Unieke identificatiecode of nummer van de vestiging."),
+    )
+    kvk_nummer = models.CharField(
         max_length=50,
         blank=True,
-        help_text=_("Afkorting of korte naam van de vestiging."),
+        help_text=_("KVK nummer van de vestiging."),
     )
     adres = models.CharField(
         max_length=255,
@@ -44,11 +45,6 @@ class Vestiging(models.Model):
         max_length=50,
         blank=True,
         help_text=_("Telefoonnummer van de vestiging (optioneel)."),
-    )
-    landcode = models.CharField(
-        max_length=2,
-        blank=True,
-        help_text=_("ISO-landcode van de vestiging (bijv. NL, BE)."),
     )
 
     class Meta:

@@ -9,12 +9,12 @@ class FunctieAdmin(ReadOnlyCompareVersionAdmin):
     list_display = (
         "functie_omschrijving",
         "functie_type",
-        "begin_datum",
-        "eind_datum",
+        "startdatum",
+        "einddatum",
     )
-    list_filter = ("functie_type", "begin_datum", "eind_datum")
+    list_filter = ("functie_type", "startdatum", "einddatum")
     search_fields = ("functie_omschrijving", "functie_type__naam")
-    ordering = ("-begin_datum",)
+    ordering = ("-startdatum",)
     readonly_fields = ("uuid",)
 
     fieldsets = (
@@ -32,8 +32,9 @@ class FunctieAdmin(ReadOnlyCompareVersionAdmin):
             "Periode",
             {
                 "fields": (
-                    "begin_datum",
-                    "eind_datum",
+                    "startdatum",
+                    "einddatum",
+                    "wijzigingsdatum",
                 ),
             },
         ),

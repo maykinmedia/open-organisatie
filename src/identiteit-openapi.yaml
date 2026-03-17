@@ -147,11 +147,6 @@ paths:
           format: date-time
         description: Datum waarop de medewerker is toegevoegd.
       - in: query
-        name: functie
-        schema:
-          type: string
-        description: Functie van de medewerker (optioneel).
-      - in: query
         name: groupsUuid
         schema:
           type: array
@@ -321,25 +316,11 @@ components:
           type: string
           readOnly: true
           description: User principal name van de medewerker.
-        voornaam:
-          type: string
-          readOnly: true
-          description: Voornaam van de medewerker.
-        achternaam:
-          type: string
-          readOnly: true
-          description: Achternaam van de medewerker.
         emailadres:
           type: string
           format: email
           readOnly: true
           description: E-mailadres van de medewerker.
-        telefoonnummer:
-          type: string
-          description: Telefoonnummer van de medewerker (optioneel).
-        titel:
-          type: string
-          description: Functie van de medewerker (optioneel).
         isActive:
           type: boolean
           readOnly: true
@@ -361,7 +342,6 @@ components:
           readOnly: true
           description: Datum waarop de medewerker voor het laatst is gewijzigd.
       required:
-      - achternaam
       - datumToegevoegd
       - emailadres
       - groups
@@ -370,7 +350,6 @@ components:
       - scimExternalId
       - url
       - username
-      - voornaam
   securitySchemes:
     tokenAuth:
       type: apiKey

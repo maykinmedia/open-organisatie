@@ -10,12 +10,6 @@ from openorganisatie.utils.filters import (
 
 
 class UserFilter(django_filters.FilterSet):
-    functie = django_filters.CharFilter(
-        field_name="job_title",
-        lookup_expr="icontains",
-        label="Functie",
-        help_text=get_help_text("identiteit.User", "job_title"),
-    )
     actief = django_filters.BooleanFilter(
         field_name="is_active",
         label="Actief",

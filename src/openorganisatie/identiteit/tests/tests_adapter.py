@@ -22,8 +22,6 @@ class MedewerkerAdapterTest(TestCase):
         self.medewerker = User.objects.create(
             scim_external_id=str(uuid.uuid4()),
             username="Test@test.nl",
-            first_name="John",
-            last_name="Doe",
             email="john.doe@example.com",
             is_active=True,
         )
@@ -53,8 +51,6 @@ class MedewerkerAdapterTest(TestCase):
         adapter.save()
         m = User.objects.get(pk=self.medewerker.pk)
         self.assertEqual(str(m.username), "Test@test.nl")
-        self.assertEqual(m.first_name, "John")
-        self.assertEqual(m.last_name, "Doe")
         self.assertEqual(m.email, "john.doe@example.com")
 
         self.assertEqual(Version.objects.get_for_object(m).count(), 1)
@@ -76,16 +72,12 @@ class GroepenAdapterTest(TestCase):
         self.user1 = User.objects.create(
             scim_external_id=str(uuid.uuid4()),
             username=str(uuid.uuid4()),
-            first_name="Kees",
-            last_name="Smit",
             email="Kees@test.com",
             is_active=True,
         )
         self.user2 = User.objects.create(
             scim_external_id=str(uuid.uuid4()),
             username=str(uuid.uuid4()),
-            first_name="Bob",
-            last_name="Smit",
             email="bob@test.com",
             is_active=True,
         )

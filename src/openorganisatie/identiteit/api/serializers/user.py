@@ -16,26 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         read_only=True, help_text=get_help_text("identiteit.User", "username")
     )
-    voornaam = serializers.CharField(
-        source="first_name",
-        read_only=True,
-        help_text=get_help_text("identiteit.User", "first_name"),
-    )
-    achternaam = serializers.CharField(
-        source="last_name",
-        read_only=True,
-        help_text=get_help_text("identiteit.User", "last_name"),
-    )
     emailadres = serializers.EmailField(
         source="email",
         read_only=True,
         help_text=get_help_text("identiteit.User", "email"),
-    )
-    telefoonnummer = serializers.CharField(
-        source="phone_number",
-        allow_blank=True,
-        required=False,
-        help_text=get_help_text("identiteit.User", "phone_number"),
     )
     datum_toegevoegd = serializers.DateTimeField(
         source="date_joined",
@@ -46,12 +30,6 @@ class UserSerializer(serializers.ModelSerializer):
         source="last_modified",
         read_only=True,
         help_text=get_help_text("identiteit.User", "last_modified"),
-    )
-    titel = serializers.CharField(
-        source="job_title",
-        allow_blank=True,
-        required=False,
-        help_text=get_help_text("identiteit.User", "job_title"),
     )
     is_active = serializers.BooleanField(
         read_only=True, help_text=get_help_text("identiteit.User", "is_active")
@@ -66,11 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
             "url",
             "scim_external_id",
             "username",
-            "voornaam",
-            "achternaam",
             "emailadres",
-            "telefoonnummer",
-            "titel",
             "is_active",
             "groups",
             "datum_toegevoegd",

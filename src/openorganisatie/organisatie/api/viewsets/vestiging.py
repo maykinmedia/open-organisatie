@@ -47,10 +47,8 @@ class VestigingViewSet(RevisionMixin, viewsets.ModelViewSet):
     filterset_fields = {
         "naam",
         "vestigingsnummer",
-        "verkorte_naam",
         "adres",
         "post_adres",
-        "landcode",
     }
     lookup_field = "uuid"
     authentication_classes = (TokenAuthentication,)

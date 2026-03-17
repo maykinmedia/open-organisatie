@@ -44,12 +44,20 @@ class OrganisatorischeEenheid(models.Model):
         blank=True,
         help_text=_("Telefoonnummer van de organisatorische eenheid."),
     )
-    datum_opheffing = models.DateField(
+    startdatum = models.DateField(
+        null=True,
+        blank=True,
+        help_text=_("De datum waarop de medewerker in dienst gaat."),
+    )
+    einddatum = models.DateField(
         blank=True,
         null=True,
-        help_text=_(
-            "Optionele datum waarop de organisatorische eenheid wordt opgeheven."
-        ),
+        help_text=_("De datum waarop de medewerker uit dienst gaat."),
+    )
+    wijzigingsdatum = models.DateField(
+        blank=True,
+        null=True,
+        help_text=_("De datum waarop de medewerker gewijzigd is."),
     )
     contactpersoon = models.ForeignKey(
         "organisatie.Medewerker",

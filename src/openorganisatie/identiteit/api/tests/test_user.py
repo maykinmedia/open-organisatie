@@ -39,8 +39,6 @@ class UserAPITests(APITestCase):
         data = response.json()
 
         self.assertEqual(data["username"], str(user.username))
-        self.assertEqual(data["voornaam"], user.first_name)
-        self.assertEqual(data["achternaam"], user.last_name)
         self.assertEqual(data["emailadres"], user.email)
 
     def test_authentication_required(self):
@@ -100,19 +98,6 @@ class UserAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(
             response.data["results"][0]["datum_toegevoegd"], u1.date_joined.isoformat()
-        )
-
-    def test_filter_functie(self):
-        u1 = UserFactory(job_title="Developer")
-        UserFactory(job_title="Manager")
-
-        url = reverse("identiteit_api:user-list")
-        response = self.client.get(url, {"functie": "dev"})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["scim_external_id"], str(u1.scim_external_id)
         )
 
     def test_filter_actief(self):

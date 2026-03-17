@@ -40,6 +40,24 @@ paths:
       summary: Alle functies opvragen.
       parameters:
       - in: query
+        name: einddatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie eindigt.
+      - in: query
+        name: einddatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie eindigt.
+      - in: query
+        name: einddatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie eindigt.
+      - in: query
         name: functieOmschrijving
         schema:
           type: string
@@ -72,6 +90,42 @@ paths:
           maximum: 500).'
         schema:
           type: integer
+      - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie ingaat.
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie ingaat.
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie ingaat.
+      - in: query
+        name: wijzigingsdatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie gewijzigd is.
+      - in: query
+        name: wijzigingsdatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie gewijzigd is.
+      - in: query
+        name: wijzigingsdatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de functie gewijzigd is.
       tags:
       - Functies
       security:
@@ -474,6 +528,21 @@ paths:
       summary: Alle medewerkers opvragen.
       parameters:
       - in: query
+        name: einddatum
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: einddatum__gte
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: einddatum__lte
+        schema:
+          type: string
+          format: date
+      - in: query
         name: functiesUuid
         schema:
           type: array
@@ -483,20 +552,6 @@ paths:
         description: UUID's van de gekoppelde functies.
         explode: false
         style: form
-      - in: query
-        name: geslachtsaanduiding
-        schema:
-          type: string
-          enum:
-          - M
-          - V
-          - X
-        description: |-
-          Geslachtsaanduiding (optioneel).
-
-          * `M` - Man
-          * `V` - Vrouw
-          * `X` - Anders
       - name: page
         required: false
         in: query
@@ -511,6 +566,21 @@ paths:
         schema:
           type: integer
       - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+      - in: query
         name: teamsUuid
         schema:
           type: array
@@ -520,6 +590,21 @@ paths:
         description: UUID's van de gekoppelde teams.
         explode: false
         style: form
+      - in: query
+        name: wijzigingsdatum
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: wijzigingsdatum__gte
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: wijzigingsdatum__lte
+        schema:
+          type: string
+          format: date
       tags:
       - Medewerkers
       security:
@@ -710,6 +795,24 @@ paths:
       summary: Alle organisatorische eenheden opvragen.
       parameters:
       - in: query
+        name: einddatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker uit dienst gaat.
+      - in: query
+        name: einddatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker uit dienst gaat.
+      - in: query
+        name: einddatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker uit dienst gaat.
+      - in: query
         name: functiesUuid
         schema:
           type: array
@@ -759,6 +862,24 @@ paths:
           type: string
         description: Soort organisatorische eenheid.
       - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker in dienst gaat.
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker in dienst gaat.
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker in dienst gaat.
+      - in: query
         name: verkorteNaam
         schema:
           type: string
@@ -773,6 +894,24 @@ paths:
         description: UUID's van de gekoppelde vestigingen.
         explode: false
         style: form
+      - in: query
+        name: wijzigingsdatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker gewijzigd is.
+      - in: query
+        name: wijzigingsdatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker gewijzigd is.
+      - in: query
+        name: wijzigingsdatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop de medewerker gewijzigd is.
       tags:
       - Organisatorische Eenheden
       security:
@@ -964,6 +1103,24 @@ paths:
       summary: Alle teams opvragen.
       parameters:
       - in: query
+        name: einddatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team eindigd.
+      - in: query
+        name: einddatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team eindigd.
+      - in: query
+        name: einddatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team eindigd.
+      - in: query
         name: functiesUuid
         schema:
           type: array
@@ -997,6 +1154,24 @@ paths:
         schema:
           type: integer
       - in: query
+        name: startdatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team ingaat.
+      - in: query
+        name: startdatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team ingaat.
+      - in: query
+        name: startdatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team ingaat.
+      - in: query
         name: vestigingenUuid
         schema:
           type: array
@@ -1006,6 +1181,24 @@ paths:
         description: UUID's van de gekoppelde vestigingen.
         explode: false
         style: form
+      - in: query
+        name: wijzigingsdatum
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team gewijzigd is.
+      - in: query
+        name: wijzigingsdatum__gte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team gewijzigd is.
+      - in: query
+        name: wijzigingsdatum__lte
+        schema:
+          type: string
+          format: date
+        description: De datum waarop het team gewijzigd is.
       tags:
       - Team
       security:
@@ -1201,11 +1394,6 @@ paths:
           type: string
         description: Fysiek adres van de vestiging (optioneel).
       - in: query
-        name: landcode
-        schema:
-          type: string
-        description: ISO-landcode van de vestiging (bijv. NL, BE).
-      - in: query
         name: naam
         schema:
           type: string
@@ -1228,11 +1416,6 @@ paths:
         schema:
           type: string
         description: Post adres van de vestiging (optioneel).
-      - in: query
-        name: verkorteNaam
-        schema:
-          type: string
-        description: Afkorting of korte naam van de vestiging.
       - in: query
         name: vestigingsnummer
         schema:
@@ -1438,15 +1621,21 @@ components:
           type: string
           description: Korte omschrijving of titel van de functie.
           maxLength: 255
-        beginDatum:
+        startdatum:
           type: string
           format: date
+          nullable: true
           description: De datum waarop de functie ingaat.
-        eindDatum:
+        einddatum:
           type: string
           format: date
           nullable: true
           description: De datum waarop de functie eindigt.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de functie gewijzigd is.
         functieType:
           allOf:
           - $ref: '#/components/schemas/FunctieType'
@@ -1458,7 +1647,6 @@ components:
           writeOnly: true
           description: UUID van de gekoppelde medewerker.
       required:
-      - beginDatum
       - functieOmschrijving
       - functieType
       - functietypeUuid
@@ -1541,12 +1729,21 @@ components:
           oneOf:
           - $ref: '#/components/schemas/GeslachtsaanduidingEnum'
           - $ref: '#/components/schemas/BlankEnum'
-        datumUitDienst:
+        startdatum:
           type: string
           format: date
           nullable: true
-          description: Datum waarop de medewerker uit dienst is gegaan (indien van
-            toepassing).
+          description: De datum waarop de medewerker in dienst gaat.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker uit dienst gaat.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker gewijzigd is.
         teams:
           type: array
           items:
@@ -1575,20 +1772,8 @@ components:
             writeOnly: true
           writeOnly: true
           description: UUID’s van gekoppelde functies.
-        datumToegevoegd:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Datum waarop de medewerker is toegevoegd.
-        datumAangepast:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Datum waarop de medewerker voor het laatst is gewijzigd.
       required:
       - achternaam
-      - datumAangepast
-      - datumToegevoegd
       - emailadres
       - functies
       - medewerkerId
@@ -1607,17 +1792,22 @@ components:
           type: string
           description: Korte omschrijving of titel van de functie.
           maxLength: 255
-        beginDatum:
+        startdatum:
           type: string
           format: date
+          nullable: true
           description: De datum waarop de functie ingaat.
-        eindDatum:
+        einddatum:
           type: string
           format: date
           nullable: true
           description: De datum waarop de functie eindigt.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de functie gewijzigd is.
       required:
-      - beginDatum
       - functieOmschrijving
     NestedMedewerker:
       type: object
@@ -1657,26 +1847,23 @@ components:
           oneOf:
           - $ref: '#/components/schemas/GeslachtsaanduidingEnum'
           - $ref: '#/components/schemas/BlankEnum'
-        datumUitDienst:
+        startdatum:
           type: string
           format: date
           nullable: true
-          description: Datum waarop de medewerker uit dienst is gegaan (indien van
-            toepassing).
-        datumToegevoegd:
+          description: De datum waarop de medewerker in dienst gaat.
+        einddatum:
           type: string
-          format: date-time
-          readOnly: true
-          description: Datum waarop de medewerker is toegevoegd.
-        datumAangepast:
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker uit dienst gaat.
+        wijzigingsdatum:
           type: string
-          format: date-time
-          readOnly: true
-          description: Datum waarop de medewerker voor het laatst is gewijzigd.
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker gewijzigd is.
       required:
       - achternaam
-      - datumAangepast
-      - datumToegevoegd
       - emailadres
       - medewerkerId
       - voornaam
@@ -1694,6 +1881,34 @@ components:
         omschrijving:
           type: string
           description: Optionele omschrijving van het team.
+        soortTeam:
+          type: string
+          description: Soort team.
+          maxLength: 50
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van het team.
+          maxLength: 50
+        emailadres:
+          type: string
+          format: email
+          description: E-mailadres van het team.
+          maxLength: 254
+        startdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team ingaat.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team eindigd.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team gewijzigd is.
       required:
       - naam
     OrganisatorischeEenheid:
@@ -1732,11 +1947,21 @@ components:
           type: string
           description: Telefoonnummer van de organisatorische eenheid.
           maxLength: 50
-        datumOpheffing:
+        startdatum:
           type: string
           format: date
           nullable: true
-          description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
+          description: De datum waarop de medewerker in dienst gaat.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker uit dienst gaat.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker gewijzigd is.
         contactpersoon:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
@@ -1938,15 +2163,21 @@ components:
           type: string
           description: Korte omschrijving of titel van de functie.
           maxLength: 255
-        beginDatum:
+        startdatum:
           type: string
           format: date
+          nullable: true
           description: De datum waarop de functie ingaat.
-        eindDatum:
+        einddatum:
           type: string
           format: date
           nullable: true
           description: De datum waarop de functie eindigt.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de functie gewijzigd is.
         functieType:
           allOf:
           - $ref: '#/components/schemas/FunctieType'
@@ -2021,12 +2252,21 @@ components:
           oneOf:
           - $ref: '#/components/schemas/GeslachtsaanduidingEnum'
           - $ref: '#/components/schemas/BlankEnum'
-        datumUitDienst:
+        startdatum:
           type: string
           format: date
           nullable: true
-          description: Datum waarop de medewerker uit dienst is gegaan (indien van
-            toepassing).
+          description: De datum waarop de medewerker in dienst gaat.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker uit dienst gaat.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker gewijzigd is.
         teams:
           type: array
           items:
@@ -2055,16 +2295,6 @@ components:
             writeOnly: true
           writeOnly: true
           description: UUID’s van gekoppelde functies.
-        datumToegevoegd:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Datum waarop de medewerker is toegevoegd.
-        datumAangepast:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Datum waarop de medewerker voor het laatst is gewijzigd.
     PatchedOrganisatorischeEenheid:
       type: object
       properties:
@@ -2101,11 +2331,21 @@ components:
           type: string
           description: Telefoonnummer van de organisatorische eenheid.
           maxLength: 50
-        datumOpheffing:
+        startdatum:
           type: string
           format: date
           nullable: true
-          description: Optionele datum waarop de organisatorische eenheid wordt opgeheven.
+          description: De datum waarop de medewerker in dienst gaat.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker uit dienst gaat.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de medewerker gewijzigd is.
         contactpersoon:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
@@ -2164,6 +2404,34 @@ components:
         omschrijving:
           type: string
           description: Optionele omschrijving van het team.
+        soortTeam:
+          type: string
+          description: Soort team.
+          maxLength: 50
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van het team.
+          maxLength: 50
+        emailadres:
+          type: string
+          format: email
+          description: E-mailadres van het team.
+          maxLength: 254
+        startdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team ingaat.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team eindigd.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team gewijzigd is.
         contactpersoon:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
@@ -2218,10 +2486,6 @@ components:
           type: string
           description: Volledige naam van de vestiging.
           maxLength: 100
-        verkorteNaam:
-          type: string
-          description: Afkorting of korte naam van de vestiging.
-          maxLength: 50
         adres:
           type: string
           description: Fysiek adres van de vestiging (optioneel).
@@ -2238,10 +2502,6 @@ components:
           type: string
           description: Telefoonnummer van de vestiging (optioneel).
           maxLength: 50
-        landcode:
-          type: string
-          description: ISO-landcode van de vestiging (bijv. NL, BE).
-          maxLength: 2
     Team:
       type: object
       properties:
@@ -2257,6 +2517,34 @@ components:
         omschrijving:
           type: string
           description: Optionele omschrijving van het team.
+        soortTeam:
+          type: string
+          description: Soort team.
+          maxLength: 50
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van het team.
+          maxLength: 50
+        emailadres:
+          type: string
+          format: email
+          description: E-mailadres van het team.
+          maxLength: 254
+        startdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team ingaat.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team eindigd.
+        wijzigingsdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop het team gewijzigd is.
         contactpersoon:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
@@ -2317,10 +2605,6 @@ components:
           type: string
           description: Volledige naam van de vestiging.
           maxLength: 100
-        verkorteNaam:
-          type: string
-          description: Afkorting of korte naam van de vestiging.
-          maxLength: 50
         adres:
           type: string
           description: Fysiek adres van de vestiging (optioneel).
@@ -2337,14 +2621,9 @@ components:
           type: string
           description: Telefoonnummer van de vestiging (optioneel).
           maxLength: 50
-        landcode:
-          type: string
-          description: ISO-landcode van de vestiging (bijv. NL, BE).
-          maxLength: 2
       required:
       - naam
       - uuid
-      - vestigingsnummer
   securitySchemes:
     tokenAuth:
       type: apiKey

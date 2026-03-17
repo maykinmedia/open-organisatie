@@ -14,13 +14,20 @@ class Functie(models.Model):
         max_length=255,
         help_text=_("Korte omschrijving of titel van de functie."),
     )
-    begin_datum = models.DateField(
+    startdatum = models.DateField(
+        null=True,
+        blank=True,
         help_text=_("De datum waarop de functie ingaat."),
     )
-    eind_datum = models.DateField(
+    einddatum = models.DateField(
         blank=True,
         null=True,
         help_text=_("De datum waarop de functie eindigt."),
+    )
+    wijzigingsdatum = models.DateField(
+        blank=True,
+        null=True,
+        help_text=_("De datum waarop de functie gewijzigd is."),
     )
     functie_type = models.ForeignKey(
         "organisatie.FunctieType",

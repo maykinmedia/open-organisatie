@@ -22,4 +22,7 @@ class TeamFilter(FilterSet):
         model = Team
         fields = {
             "naam": ["exact", "icontains"],
+            "startdatum": ["exact", "gte", "lte"],
+            "einddatum": ["exact", "gte", "lte"],
+            "wijzigingsdatum": ["exact", "gte", "lte"],
         }

@@ -16,8 +16,9 @@ class NestedFunctieSerializer(serializers.ModelSerializer):
         fields = [
             "uuid",
             "functie_omschrijving",
-            "begin_datum",
-            "eind_datum",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
         ]
 
 
@@ -39,8 +40,9 @@ class FunctieSerializer(serializers.ModelSerializer):
         fields = [
             "uuid",
             "functie_omschrijving",
-            "begin_datum",
-            "eind_datum",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
             "functie_type",
             "functietype_uuid",
         ]

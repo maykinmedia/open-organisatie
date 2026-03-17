@@ -15,7 +15,17 @@ from .vestiging import VestigingSerializer
 class NestedTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ["uuid", "naam", "omschrijving"]
+        fields = [
+            "uuid",
+            "naam",
+            "omschrijving",
+            "soort_team",
+            "telefoonnummer",
+            "emailadres",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
+        ]
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -66,6 +76,12 @@ class TeamSerializer(serializers.ModelSerializer):
             "uuid",
             "naam",
             "omschrijving",
+            "soort_team",
+            "telefoonnummer",
+            "emailadres",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
             "contactpersoon",
             "contactpersoon_uuid",
             "vestigingen",

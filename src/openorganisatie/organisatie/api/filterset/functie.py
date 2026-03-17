@@ -19,4 +19,7 @@ class FunctieFilter(FilterSet):
         model = Functie
         fields = {
             "functie_omschrijving": ["exact", "icontains"],
+            "startdatum": ["exact", "gte", "lte"],
+            "einddatum": ["exact", "gte", "lte"],
+            "wijzigingsdatum": ["exact", "gte", "lte"],
         }
