@@ -42,9 +42,9 @@ class Team(models.Model):
     einddatum = models.DateField(
         blank=True,
         null=True,
-        help_text=_("De datum waarop het team eindigd."),
+        help_text=_("De datum waarop het team eindigt."),
     )
-    wijzigingsdatum = models.DateField(
+    wijzigingsdatum = models.DateTimeField(
         blank=True,
         null=True,
         help_text=_("De datum waarop het team gewijzigd is."),

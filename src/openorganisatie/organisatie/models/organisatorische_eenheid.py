@@ -47,17 +47,17 @@ class OrganisatorischeEenheid(models.Model):
     startdatum = models.DateField(
         null=True,
         blank=True,
-        help_text=_("De datum waarop de medewerker in dienst gaat."),
+        help_text=_("De datum waarop de organisatorische eenheid start."),
     )
     einddatum = models.DateField(
         blank=True,
         null=True,
-        help_text=_("De datum waarop de medewerker uit dienst gaat."),
+        help_text=_("De datum waarop de organisatorische eenheid eindigt."),
     )
-    wijzigingsdatum = models.DateField(
+    wijzigingsdatum = models.DateTimeField(
         blank=True,
         null=True,
-        help_text=_("De datum waarop de medewerker gewijzigd is."),
+        help_text=_("De datum waarop de organisatorische eenheid gewijzigd is."),
     )
     contactpersoon = models.ForeignKey(
         "organisatie.Medewerker",

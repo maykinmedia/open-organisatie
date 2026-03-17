@@ -1,4 +1,7 @@
+from datetime import date, datetime
+
 from django.urls import reverse
+from django.utils.timezone import make_aware
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -171,3 +174,123 @@ class MedewerkerAPITests(APITestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(Version.objects.get_for_object(medewerker).count(), 3)
+
+    def test_filter_startdatum(self):
+        m1 = MedewerkerFactory(startdatum=date(2025, 1, 1))
+        MedewerkerFactory(startdatum=date(2026, 1, 1))
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"startdatum": "2025-01-01"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["startdatum"], m1.startdatum.isoformat()
+        )
+
+    def test_filter_startdatum_gte(self):
+        MedewerkerFactory(startdatum=date(2024, 12, 31))
+        m2 = MedewerkerFactory(startdatum=date(2025, 2, 1))
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"startdatum__gte": "2025-01-01"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["startdatum"], m2.startdatum.isoformat()
+        )
+
+    def test_filter_startdatum_lte(self):
+        m1 = MedewerkerFactory(startdatum=date(2024, 12, 31))
+        MedewerkerFactory(startdatum=date(2025, 3, 1))
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"startdatum__lte": "2025-01-31"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["startdatum"], m1.startdatum.isoformat()
+        )
+
+    def test_filter_einddatum(self):
+        m1 = MedewerkerFactory(einddatum=date(2025, 1, 1))
+        MedewerkerFactory(einddatum=date(2026, 1, 1))
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"einddatum": "2025-01-01"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["einddatum"], m1.einddatum.isoformat()
+        )
+
+    def test_filter_einddatum_gte(self):
+        MedewerkerFactory(einddatum=date(2024, 12, 31))
+        m2 = MedewerkerFactory(einddatum=date(2025, 2, 1))
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"einddatum__gte": "2025-01-01"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["einddatum"], m2.einddatum.isoformat()
+        )
+
+    def test_filter_einddatum_lte(self):
+        m1 = MedewerkerFactory(einddatum=date(2024, 12, 31))
+        MedewerkerFactory(einddatum=date(2025, 3, 1))
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"einddatum__lte": "2025-01-31"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["einddatum"], m1.einddatum.isoformat()
+        )
+
+    def test_filter_wijzigingsdatum(self):
+        dt1 = make_aware(datetime(2025, 1, 1, 10, 30))
+        dt2 = make_aware(datetime(2026, 1, 1, 12, 0))
+        m1 = MedewerkerFactory(wijzigingsdatum=dt1)
+        MedewerkerFactory(wijzigingsdatum=dt2)
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"wijzigingsdatum": dt1.isoformat()})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["wijzigingsdatum"],
+            m1.wijzigingsdatum.isoformat(),
+        )
+
+    def test_filter_wijzigingsdatum_gte(self):
+        make_aware(datetime(2024, 12, 31, 9, 0))
+        dt2 = make_aware(datetime(2025, 2, 1, 15, 45))
+        m2 = MedewerkerFactory(wijzigingsdatum=dt2)
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(
+            url, {"wijzigingsdatum__gte": "2025-01-01T00:00:00Z"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["wijzigingsdatum"],
+            m2.wijzigingsdatum.isoformat(),
+        )
+
+    def test_filter_wijzigingsdatum_lte(self):
+        dt1 = make_aware(datetime(2024, 12, 31, 8, 0))
+        dt2 = make_aware(datetime(2025, 3, 1, 12, 0))
+        m1 = MedewerkerFactory(wijzigingsdatum=dt1)
+        MedewerkerFactory(wijzigingsdatum=dt2)
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(
+            url, {"wijzigingsdatum__lte": "2025-01-31T23:59:59Z"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["wijzigingsdatum"],
+            m1.wijzigingsdatum.isoformat(),
+        )

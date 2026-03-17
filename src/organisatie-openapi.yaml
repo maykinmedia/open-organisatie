@@ -112,19 +112,19 @@ paths:
         name: wijzigingsdatum
         schema:
           type: string
-          format: date
+          format: date-time
         description: De datum waarop de functie gewijzigd is.
       - in: query
         name: wijzigingsdatum__gte
         schema:
           type: string
-          format: date
+          format: date-time
         description: De datum waarop de functie gewijzigd is.
       - in: query
         name: wijzigingsdatum__lte
         schema:
           type: string
-          format: date
+          format: date-time
         description: De datum waarop de functie gewijzigd is.
       tags:
       - Functies
@@ -594,17 +594,17 @@ paths:
         name: wijzigingsdatum
         schema:
           type: string
-          format: date
+          format: date-time
       - in: query
         name: wijzigingsdatum__gte
         schema:
           type: string
-          format: date
+          format: date-time
       - in: query
         name: wijzigingsdatum__lte
         schema:
           type: string
-          format: date
+          format: date-time
       tags:
       - Medewerkers
       security:
@@ -799,19 +799,19 @@ paths:
         schema:
           type: string
           format: date
-        description: De datum waarop de medewerker uit dienst gaat.
+        description: De datum waarop de organisatorische eenheid eindigt.
       - in: query
         name: einddatum__gte
         schema:
           type: string
           format: date
-        description: De datum waarop de medewerker uit dienst gaat.
+        description: De datum waarop de organisatorische eenheid eindigt.
       - in: query
         name: einddatum__lte
         schema:
           type: string
           format: date
-        description: De datum waarop de medewerker uit dienst gaat.
+        description: De datum waarop de organisatorische eenheid eindigt.
       - in: query
         name: functiesUuid
         schema:
@@ -866,19 +866,19 @@ paths:
         schema:
           type: string
           format: date
-        description: De datum waarop de medewerker in dienst gaat.
+        description: De datum waarop de organisatorische eenheid start.
       - in: query
         name: startdatum__gte
         schema:
           type: string
           format: date
-        description: De datum waarop de medewerker in dienst gaat.
+        description: De datum waarop de organisatorische eenheid start.
       - in: query
         name: startdatum__lte
         schema:
           type: string
           format: date
-        description: De datum waarop de medewerker in dienst gaat.
+        description: De datum waarop de organisatorische eenheid start.
       - in: query
         name: verkorteNaam
         schema:
@@ -898,20 +898,20 @@ paths:
         name: wijzigingsdatum
         schema:
           type: string
-          format: date
-        description: De datum waarop de medewerker gewijzigd is.
+          format: date-time
+        description: De datum waarop de organisatorische eenheid gewijzigd is.
       - in: query
         name: wijzigingsdatum__gte
         schema:
           type: string
-          format: date
-        description: De datum waarop de medewerker gewijzigd is.
+          format: date-time
+        description: De datum waarop de organisatorische eenheid gewijzigd is.
       - in: query
         name: wijzigingsdatum__lte
         schema:
           type: string
-          format: date
-        description: De datum waarop de medewerker gewijzigd is.
+          format: date-time
+        description: De datum waarop de organisatorische eenheid gewijzigd is.
       tags:
       - Organisatorische Eenheden
       security:
@@ -1107,19 +1107,19 @@ paths:
         schema:
           type: string
           format: date
-        description: De datum waarop het team eindigd.
+        description: De datum waarop het team eindigt.
       - in: query
         name: einddatum__gte
         schema:
           type: string
           format: date
-        description: De datum waarop het team eindigd.
+        description: De datum waarop het team eindigt.
       - in: query
         name: einddatum__lte
         schema:
           type: string
           format: date
-        description: De datum waarop het team eindigd.
+        description: De datum waarop het team eindigt.
       - in: query
         name: functiesUuid
         schema:
@@ -1185,19 +1185,19 @@ paths:
         name: wijzigingsdatum
         schema:
           type: string
-          format: date
+          format: date-time
         description: De datum waarop het team gewijzigd is.
       - in: query
         name: wijzigingsdatum__gte
         schema:
           type: string
-          format: date
+          format: date-time
         description: De datum waarop het team gewijzigd is.
       - in: query
         name: wijzigingsdatum__lte
         schema:
           type: string
-          format: date
+          format: date-time
         description: De datum waarop het team gewijzigd is.
       tags:
       - Team
@@ -1633,7 +1633,7 @@ components:
           description: De datum waarop de functie eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop de functie gewijzigd is.
         functieType:
@@ -1741,7 +1741,7 @@ components:
           description: De datum waarop de medewerker uit dienst gaat.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop de medewerker gewijzigd is.
         teams:
@@ -1804,7 +1804,7 @@ components:
           description: De datum waarop de functie eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop de functie gewijzigd is.
       required:
@@ -1859,7 +1859,7 @@ components:
           description: De datum waarop de medewerker uit dienst gaat.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop de medewerker gewijzigd is.
       required:
@@ -1903,10 +1903,10 @@ components:
           type: string
           format: date
           nullable: true
-          description: De datum waarop het team eindigd.
+          description: De datum waarop het team eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop het team gewijzigd is.
       required:
@@ -1951,17 +1951,17 @@ components:
           type: string
           format: date
           nullable: true
-          description: De datum waarop de medewerker in dienst gaat.
+          description: De datum waarop de organisatorische eenheid start.
         einddatum:
           type: string
           format: date
           nullable: true
-          description: De datum waarop de medewerker uit dienst gaat.
+          description: De datum waarop de organisatorische eenheid eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
-          description: De datum waarop de medewerker gewijzigd is.
+          description: De datum waarop de organisatorische eenheid gewijzigd is.
         contactpersoon:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
@@ -2175,7 +2175,7 @@ components:
           description: De datum waarop de functie eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop de functie gewijzigd is.
         functieType:
@@ -2264,7 +2264,7 @@ components:
           description: De datum waarop de medewerker uit dienst gaat.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop de medewerker gewijzigd is.
         teams:
@@ -2335,17 +2335,17 @@ components:
           type: string
           format: date
           nullable: true
-          description: De datum waarop de medewerker in dienst gaat.
+          description: De datum waarop de organisatorische eenheid start.
         einddatum:
           type: string
           format: date
           nullable: true
-          description: De datum waarop de medewerker uit dienst gaat.
+          description: De datum waarop de organisatorische eenheid eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
-          description: De datum waarop de medewerker gewijzigd is.
+          description: De datum waarop de organisatorische eenheid gewijzigd is.
         contactpersoon:
           allOf:
           - $ref: '#/components/schemas/NestedMedewerker'
@@ -2426,10 +2426,10 @@ components:
           type: string
           format: date
           nullable: true
-          description: De datum waarop het team eindigd.
+          description: De datum waarop het team eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop het team gewijzigd is.
         contactpersoon:
@@ -2539,10 +2539,10 @@ components:
           type: string
           format: date
           nullable: true
-          description: De datum waarop het team eindigd.
+          description: De datum waarop het team eindigt.
         wijzigingsdatum:
           type: string
-          format: date
+          format: date-time
           nullable: true
           description: De datum waarop het team gewijzigd is.
         contactpersoon:

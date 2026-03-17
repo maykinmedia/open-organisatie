@@ -24,7 +24,7 @@ class Functie(models.Model):
         null=True,
         help_text=_("De datum waarop de functie eindigt."),
     )
-    wijzigingsdatum = models.DateField(
+    wijzigingsdatum = models.DateTimeField(
         blank=True,
         null=True,
         help_text=_("De datum waarop de functie gewijzigd is."),

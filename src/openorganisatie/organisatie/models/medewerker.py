@@ -50,7 +50,7 @@ class Medewerker(models.Model):
         null=True,
         help_text=_("De datum waarop de medewerker uit dienst gaat."),
     )
-    wijzigingsdatum = models.DateField(
+    wijzigingsdatum = models.DateTimeField(
         blank=True,
         null=True,
         help_text=_("De datum waarop de medewerker gewijzigd is."),
