@@ -20,8 +20,8 @@ class FunctieTypeFactory(factory.django.DjangoModelFactory):
 class FunctieFactory(factory.django.DjangoModelFactory):
     uuid = LazyFunction(uuid.uuid4)
     functie_omschrijving = Faker("job")
-    begin_datum = Faker("date_this_decade")
-    eind_datum = Faker("date_this_decade")
+    startdatum = Faker("date_this_decade")
+    einddatum = Faker("date_this_decade")
     functie_type = SubFactory(FunctieTypeFactory)
 
     class Meta:

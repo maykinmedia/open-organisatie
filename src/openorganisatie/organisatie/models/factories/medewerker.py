@@ -20,8 +20,8 @@ class MedewerkerFactory(factory.django.DjangoModelFactory):
     geslachtsaanduiding = factory.Iterator(
         [choice[0] for choice in GenderIndicator.choices]
     )
-    datum_uit_dienst = None
-    datum_toegevoegd = factory.LazyFunction(timezone.now)
+    einddatum = None
+    startdatum = factory.LazyFunction(timezone.now)
 
     class Meta:
         model = Medewerker

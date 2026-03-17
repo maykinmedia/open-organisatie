@@ -80,6 +80,11 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
         ]
 
     def to_dict(self):
+        if not hasattr(self.obj, "first_name"):
+            self.obj.first_name = ""
+        if not hasattr(self.obj, "last_name"):
+            self.obj.last_name = ""
+
         d = super().to_dict()
 
         d.update(

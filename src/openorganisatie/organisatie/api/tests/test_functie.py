@@ -22,7 +22,7 @@ class FunctieAPITests(APITestCase):
         url = reverse("organisatie_api:functie-list")
         data = {
             "functieOmschrijving": "Nieuwe Functie",
-            "beginDatum": "2025-11-01",
+            "startdatum": "2025-11-01",
             "functietypeUuid": str(self.functie_type.uuid),
         }
         response = self.client.post(url, data)
@@ -30,7 +30,7 @@ class FunctieAPITests(APITestCase):
 
         functie = Functie.objects.get(uuid=response.data["uuid"])
         self.assertEqual(functie.functie_omschrijving, data["functieOmschrijving"])
-        self.assertEqual(functie.begin_datum.isoformat(), data["beginDatum"])
+        self.assertEqual(functie.startdatum.isoformat(), data["startdatum"])
 
     def test_list_functies(self):
         url = reverse("organisatie_api:functie-list")
@@ -44,7 +44,7 @@ class FunctieAPITests(APITestCase):
         for functie in data["results"]:
             self.assertIn("uuid", functie)
             self.assertIn("functieOmschrijving", functie)
-            self.assertIn("beginDatum", functie)
+            self.assertIn("startdatum", functie)
 
     def test_read_functie_detail(self):
         type1 = FunctieTypeFactory()
@@ -59,7 +59,7 @@ class FunctieAPITests(APITestCase):
         data = response.json()
         self.assertEqual(data["uuid"], str(functie.uuid))
         self.assertEqual(data["functieOmschrijving"], functie.functie_omschrijving)
-        self.assertEqual(data["beginDatum"], functie.begin_datum.isoformat())
+        self.assertEqual(data["startdatum"], functie.startdatum.isoformat())
 
     def test_update_functie(self):
         functie = FunctieFactory(functie_type=self.functie_type)
@@ -69,7 +69,7 @@ class FunctieAPITests(APITestCase):
 
         data = {
             "functieOmschrijving": "Bijgewerkte Functie",
-            "beginDatum": "2025-12-01",
+            "startdatum": "2025-12-01",
             "functietypeUuid": str(self.functie_type.uuid),
         }
         response = self.client.put(detail_url, data)
@@ -77,7 +77,7 @@ class FunctieAPITests(APITestCase):
 
         functie.refresh_from_db()
         self.assertEqual(functie.functie_omschrijving, data["functieOmschrijving"])
-        self.assertEqual(functie.begin_datum.isoformat(), data["beginDatum"])
+        self.assertEqual(functie.startdatum.isoformat(), data["startdatum"])
 
     def test_partial_update_functie(self):
         functie = FunctieFactory(functie_type=self.functie_type)
@@ -140,7 +140,7 @@ class FunctieAPITests(APITestCase):
         url = reverse("organisatie_api:functie-list")
         data = {
             "functieOmschrijving": "1234",
-            "beginDatum": "2025-10-10",
+            "startdatum": "2025-10-10",
             "functietypeUuid": str(FunctieTypeFactory.create().uuid),
         }
 

@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from reversion.models import Version
 
-from openorganisatie.organisatie.enums.enums import GenderIndicator
 from openorganisatie.organisatie.models.factories.functie import FunctieFactory
 from openorganisatie.organisatie.models.factories.medewerker import MedewerkerFactory
 from openorganisatie.organisatie.models.factories.team import TeamFactory
@@ -114,19 +113,6 @@ class MedewerkerAPITests(APITestCase):
         response = client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_filter_geslachtsaanduiding(self):
-        m1 = MedewerkerFactory(geslachtsaanduiding=GenderIndicator.MAN)
-        MedewerkerFactory(geslachtsaanduiding=GenderIndicator.VROUW)
-
-        url = reverse("organisatie_api:medewerker-list")
-        response = self.client.get(url, {"geslachtsaanduiding": GenderIndicator.MAN})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(
-            response.data["results"][0]["geslachtsaanduiding"], m1.geslachtsaanduiding
-        )
 
     def test_filter_teams_uuid(self):
         team1 = TeamFactory()

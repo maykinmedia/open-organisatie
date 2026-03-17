@@ -25,8 +25,6 @@ class GroupAdmin(ReadOnlyCompareVersionAdmin):
     )
 
     def display_users(self, obj):
-        return ", ".join(
-            [f"{user.first_name} {user.last_name}" for user in obj.user_set.all()]
-        )
+        return ", ".join([f"{user.username}" for user in obj.user_set.all()])
 
     display_users.short_description = "Users"
