@@ -14,7 +14,20 @@ class TeamAdmin(ReadOnlyCompareVersionAdmin):
     fieldsets = (
         (
             "Algemene informatie",
-            {"fields": ("uuid", "naam", "omschrijving", "contactpersoon")},
+            {
+                "fields": (
+                    "uuid",
+                    "naam",
+                    "omschrijving",
+                    "contactpersoon",
+                    "soort_team",
+                    "telefoonnummer",
+                    "emailadres",
+                    "startdatum",
+                    "einddatum",
+                    "wijzigingsdatum",
+                )
+            },
         ),
         (
             "Medewerkers",

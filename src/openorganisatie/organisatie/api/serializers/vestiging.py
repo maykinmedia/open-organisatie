@@ -10,12 +10,10 @@ class VestigingSerializer(serializers.ModelSerializer):
             "uuid",
             "vestigingsnummer",
             "naam",
-            "verkorte_naam",
             "adres",
             "correspondentieadres",
             "post_adres",
             "telefoonnummer",
-            "landcode",
         ]
         extra_kwargs = {
             "uuid": {"read_only": True},

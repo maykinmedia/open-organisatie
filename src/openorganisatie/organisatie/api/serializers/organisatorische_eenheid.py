@@ -26,9 +26,9 @@ class NestedMedewerkerSerializer(serializers.ModelSerializer):
             "emailadres",
             "telefoonnummer",
             "geslachtsaanduiding",
-            "datum_uit_dienst",
-            "datum_toegevoegd",
-            "datum_aangepast",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
         ]
 
 
@@ -51,7 +51,9 @@ class NestedOrganisatorischeEenheidSerializer(serializers.ModelSerializer):
             "omschrijving",
             "emailadres",
             "telefoonnummer",
-            "datum_opheffing",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
             "contactpersoon",
             "hoofd_organisatorische_eenheid",
         ]
@@ -114,7 +116,9 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
             "omschrijving",
             "emailadres",
             "telefoonnummer",
-            "datum_opheffing",
+            "startdatum",
+            "einddatum",
+            "wijzigingsdatum",
             "contactpersoon",
             "contactpersoon_uuid",
             "vestigingen",

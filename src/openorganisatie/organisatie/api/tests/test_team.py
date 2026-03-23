@@ -1,4 +1,7 @@
+from datetime import date, datetime
+
 from django.urls import reverse
+from django.utils.timezone import make_aware
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -178,3 +181,114 @@ class TeamAPITests(APITestCase):
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(Version.objects.get_for_object(team).count(), 3)
+
+    def test_filter_startdatum(self):
+        t1 = TeamFactory(startdatum=date(2025, 1, 1))
+        TeamFactory(startdatum=date(2026, 1, 1))
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"startdatum": "2025-01-01"})
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["startdatum"], t1.startdatum.isoformat()
+        )
+
+    def test_filter_startdatum_gte(self):
+        TeamFactory(startdatum=date(2024, 12, 31))
+        t2 = TeamFactory(startdatum=date(2025, 2, 1))
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"startdatum__gte": "2025-01-01"})
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["startdatum"], t2.startdatum.isoformat()
+        )
+
+    def test_filter_startdatum_lte(self):
+        t1 = TeamFactory(startdatum=date(2024, 12, 31))
+        TeamFactory(startdatum=date(2025, 3, 1))
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"startdatum__lte": "2025-01-31"})
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["startdatum"], t1.startdatum.isoformat()
+        )
+
+    def test_filter_einddatum(self):
+        t1 = TeamFactory(einddatum=date(2025, 1, 1))
+        TeamFactory(einddatum=date(2026, 1, 1))
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"einddatum": "2025-01-01"})
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["einddatum"], t1.einddatum.isoformat()
+        )
+
+    def test_filter_einddatum_gte(self):
+        TeamFactory(einddatum=date(2024, 12, 31))
+        t2 = TeamFactory(einddatum=date(2025, 2, 1))
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"einddatum__gte": "2025-01-01"})
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["einddatum"], t2.einddatum.isoformat()
+        )
+
+    def test_filter_einddatum_lte(self):
+        t1 = TeamFactory(einddatum=date(2024, 12, 31))
+        TeamFactory(einddatum=date(2025, 3, 1))
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"einddatum__lte": "2025-01-31"})
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["einddatum"], t1.einddatum.isoformat()
+        )
+
+    def test_filter_wijzigingsdatum(self):
+        dt1 = make_aware(datetime(2025, 1, 1, 10, 30))
+        dt2 = make_aware(datetime(2026, 1, 1, 12, 0))
+        t1 = TeamFactory(wijzigingsdatum=dt1)
+        TeamFactory(wijzigingsdatum=dt2)
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"wijzigingsdatum": dt1.isoformat()})
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["wijzigingsdatum"],
+            t1.wijzigingsdatum.isoformat(),
+        )
+
+    def test_filter_wijzigingsdatum_gte(self):
+        make_aware(datetime(2024, 12, 31, 9, 0))
+        dt2 = make_aware(datetime(2025, 2, 1, 15, 45))
+        t2 = TeamFactory(wijzigingsdatum=dt2)
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(
+            url, {"wijzigingsdatum__gte": "2025-01-01T00:00:00Z"}
+        )
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["wijzigingsdatum"],
+            t2.wijzigingsdatum.isoformat(),
+        )
+
+    def test_filter_wijzigingsdatum_lte(self):
+        dt1 = make_aware(datetime(2024, 12, 31, 8, 0))
+        dt2 = make_aware(datetime(2025, 3, 1, 12, 0))
+        t1 = TeamFactory(wijzigingsdatum=dt1)
+        TeamFactory(wijzigingsdatum=dt2)
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(
+            url, {"wijzigingsdatum__lte": "2025-01-31T23:59:59Z"}
+        )
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["wijzigingsdatum"],
+            t1.wijzigingsdatum.isoformat(),
+        )

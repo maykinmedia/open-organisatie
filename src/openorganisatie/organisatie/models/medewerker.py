@@ -1,7 +1,6 @@
 import uuid
 
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from ..enums.enums import GenderIndicator
@@ -41,12 +40,20 @@ class Medewerker(models.Model):
         blank=True,
         help_text=_("Geslachtsaanduiding (optioneel)."),
     )
-    datum_uit_dienst = models.DateField(
+    startdatum = models.DateField(
+        null=True,
+        blank=True,
+        help_text=_("De datum waarop de medewerker in dienst gaat."),
+    )
+    einddatum = models.DateField(
         blank=True,
         null=True,
-        help_text=_(
-            "Datum waarop de medewerker uit dienst is gegaan (indien van toepassing)."
-        ),
+        help_text=_("De datum waarop de medewerker uit dienst gaat."),
+    )
+    wijzigingsdatum = models.DateTimeField(
+        blank=True,
+        null=True,
+        help_text=_("De datum waarop de medewerker gewijzigd is."),
     )
     teams = models.ManyToManyField(
         "organisatie.Team",
@@ -59,15 +66,6 @@ class Medewerker(models.Model):
         related_name="medewerkers",
         blank=True,
         help_text=_("Functies van de medewerker."),
-    )
-    datum_toegevoegd = models.DateTimeField(
-        default=timezone.now,
-        editable=False,
-        help_text=_("Datum waarop de medewerker is toegevoegd."),
-    )
-    datum_aangepast = models.DateTimeField(
-        auto_now=True,
-        help_text=_("Datum waarop de medewerker voor het laatst is gewijzigd."),
     )
 
     class Meta:

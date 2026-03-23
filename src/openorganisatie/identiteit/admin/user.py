@@ -7,17 +7,14 @@ from ..models.user import User
 @admin.register(User)
 class UserAdmin(ReadOnlyCompareVersionAdmin):
     list_display = (
-        "first_name",
-        "last_name",
+        "employee_number",
         "email",
-        "job_title",
-        "phone_number",
         "is_active",
         "date_joined",
         "last_modified",
     )
     readonly_fields = ("username", "scim_external_id", "date_joined", "last_modified")
-    search_fields = ("first_name", "last_name", "email", "job_title")
+    search_fields = ("email", "employee_number")
     list_filter = ("is_active",)
     filter_horizontal = ("groups",)
 
@@ -32,11 +29,7 @@ class UserAdmin(ReadOnlyCompareVersionAdmin):
                 "fields": (
                     "employee_number",
                     "username",
-                    "first_name",
-                    "last_name",
                     "email",
-                    "phone_number",
-                    "job_title",
                 )
             },
         ),

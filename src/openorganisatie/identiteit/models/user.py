@@ -27,32 +27,10 @@ class User(AbstractSCIMUserMixin, models.Model):
         blank=True,
         help_text=_("EmployeeNumber uit Entra / SCIM."),
     )
-    first_name = models.CharField(
-        max_length=100,
-        verbose_name=_("Voornaam"),
-        help_text=_("Voornaam van de medewerker."),
-    )
-    last_name = models.CharField(
-        max_length=100,
-        verbose_name=_("Achternaam"),
-        help_text=_("Achternaam van de medewerker."),
-    )
     email = models.EmailField(
         unique=True,
         verbose_name=_("E-mailadres"),
         help_text=_("E-mailadres van de medewerker."),
-    )
-    job_title = models.CharField(
-        max_length=100,
-        blank=True,
-        verbose_name=_("Functie"),
-        help_text=_("Functie van de medewerker (optioneel)."),
-    )
-    phone_number = models.CharField(
-        max_length=30,
-        blank=True,
-        verbose_name=_("Telefoonnummer"),
-        help_text=_("Telefoonnummer van de medewerker (optioneel)."),
     )
     is_active = models.BooleanField(
         default=True,
@@ -93,7 +71,7 @@ class User(AbstractSCIMUserMixin, models.Model):
         verbose_name_plural = "Users"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.username} {self.employee_number}"
 
     def koppel_medewerker(self):
         """Link User to Medewerker based on configuration."""

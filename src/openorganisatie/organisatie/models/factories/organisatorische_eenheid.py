@@ -21,7 +21,7 @@ class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
     omschrijving = factory.Faker("text", max_nb_chars=50)
     emailadres = factory.Faker("email")
     telefoonnummer = factory.Faker("phone_number")
-    datum_opheffing = None
+    einddatum = None
     hoofd_organisatorische_eenheid = None
     contactpersoon = factory.SubFactory(MedewerkerFactory)
 

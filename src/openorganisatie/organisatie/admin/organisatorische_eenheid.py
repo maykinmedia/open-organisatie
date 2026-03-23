@@ -23,11 +23,14 @@ class OrganisatorischeEenheidAdmin(ReadOnlyCompareVersionAdmin):
                     "verkorte_naam",
                     "soort_organisatie",
                     "omschrijving",
-                    "datum_opheffing",
                     "contactpersoon",
                     "hoofd_organisatorische_eenheid",
                 )
             },
+        ),
+        (
+            "Periods",
+            {"fields": ("startdatum", "einddatum", "wijzigingsdatum")},
         ),
         (
             "Contactgegevens",

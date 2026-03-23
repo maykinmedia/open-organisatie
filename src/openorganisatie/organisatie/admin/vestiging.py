@@ -7,7 +7,7 @@ from ..models.vestiging import Vestiging
 @admin.register(Vestiging)
 class VestigingAdmin(ReadOnlyCompareVersionAdmin):
     list_display = ("naam", "vestigingsnummer")
-    search_fields = ("naam", "vestigingsnummer", "verkorte_naam")
+    search_fields = ("naam", "vestigingsnummer")
     readonly_fields = ("uuid",)
 
     fieldsets = (
@@ -17,9 +17,8 @@ class VestigingAdmin(ReadOnlyCompareVersionAdmin):
                 "fields": (
                     "uuid",
                     "vestigingsnummer",
+                    "kvk_nummer",
                     "naam",
-                    "verkorte_naam",
-                    "landcode",
                 )
             },
         ),

@@ -11,10 +11,10 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
         "achternaam",
         "emailadres",
         "telefoonnummer",
-        "datum_toegevoegd",
-        "datum_aangepast",
+        "startdatum",
+        "einddatum",
     )
-    readonly_fields = ("uuid", "datum_toegevoegd", "datum_aangepast")
+    readonly_fields = ("uuid", "startdatum", "einddatum")
     search_fields = ("voornaam", "achternaam", "emailadres")
     filter_horizontal = ("teams", "functies")
 
@@ -44,13 +44,7 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
         ),
         (
             "Status",
-            {
-                "fields": (
-                    "datum_uit_dienst",
-                    "datum_toegevoegd",
-                    "datum_aangepast",
-                )
-            },
+            {"fields": ("startdatum", "einddatum", "wijzigingsdatum")},
         ),
     )
 

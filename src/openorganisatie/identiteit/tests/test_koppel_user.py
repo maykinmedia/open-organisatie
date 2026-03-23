@@ -24,8 +24,6 @@ class KoppelMedewerkerTests(TestCase):
     def test_koppel_medewerker_by_employee_number(self):
         user = UserFactory(
             username="test",
-            first_name="test",
-            last_name="test",
             email="test@gmail.nl",
             employee_number="123",
         )
@@ -39,8 +37,6 @@ class KoppelMedewerkerTests(TestCase):
 
         user = UserFactory(
             username="test",
-            first_name="test",
-            last_name="test",
             email="test@gmail.nl",
         )
 
@@ -53,8 +49,6 @@ class KoppelMedewerkerTests(TestCase):
 
         user = UserFactory(
             username="test@gmail.nl",
-            first_name="test",
-            last_name="test",
             email="different@gmail.nl",
         )
 
@@ -64,8 +58,6 @@ class KoppelMedewerkerTests(TestCase):
     def test_no_matching_medewerker(self):
         user = UserFactory(
             username="test",
-            first_name="test",
-            last_name="test",
             email="nope@gmail.nl",
             employee_number="999",
         )

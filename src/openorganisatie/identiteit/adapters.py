@@ -69,12 +69,6 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
         return urljoin(base_url, self.path)
 
     @property
-    def phone_numbers(self):
-        if self.obj.phone_number:
-            return [{"value": self.obj.phone_number, "type": "work"}]
-        return []
-
-    @property
     def groups(self):
         return [
             {
@@ -86,14 +80,17 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
         ]
 
     def to_dict(self):
+        if not hasattr(self.obj, "first_name"):
+            self.obj.first_name = ""
+        if not hasattr(self.obj, "last_name"):
+            self.obj.last_name = ""
+
         d = super().to_dict()
 
         d.update(
             {
                 "scimExternalId": str(self.obj.scim_external_id),
                 "userName": str(self.obj.username),
-                "phoneNumbers": self.phone_numbers,
-                "jobTitle": self.obj.job_title,
                 "url": self.location,
             }
         )
@@ -102,28 +99,6 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
 
     def from_dict(self, d):
         super().from_dict(d)
-
-        name = d.get("name", {})
-        if name:
-            self.obj.first_name = name.get("givenName", "")
-            self.obj.last_name = name.get("familyName", "")
-        else:
-            display_name = d.get("displayName", "")
-            if display_name:
-                parts = display_name.split(" ", 1)
-                self.obj.first_name = parts[0]
-                if len(parts) > 1:
-                    self.obj.last_name = parts[1]
-                else:
-                    self.obj.last_name = ""
-
-        phone_numbers = d.get("phoneNumbers", [])
-        if phone_numbers:
-            self.obj.phone_number = phone_numbers[0].get("value", "")
-
-        job_title = d.get("jobTitle")
-        if job_title is not None:
-            self.obj.job_title = job_title
 
         enterprise_ext = d.get(
             "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User", {}
@@ -134,8 +109,6 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
         logger.info(
             "add_scim_user",
             username=str(self.obj.username),
-            first_name=self.obj.first_name,
-            last_name=self.obj.last_name,
         )
 
     def handle_operations(self, operations):
@@ -154,11 +127,6 @@ class UserAdapter(ReversionSCIMMixin, NotificationMixin, SCIMUser):
                     self.obj.is_active = bool(value)
                 elif path == "username":
                     self.obj.username = value
-                elif path == "phonenumbers":
-                    if isinstance(value, list) and value:
-                        self.obj.phone_number = value[0].get("value", "")
-                elif path == "jobtitle":
-                    self.obj.job_title = value
             elif operation == "remove":
                 if path == "username":
                     self.obj.username = ""
@@ -218,7 +186,7 @@ class GroupAdapter(ReversionSCIMMixin, SCIMGroup):
             {
                 "value": str(user.username),
                 "$ref": UserAdapter(user, request=self.request).location,
-                "display": f"{user.first_name} {user.last_name}".strip(),
+                "display": f"{user.username}".strip(),
             }
             for user in self.obj.user_set.all()
         ]

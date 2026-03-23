@@ -45,8 +45,6 @@ class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCaseBeare
         cls.existing_user = User.objects.create(
             scim_external_id=str(uuid.uuid4()),
             username="existing",
-            first_name="Existing",
-            last_name="User",
             email="existing@gmail.com",
             is_active=True,
         )
@@ -63,7 +61,6 @@ class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCaseBeare
             "externalId": str(uuid.uuid4()),
             "userName": "Bob",
             "emails": [{"value": "Bob@gmail.com"}],
-            "name": {"givenName": "Bob", "familyName": "Jansen"},
             "active": True,
         }
 

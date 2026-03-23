@@ -33,4 +33,7 @@ class OrganisatorischeEenheidFilter(FilterSet):
             "identificatie": ["exact"],
             "soort_organisatie": ["exact"],
             "verkorte_naam": ["exact"],
+            "startdatum": ["exact", "gte", "lte"],
+            "einddatum": ["exact", "gte", "lte"],
+            "wijzigingsdatum": ["exact", "gte", "lte"],
         }

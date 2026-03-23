@@ -16,7 +16,6 @@ class VestigingAPITests(APITestCase):
         data = {
             "vestigingsnummer": "9999",
             "naam": "Nieuwe Vestiging",
-            "landcode": "NL",
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -24,7 +23,6 @@ class VestigingAPITests(APITestCase):
         vestiging = Vestiging.objects.get(uuid=response.data["uuid"])
         self.assertEqual(vestiging.vestigingsnummer, data["vestigingsnummer"])
         self.assertEqual(vestiging.naam, data["naam"])
-        self.assertEqual(vestiging.landcode, data["landcode"])
 
     def test_list_vestigingen(self):
         url = reverse("organisatie_api:vestiging-list")
@@ -49,7 +47,6 @@ class VestigingAPITests(APITestCase):
         data = response.json()
         self.assertEqual(data["vestigingsnummer"], vestiging.vestigingsnummer)
         self.assertEqual(data["naam"], vestiging.naam)
-        self.assertEqual(data["landcode"], vestiging.landcode)
 
     def test_update_vestiging(self):
         vestiging = VestigingFactory()
@@ -60,14 +57,12 @@ class VestigingAPITests(APITestCase):
         data = {
             "vestigingsnummer": vestiging.vestigingsnummer,
             "naam": "Bijgewerkte Vestiging",
-            "landcode": "BE",
         }
         response = self.client.put(detail_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         vestiging.refresh_from_db()
         self.assertEqual(vestiging.naam, data["naam"])
-        self.assertEqual(vestiging.landcode, data["landcode"])
 
     def test_partial_update_vestiging(self):
         vestiging = VestigingFactory()
@@ -120,17 +115,6 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["naam"], v1.naam)
 
-    def test_korte_naam_filter(self):
-        v1 = VestigingFactory(verkorte_naam="AMS")
-        VestigingFactory(verkorte_naam="RTM")
-
-        url = reverse("organisatie_api:vestiging-list")
-        response = self.client.get(url, {"verkorteNaam": "AMS"})
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["verkorteNaam"], v1.verkorte_naam)
-
     def test_adres_filter(self):
         v1 = VestigingFactory(adres="Straat 1")
         VestigingFactory(adres="Straat 2")
@@ -151,16 +135,6 @@ class VestigingAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["postAdres"], v1.post_adres)
-
-    def test_landcode_filter(self):
-        v1 = VestigingFactory(landcode="NL")
-        VestigingFactory(landcode="BE")
-
-        url = reverse("organisatie_api:vestiging-list")
-        response = self.client.get(url, {"landcode": "NL"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["landcode"], v1.landcode)
 
     def test_history(self):
         url = reverse("organisatie_api:vestiging-list")

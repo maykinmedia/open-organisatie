@@ -19,6 +19,36 @@ class Team(models.Model):
         blank=True,
         help_text=_("Optionele omschrijving van het team."),
     )
+    soort_team = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text=_("Soort team."),
+    )
+    emailadres = models.EmailField(
+        max_length=254,
+        blank=True,
+        help_text=_("E-mailadres van het team."),
+    )
+    telefoonnummer = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text=_("Telefoonnummer van het team."),
+    )
+    startdatum = models.DateField(
+        null=True,
+        blank=True,
+        help_text=_("De datum waarop het team ingaat."),
+    )
+    einddatum = models.DateField(
+        blank=True,
+        null=True,
+        help_text=_("De datum waarop het team eindigt."),
+    )
+    wijzigingsdatum = models.DateTimeField(
+        blank=True,
+        null=True,
+        help_text=_("De datum waarop het team gewijzigd is."),
+    )
     contactpersoon = models.ForeignKey(
         "organisatie.Medewerker",
         on_delete=models.SET_NULL,
