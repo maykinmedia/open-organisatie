@@ -29,6 +29,7 @@ class OrganisatorischeEenheidFilter(FilterSet):
     class Meta:
         model = OrganisatorischeEenheid
         fields = {
+            "external_id": ["exact"],
             "naam": ["exact", "icontains"],
             "identificatie": ["exact"],
             "soort_organisatie": ["exact"],

@@ -48,6 +48,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         fields = [
             "url",
             "uuid",
+            "external_id",
             "medewerker_id",
             "voornaam",
             "achternaam",

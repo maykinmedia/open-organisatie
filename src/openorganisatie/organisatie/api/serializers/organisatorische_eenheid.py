@@ -20,6 +20,7 @@ class NestedMedewerkerSerializer(serializers.ModelSerializer):
         model = Medewerker
         fields = [
             "uuid",
+            "external_id",
             "medewerker_id",
             "voornaam",
             "achternaam",
@@ -44,6 +45,7 @@ class NestedOrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         model = OrganisatorischeEenheid
         fields = [
             "uuid",
+            "external_id",
             "identificatie",
             "naam",
             "soort_organisatie",
@@ -109,6 +111,7 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         model = OrganisatorischeEenheid
         fields = [
             "uuid",
+            "external_id",
             "identificatie",
             "naam",
             "soort_organisatie",

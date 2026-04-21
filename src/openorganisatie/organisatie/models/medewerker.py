@@ -12,6 +12,12 @@ class Medewerker(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4)"),
     )
+    external_id = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=True,
+        help_text=_("Externe identifier voor deze medewerker."),
+    )
     medewerker_id = models.CharField(
         unique=True,
         max_length=50,

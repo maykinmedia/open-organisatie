@@ -45,6 +45,7 @@ class VestigingViewSet(RevisionMixin, viewsets.ModelViewSet):
     queryset = Vestiging.objects.all()
     serializer_class = VestigingSerializer
     filterset_fields = {
+        "external_id",
         "naam",
         "vestigingsnummer",
         "adres",

@@ -21,6 +21,7 @@ class TeamFilter(FilterSet):
     class Meta:
         model = Team
         fields = {
+            "external_id": ["exact"],
             "naam": ["exact", "icontains"],
             "startdatum": ["exact", "gte", "lte"],
             "einddatum": ["exact", "gte", "lte"],

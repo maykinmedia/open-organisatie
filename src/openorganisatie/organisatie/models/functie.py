@@ -10,6 +10,12 @@ class Functie(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4) voor deze functie."),
     )
+    external_id = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=True,
+        help_text=_("Externe identifier voor deze functie."),
+    )
     functie_omschrijving = models.CharField(
         max_length=255,
         help_text=_("Korte omschrijving of titel van de functie."),

@@ -45,6 +45,7 @@ class FunctieTypeViewSet(RevisionMixin, viewsets.ModelViewSet):
     queryset = FunctieType.objects.all()
     serializer_class = FunctieTypeSerializer
     filterset_fields = {
+        "external_id",
         "naam",
         "slug",
     }

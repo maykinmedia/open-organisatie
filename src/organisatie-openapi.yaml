@@ -58,6 +58,11 @@ paths:
           format: date
         description: De datum waarop de functie eindigt.
       - in: query
+        name: externalId
+        schema:
+          type: string
+        description: Externe identifier voor deze functie.
+      - in: query
         name: functieOmschrijving
         schema:
           type: string
@@ -316,6 +321,11 @@ paths:
       summary: Alle functietypes opvragen.
       parameters:
       - in: query
+        name: externalId
+        schema:
+          type: string
+        description: Externe identifier voor deze functietype.
+      - in: query
         name: naam
         schema:
           type: string
@@ -542,6 +552,10 @@ paths:
         schema:
           type: string
           format: date
+      - in: query
+        name: externalId
+        schema:
+          type: string
       - in: query
         name: functiesUuid
         schema:
@@ -812,6 +826,11 @@ paths:
           type: string
           format: date
         description: De datum waarop de organisatorische eenheid eindigt.
+      - in: query
+        name: externalId
+        schema:
+          type: string
+        description: Externe identifier voor deze organisatorische eenheid.
       - in: query
         name: functiesUuid
         schema:
@@ -1121,6 +1140,11 @@ paths:
           format: date
         description: De datum waarop het team eindigt.
       - in: query
+        name: externalId
+        schema:
+          type: string
+        description: Externe identifier voor dit team.
+      - in: query
         name: functiesUuid
         schema:
           type: array
@@ -1394,6 +1418,11 @@ paths:
           type: string
         description: Fysiek adres van de vestiging (optioneel).
       - in: query
+        name: externalId
+        schema:
+          type: string
+        description: Externe identifier voor deze vestiging.
+      - in: query
         name: naam
         schema:
           type: string
@@ -1617,6 +1646,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4) voor deze functie.
+        externalId:
+          type: string
+          description: Externe identifier voor deze functie.
+          maxLength: 255
         functieOmschrijving:
           type: string
           description: Korte omschrijving of titel van de functie.
@@ -1659,6 +1692,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4) voor dit functietype.
+        externalId:
+          type: string
+          description: Externe identifier voor deze functietype.
+          maxLength: 255
         naam:
           type: string
           description: De naam van het functietype (bijv. Manager, Medewerker).
@@ -1698,6 +1735,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze medewerker.
+          maxLength: 255
         medewerkerId:
           type: string
           description: ID van de medewerker.
@@ -1788,6 +1829,10 @@ components:
           type: string
           format: uuid
           description: Unieke resource identifier (UUID4) voor deze functie.
+        externalId:
+          type: string
+          description: Externe identifier voor deze functie.
+          maxLength: 255
         functieOmschrijving:
           type: string
           description: Korte omschrijving of titel van de functie.
@@ -1816,6 +1861,10 @@ components:
           type: string
           format: uuid
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze medewerker.
+          maxLength: 255
         medewerkerId:
           type: string
           description: ID van de medewerker.
@@ -1874,6 +1923,10 @@ components:
           type: string
           format: uuid
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor dit team.
+          maxLength: 255
         naam:
           type: string
           description: Naam van het team.
@@ -1919,6 +1972,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze organisatorische eenheid.
+          maxLength: 255
         identificatie:
           type: string
           description: Unieke interne identificatie van de organisatorische eenheid.
@@ -2159,6 +2216,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4) voor deze functie.
+        externalId:
+          type: string
+          description: Externe identifier voor deze functie.
+          maxLength: 255
         functieOmschrijving:
           type: string
           description: Korte omschrijving of titel van de functie.
@@ -2196,6 +2257,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4) voor dit functietype.
+        externalId:
+          type: string
+          description: Externe identifier voor deze functietype.
+          maxLength: 255
         naam:
           type: string
           description: De naam van het functietype (bijv. Manager, Medewerker).
@@ -2221,6 +2286,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze medewerker.
+          maxLength: 255
         medewerkerId:
           type: string
           description: ID van de medewerker.
@@ -2303,6 +2372,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze organisatorische eenheid.
+          maxLength: 255
         identificatie:
           type: string
           description: Unieke interne identificatie van de organisatorische eenheid.
@@ -2397,6 +2470,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor dit team.
+          maxLength: 255
         naam:
           type: string
           description: Naam van het team.
@@ -2478,6 +2555,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze vestiging.
+          maxLength: 255
         vestigingsnummer:
           type: string
           description: Unieke identificatiecode of nummer van de vestiging.
@@ -2510,6 +2591,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor dit team.
+          maxLength: 255
         naam:
           type: string
           description: Naam van het team.
@@ -2597,6 +2682,10 @@ components:
           format: uuid
           readOnly: true
           description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze vestiging.
+          maxLength: 255
         vestigingsnummer:
           type: string
           description: Unieke identificatiecode of nummer van de vestiging.

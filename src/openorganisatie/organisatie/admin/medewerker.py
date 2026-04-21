@@ -7,6 +7,7 @@ from ..models.medewerker import Medewerker
 @admin.register(Medewerker)
 class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
     list_display = (
+        "external_id",
         "voornaam",
         "achternaam",
         "emailadres",
@@ -15,7 +16,7 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
         "einddatum",
     )
     readonly_fields = ("uuid", "startdatum", "einddatum")
-    search_fields = ("voornaam", "achternaam", "emailadres")
+    search_fields = ("voornaam", "achternaam", "emailadres", "external_id")
     filter_horizontal = ("teams", "functies")
 
     fieldsets = (
@@ -24,6 +25,7 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
             {
                 "fields": (
                     "uuid",
+                    "external_id",
                     "medewerker_id",
                     "voornaam",
                     "achternaam",

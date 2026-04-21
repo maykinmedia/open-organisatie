@@ -11,6 +11,12 @@ class OrganisatorischeEenheid(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4)"),
     )
+    external_id = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=True,
+        help_text=_("Externe identifier voor deze organisatorische eenheid."),
+    )
     identificatie = models.CharField(
         max_length=50,
         unique=True,
