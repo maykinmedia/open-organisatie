@@ -9,6 +9,7 @@ from openorganisatie.organisatie.models import Medewerker
 
 
 class MedewerkerFactory(factory.django.DjangoModelFactory):
+    external_id = factory.LazyFunction(uuid.uuid4)
     uuid = factory.LazyFunction(uuid.uuid4)
     medewerker_id = factory.Sequence(lambda n: f"medewerker_{n}")
     voornaam = factory.Faker("first_name")

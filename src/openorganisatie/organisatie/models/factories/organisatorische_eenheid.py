@@ -13,6 +13,7 @@ fake = Faker()
 
 
 class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
+    external_id = factory.LazyFunction(uuid.uuid4)
     uuid = factory.LazyFunction(uuid.uuid4)
     identificatie = factory.Sequence(lambda n: f"OE{n:03d}")
     naam = factory.LazyAttribute(lambda o: fake.name()[:50])
