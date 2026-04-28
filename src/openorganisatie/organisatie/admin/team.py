@@ -6,14 +6,14 @@ from ..models.team import Team
 
 @admin.register(Team)
 class TeamAdmin(ReadOnlyCompareVersionAdmin):
-    list_display = ("external_id", "naam", "display_medewerkers", "contactpersoon")
+    list_display = ("external_id", "naam", "contactpersoon")
     search_fields = (
         "naam",
         "omschrijving",
         "external_id",
     )
-    readonly_fields = ("display_medewerkers", "uuid")
-    filter_horizontal = ("vestigingen", "functies")
+    readonly_fields = ("uuid",)
+    filter_horizontal = ("vestigingen",)
 
     fieldsets = (
         (
@@ -35,30 +35,10 @@ class TeamAdmin(ReadOnlyCompareVersionAdmin):
             },
         ),
         (
-            "Medewerkers",
-            {
-                "fields": ("display_medewerkers",),
-            },
-        ),
-        (
             "Relaties",
-            {"fields": ("vestigingen", "functies")},
+            {"fields": ("vestigingen",)},
         ),
     )
 
-    def display_medewerkers(self, obj):
-        return ", ".join(
-            [
-                f"{medewerker.voornaam} {medewerker.achternaam}"
-                for medewerker in obj.medewerkers.all()
-            ]
-        )
-
-    display_medewerkers.short_description = "Medewerkers"
-
     def get_queryset(self, request):
-        return (
-            super()
-            .get_queryset(request)
-            .prefetch_related("vestigingen", "functies", "medewerkers")
-        )
+        return super().get_queryset(request).prefetch_related("vestigingen")

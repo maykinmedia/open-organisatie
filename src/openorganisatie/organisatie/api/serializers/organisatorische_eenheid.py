@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from vng_api_common.utils import get_help_text
 
-from openorganisatie.organisatie.models.functie import Functie
 from openorganisatie.organisatie.models.medewerker import Medewerker
 from openorganisatie.organisatie.models.organisatorische_eenheid import (
     OrganisatorischeEenheid,
@@ -11,7 +10,6 @@ from openorganisatie.organisatie.models.organisatorische_eenheid import (
 from openorganisatie.organisatie.models.vestiging import Vestiging
 from openorganisatie.utils.fields import UUIDRelatedField
 
-from ..serializers.functie import NestedFunctieSerializer
 from ..serializers.vestiging import VestigingSerializer
 
 
@@ -87,19 +85,6 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         required=False,
         help_text=_("UUID’s van gekoppelde vestigingen."),
     )
-    functies = NestedFunctieSerializer(
-        many=True,
-        read_only=True,
-        help_text=get_help_text("organisatie.OrganisatorischeEenheid", "functies"),
-    )
-    functies_uuid = UUIDRelatedField(
-        queryset=Functie.objects.all(),
-        write_only=True,
-        source="functies",
-        many=True,
-        required=False,
-        help_text=_("UUID’s van gekoppelde functies."),
-    )
     hoofd_organisatorische_eenheid = UUIDRelatedField(
         queryset=OrganisatorischeEenheid.objects.all(),
         required=False,
@@ -126,8 +111,6 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
             "contactpersoon_uuid",
             "vestigingen",
             "vestigingen_uuid",
-            "functies",
-            "functies_uuid",
             "hoofd_organisatorische_eenheid",
         ]
         extra_kwargs = {

@@ -60,18 +60,6 @@ class Medewerker(models.Model):
         null=True,
         help_text=_("De datum waarop de medewerker gewijzigd is."),
     )
-    teams = models.ManyToManyField(
-        "organisatie.Team",
-        related_name="medewerkers",
-        blank=True,
-        help_text=_("Teams van de medewerker."),
-    )
-    functies = models.ManyToManyField(
-        "organisatie.Functie",
-        related_name="medewerkers",
-        blank=True,
-        help_text=_("Functies van de medewerker."),
-    )
 
     class Meta:
         verbose_name = _("Medewerker")

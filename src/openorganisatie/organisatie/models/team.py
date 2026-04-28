@@ -68,13 +68,6 @@ class Team(models.Model):
         blank=True,
         help_text=_("Vestigingen waaraan de medewerker gekoppeld is."),
     )
-    functies = models.ManyToManyField(
-        "organisatie.Functie",
-        related_name="teams",
-        blank=True,
-        verbose_name=_("Functies"),
-        help_text=_("Functies die binnen dit team actief zijn."),
-    )
 
     class Meta:
         verbose_name = _("Team")

@@ -36,19 +36,7 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
             },
         ),
         (
-            "Relaties",
-            {
-                "fields": (
-                    "teams",
-                    "functies",
-                )
-            },
-        ),
-        (
             "Status",
             {"fields": ("startdatum", "einddatum", "wijzigingsdatum")},
         ),
     )
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related("teams", "functies")
