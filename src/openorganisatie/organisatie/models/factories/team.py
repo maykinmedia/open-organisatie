@@ -23,10 +23,3 @@ class TeamFactory(factory.django.DjangoModelFactory):
             return
         if extracted:
             self.vestigingen.set(extracted)
-
-    @factory.post_generation
-    def functies(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.functies.set(extracted)
