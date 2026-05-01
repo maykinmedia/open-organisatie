@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.postgres.forms import DateRangeField as FormDateRangeField
 
-from ..models.relaties import FunctieTeam
+from ..models.relaties import FunctieTeam, OrganisatorischeEenheidFunctie
 
 
 class DateRangeWidget(forms.MultiWidget):
@@ -28,38 +28,30 @@ class DateRangeWidget(forms.MultiWidget):
 
 
 class FunctieTeamInlineForm(forms.ModelForm):
-    period = FormDateRangeField(
+    periode = FormDateRangeField(
         widget=DateRangeWidget(),
         label="Periode",
     )
 
     class Meta:
         model = FunctieTeam
-        fields = "__all__"
-
-    def clean_period(self):
-        value = self.cleaned_data.get("period")
-
-        if not value:
-            return None
-
-        return value
+        fields = (
+            "functie",
+            "team",
+            "periode",
+        )
 
 
 class FunctieOrganisatorischeEenheidInlineForm(forms.ModelForm):
-    period = FormDateRangeField(
+    periode = FormDateRangeField(
         widget=DateRangeWidget(),
         label="Periode",
     )
 
     class Meta:
-        model = FunctieTeam
-        fields = "__all__"
-
-    def clean_period(self):
-        value = self.cleaned_data.get("period")
-
-        if not value:
-            return None
-
-        return value
+        model = OrganisatorischeEenheidFunctie
+        fields = (
+            "functie",
+            "organisatorische_eenheid",
+            "periode",
+        )

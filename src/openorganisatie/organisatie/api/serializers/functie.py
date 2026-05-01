@@ -70,7 +70,7 @@ class OrganisatorischeEenheidGroupPeriodsSerializer(serializers.Serializer):
 
 class FunctieTeamSerializer(serializers.ModelSerializer):
     team = NestedTeamSerializer(read_only=True)
-    periode = PeriodSerializer(source="period", read_only=True)
+    periode = PeriodSerializer(read_only=True)
 
     class Meta:
         model = FunctieTeam
@@ -87,7 +87,7 @@ class FunctieTeamWriteSerializer(serializers.ModelSerializer):
         queryset=Team.objects.all(),
         write_only=True,
     )
-    periode = PeriodSerializer(source="period", write_only=True)
+    periode = PeriodSerializer(write_only=True)
 
     class Meta:
         model = FunctieTeam
@@ -99,7 +99,7 @@ class FunctieTeamWriteSerializer(serializers.ModelSerializer):
 
 class OrganisatorischeEenheidFunctieSerializer(serializers.ModelSerializer):
     organisatorische_eenheid = NestedOrganisatorischeEenheidSerializer(read_only=True)
-    periode = PeriodSerializer(source="period", read_only=True)
+    periode = PeriodSerializer(read_only=True)
 
     class Meta:
         model = OrganisatorischeEenheidFunctie
@@ -116,7 +116,7 @@ class OrganisatorischeEenheidFunctieWriteSerializer(serializers.ModelSerializer)
         queryset=OrganisatorischeEenheid.objects.all(),
         write_only=True,
     )
-    periode = PeriodSerializer(source="period", write_only=True)
+    periode = PeriodSerializer(write_only=True)
 
     class Meta:
         model = OrganisatorischeEenheidFunctie
@@ -207,7 +207,7 @@ class FunctieSerializer(serializers.ModelSerializer):
                     "wijzigingsdatum": rel.wijzigingsdatum,
                 }
 
-            grouped[team_id]["periodes"].append(rel.period)
+            grouped[team_id]["periodes"].append(rel.periode)
 
         return TeamGroupPeriodsSerializer(grouped.values(), many=True).data
 
@@ -229,7 +229,7 @@ class FunctieSerializer(serializers.ModelSerializer):
                     "wijzigingsdatum": rel.wijzigingsdatum,
                 }
 
-            grouped[organisatorische_eenheid_id]["periodes"].append(rel.period)
+            grouped[organisatorische_eenheid_id]["periodes"].append(rel.periode)
 
         return OrganisatorischeEenheidGroupPeriodsSerializer(
             grouped.values(), many=True
@@ -243,24 +243,24 @@ class FunctieSerializer(serializers.ModelSerializer):
             functie = super().create(validated_data)
 
             for team in teams_data:
-                period_data = team.pop("period")
+                period_data = team.pop("periode")
                 start = period_data["startdatum"]
                 end = period_data.get("einddatum")
 
                 FunctieTeam.objects.create(
                     functie=functie,
-                    period=DateRange(start, end),
+                    periode=DateRange(start, end),
                     **team,
                 )
 
             for oe in oe_data:
-                period_data = oe.pop("period")
+                period_data = oe.pop("periode")
                 start = period_data["startdatum"]
                 end = period_data.get("einddatum")
 
                 OrganisatorischeEenheidFunctie.objects.create(
                     functie=functie,
-                    period=DateRange(start, end),
+                    periode=DateRange(start, end),
                     **oe,
                 )
 

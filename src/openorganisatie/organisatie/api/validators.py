@@ -25,7 +25,7 @@ def validate_functie_team(serializer, attrs):
 
     for item in teams:
         team = item.get("team")
-        period = item.get("period")
+        period = item.get("periode")
 
         if not team or not period:
             continue
@@ -40,7 +40,7 @@ def validate_functie_team(serializer, attrs):
         if functie:
             qs = qs.filter(functie=functie)
 
-        if qs.filter(period__overlap=period_range).exists():
+        if qs.filter(periode__overlap=period_range).exists():
             raise serializers.ValidationError(
                 {"teams_input": "Deze periode overlapt met een bestaand team."}
             )
@@ -52,7 +52,7 @@ def validate_functie_oe(serializer, attrs):
 
     for item in organisatorische_eenheden:
         organisatorische_eenheid = item.get("organisatorische_eenheid")
-        period = item.get("period")
+        period = item.get("periode")
 
         if not organisatorische_eenheid or not period:
             continue
@@ -66,7 +66,7 @@ def validate_functie_oe(serializer, attrs):
         if functie:
             qs = qs.filter(functie=functie)
 
-        if qs.filter(period__overlap=period_range).exists():
+        if qs.filter(periode__overlap=period_range).exists():
             raise serializers.ValidationError(
                 {
                     "organisatorische_eenheden_input": "Deze periode overlapt met een bestaande relatie."

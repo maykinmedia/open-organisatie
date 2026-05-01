@@ -40,6 +40,18 @@ paths:
       summary: Alle functies opvragen.
       parameters:
       - in: query
+        name: actiefOpOrganisatorischeEenheid
+        schema:
+          type: string
+          format: date
+        description: Functies actief via organisatorische eenheid op deze datum
+      - in: query
+        name: actiefOpTeam
+        schema:
+          type: string
+          format: date
+        description: Functies actief via team op deze datum
+      - in: query
         name: einddatum
         schema:
           type: string
@@ -82,6 +94,16 @@ paths:
         description: UUID's van de gekoppelde functietypen.
         explode: false
         style: form
+      - in: query
+        name: organisatorischeEenheidUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUID's van de gekoppelde organisatorische eenheden.
+        explode: false
+        style: form
       - name: page
         required: false
         in: query
@@ -113,6 +135,16 @@ paths:
           type: string
           format: date
         description: De datum waarop de functie ingaat.
+      - in: query
+        name: teamUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUID's van de gekoppelde teams.
+        explode: false
+        style: form
       - in: query
         name: wijzigingsdatum
         schema:
@@ -1668,16 +1700,20 @@ components:
           type: string
           format: uuid
           writeOnly: true
-          description: UUID van de gekoppelde medewerker.
+          description: UUID van de gekoppelde functietype.
         medewerker:
-          type: array
-          items:
-            $ref: '#/components/schemas/Medewerker'
+          allOf:
+          - $ref: '#/components/schemas/Medewerker'
           readOnly: true
+        medewerkerUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+          description: UUID van de gekoppelde medewerker.
         teams:
           type: array
           items:
-            $ref: '#/components/schemas/FunctieTeam'
+            $ref: '#/components/schemas/TeamGroupPeriods'
           readOnly: true
         teamsInput:
           type: array
@@ -1687,7 +1723,7 @@ components:
         organisatorischeEenheden:
           type: array
           items:
-            $ref: '#/components/schemas/OrganisatorischeEenheidFunctie'
+            $ref: '#/components/schemas/OrganisatorischeEenheidGroupPeriods'
           readOnly: true
         organisatorischeEenhedenInput:
           type: array
@@ -1702,30 +1738,6 @@ components:
       - organisatorischeEenheden
       - teams
       - uuid
-    FunctieTeam:
-      type: object
-      properties:
-        team:
-          allOf:
-          - $ref: '#/components/schemas/NestedTeam'
-          readOnly: true
-        startdatum:
-          type: string
-          format: date
-          description: De datum waarop de functie begint.
-        einddatum:
-          type: string
-          format: date
-          nullable: true
-          description: De datum waarop de functie eindigd.
-        wijzigingsdatum:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - startdatum
-      - team
-      - wijzigingsdatum
     FunctieTeamWrite:
       type: object
       properties:
@@ -1733,17 +1745,12 @@ components:
           type: string
           format: uuid
           writeOnly: true
-        startdatum:
-          type: string
-          format: date
-          description: De datum waarop de functie begint.
-        einddatum:
-          type: string
-          format: date
-          nullable: true
-          description: De datum waarop de functie eindigd.
+        periode:
+          allOf:
+          - $ref: '#/components/schemas/Period'
+          writeOnly: true
       required:
-      - startdatum
+      - periode
       - teamUuid
     FunctieType:
       type: object
@@ -2150,28 +2157,6 @@ components:
       - soortOrganisatie
       - uuid
       - vestigingen
-    OrganisatorischeEenheidFunctie:
-      type: object
-      properties:
-        organisatorischeEenheid:
-          allOf:
-          - $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
-          readOnly: true
-        startdatum:
-          type: string
-          format: date
-        einddatum:
-          type: string
-          format: date
-          nullable: true
-        wijzigingsdatum:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - organisatorischeEenheid
-      - startdatum
-      - wijzigingsdatum
     OrganisatorischeEenheidFunctieWrite:
       type: object
       properties:
@@ -2179,16 +2164,30 @@ components:
           type: string
           format: uuid
           writeOnly: true
-        startdatum:
-          type: string
-          format: date
-        einddatum:
-          type: string
-          format: date
-          nullable: true
+        periode:
+          allOf:
+          - $ref: '#/components/schemas/Period'
+          writeOnly: true
       required:
       - organisatorischeEenheidUuid
-      - startdatum
+      - periode
+    OrganisatorischeEenheidGroupPeriods:
+      type: object
+      properties:
+        organisatorischeEenheid:
+          $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
+        periodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Period'
+        wijzigingsdatum:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - organisatorischeEenheid
+      - periodes
+      - wijzigingsdatum
     PaginatedFunctieList:
       type: object
       required:
@@ -2367,16 +2366,20 @@ components:
           type: string
           format: uuid
           writeOnly: true
-          description: UUID van de gekoppelde medewerker.
+          description: UUID van de gekoppelde functietype.
         medewerker:
-          type: array
-          items:
-            $ref: '#/components/schemas/Medewerker'
+          allOf:
+          - $ref: '#/components/schemas/Medewerker'
           readOnly: true
+        medewerkerUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+          description: UUID van de gekoppelde medewerker.
         teams:
           type: array
           items:
-            $ref: '#/components/schemas/FunctieTeam'
+            $ref: '#/components/schemas/TeamGroupPeriods'
           readOnly: true
         teamsInput:
           type: array
@@ -2386,7 +2389,7 @@ components:
         organisatorischeEenheden:
           type: array
           items:
-            $ref: '#/components/schemas/OrganisatorischeEenheidFunctie'
+            $ref: '#/components/schemas/OrganisatorischeEenheidGroupPeriods'
           readOnly: true
         organisatorischeEenhedenInput:
           type: array
@@ -2671,6 +2674,18 @@ components:
           type: string
           description: Telefoonnummer van de vestiging (optioneel).
           maxLength: 50
+    Period:
+      type: object
+      properties:
+        startdatum:
+          type: string
+          format: date
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - startdatum
     Team:
       type: object
       properties:
@@ -2747,6 +2762,23 @@ components:
       - naam
       - uuid
       - vestigingen
+    TeamGroupPeriods:
+      type: object
+      properties:
+        team:
+          $ref: '#/components/schemas/NestedTeam'
+        periodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Period'
+        wijzigingsdatum:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - periodes
+      - team
+      - wijzigingsdatum
     Vestiging:
       type: object
       properties:

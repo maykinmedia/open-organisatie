@@ -31,7 +31,7 @@ class FunctieTeamFactory(factory.django.DjangoModelFactory):
     )
     team = SubFactory(TeamFactory)
 
-    period = factory.LazyFunction(
+    periode = factory.LazyFunction(
         lambda: DateRange(
             date.today(),
             date.today() + timedelta(days=30),
@@ -48,7 +48,7 @@ class OrganisatorischeEenheidFunctieFactory(factory.django.DjangoModelFactory):
     )
     organisatorische_eenheid = factory.SubFactory(OrganisatorischeEenheidFactory)
 
-    period = factory.LazyFunction(
+    periode = factory.LazyFunction(
         lambda: DateRange(
             date.today(),
             date.today() + timedelta(days=30),

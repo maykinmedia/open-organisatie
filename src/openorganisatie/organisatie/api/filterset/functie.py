@@ -1,28 +1,12 @@
-from datetime import date
-
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from django_filters import Filter
+from django_filters import DateFilter
 
 from openorganisatie.organisatie.models.functie import Functie
 from openorganisatie.utils.filters import (
     FilterSet,
     UUIDFInFilter,
 )
-
-
-class CombinedActiveOnDateFilter(Filter):
-    def filter(self, qs, value):
-        if not value:
-            return qs
-
-        target_date = date.fromisoformat(value)
-
-        return qs.filter(
-            Q(functieteam__period__contains=target_date)
-            | Q(organisatorischeeenheidfunctie__period__contains=target_date)
-        ).distinct()
 
 
 class FunctieFilter(FilterSet):
@@ -44,8 +28,17 @@ class FunctieFilter(FilterSet):
         distinct=True,
         help_text=_("UUID's van de gekoppelde organisatorische eenheden."),
     )
-    actief_op = CombinedActiveOnDateFilter(
-        help_text="Functies actief via team of organisatorische eenheid op deze datum",
+    actief_op_team = DateFilter(
+        field_name="functieteam__periode",
+        lookup_expr="contains",
+        distinct=True,
+        help_text="Functies actief via team op deze datum",
+    )
+    actief_op_organisatorische_eenheid = DateFilter(
+        field_name="organisatorischeeenheidfunctie__periode",
+        lookup_expr="contains",
+        distinct=True,
+        help_text="Functies actief via organisatorische eenheid op deze datum",
     )
 
     class Meta:

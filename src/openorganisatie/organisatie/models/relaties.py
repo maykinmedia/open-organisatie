@@ -1,7 +1,6 @@
 from django.contrib.postgres.constraints import ExclusionConstraint
 from django.contrib.postgres.fields import DateRangeField
 from django.contrib.postgres.fields.ranges import RangeOperators
-from django.contrib.postgres.indexes import GistIndex
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -13,7 +12,7 @@ class FunctieTeam(models.Model):
 
     wijzigingsdatum = models.DateTimeField(auto_now=True)
 
-    period = DateRangeField(blank=True, null=True)
+    periode = DateRangeField(blank=True, null=True)
 
     class Meta:
         verbose_name = _("Functie Team")
@@ -25,13 +24,9 @@ class FunctieTeam(models.Model):
                 expressions=[
                     ("functie", RangeOperators.EQUAL),
                     ("team", RangeOperators.EQUAL),
-                    ("period", RangeOperators.OVERLAPS),
+                    ("periode", RangeOperators.OVERLAPS),
                 ],
             ),
-        ]
-
-        indexes = [
-            GistIndex(fields=["period"]),
         ]
 
     def __str__(self):
@@ -44,10 +39,10 @@ class FunctieTeam(models.Model):
     def clean(self):
         super().clean()
 
-        if not self.period:
+        if not self.periode:
             raise ValidationError({"period": "Periode is verplicht."})
 
-        if not self.period.lower:
+        if not self.periode.lower:
             raise ValidationError({"period": "Startdatum is verplicht."})
 
         qs = FunctieTeam.objects.filter(
@@ -55,9 +50,9 @@ class FunctieTeam(models.Model):
             team_id=self.team_id,
         ).exclude(pk=self.pk)
 
-        if qs.filter(period__overlap=self.period).exists():
+        if qs.filter(periode__overlap=self.periode).exists():
             raise ValidationError(
-                {"period": "Deze periode overlapt met een bestaande toewijzing."}
+                {"periode": "Deze periode overlapt met een bestaande toewijzing."}
             )
 
 
@@ -69,7 +64,7 @@ class OrganisatorischeEenheidFunctie(models.Model):
 
     wijzigingsdatum = models.DateTimeField(auto_now=True)
 
-    period = DateRangeField(blank=True, null=True)
+    periode = DateRangeField(blank=True, null=True)
 
     class Meta:
         verbose_name = _("Functie organisatorische eenheden")
@@ -81,13 +76,9 @@ class OrganisatorischeEenheidFunctie(models.Model):
                 expressions=[
                     ("functie", RangeOperators.EQUAL),
                     ("organisatorische_eenheid", RangeOperators.EQUAL),
-                    ("period", RangeOperators.OVERLAPS),
+                    ("periode", RangeOperators.OVERLAPS),
                 ],
             ),
-        ]
-
-        indexes = [
-            GistIndex(fields=["period"]),
         ]
 
     def __str__(self):
@@ -100,18 +91,18 @@ class OrganisatorischeEenheidFunctie(models.Model):
     def clean(self):
         super().clean()
 
-        if not self.period:
-            raise ValidationError({"period": "Periode is verplicht."})
+        if not self.periode:
+            raise ValidationError({"periode": "Periode is verplicht."})
 
-        if not self.period.lower:
-            raise ValidationError({"period": "Startdatum is verplicht."})
+        if not self.periode.lower:
+            raise ValidationError({"periode": "Startdatum is verplicht."})
 
         qs = OrganisatorischeEenheidFunctie.objects.filter(
             functie_id=self.functie_id,
             organisatorische_eenheid_id=self.organisatorische_eenheid_id,
         ).exclude(pk=self.pk)
 
-        if qs.filter(period__overlap=self.period).exists():
+        if qs.filter(periode__overlap=self.periode).exists():
             raise ValidationError(
-                {"period": "Deze periode overlapt met een bestaande toewijzing."}
+                {"periode": "Deze periode overlapt met een bestaande toewijzing."}
             )

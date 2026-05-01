@@ -184,7 +184,7 @@ class FunctieAPITests(APITestCase):
 
         FunctieTeamFactory(
             team=team,
-            period=DateRange(date(2025, 1, 1), None),
+            periode=DateRange(date(2025, 1, 1), None),
         )
 
         data = {
@@ -213,7 +213,7 @@ class FunctieAPITests(APITestCase):
 
         FunctieTeamFactory(
             team=team,
-            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         data = {
@@ -241,7 +241,7 @@ class FunctieAPITests(APITestCase):
 
         FunctieTeamFactory(
             team=team,
-            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         data = {
@@ -269,7 +269,7 @@ class FunctieAPITests(APITestCase):
 
         FunctieTeamFactory(
             team=team,
-            period=DateRange(date(2025, 1, 1), None),
+            periode=DateRange(date(2025, 1, 1), None),
         )
 
         data = {
@@ -298,7 +298,7 @@ class FunctieAPITests(APITestCase):
         # existing assignment
         OrganisatorischeEenheidFunctieFactory(
             organisatorische_eenheid=oe,
-            period=DateRange(date(2025, 1, 1), None),
+            periode=DateRange(date(2025, 1, 1), None),
         )
 
         data = {
@@ -682,13 +682,13 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team,
-            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
         FunctieTeamFactory(
-            period=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
+            periode=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
         )
 
-        response = self.client.get(url, {"actief_op": "2025-03-01"})
+        response = self.client.get(url, {"actief_op_team": "2025-03-01"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -705,10 +705,10 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team,
-            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
-        response = self.client.get(url, {"actief_op": "2025-07-01"})
+        response = self.client.get(url, {"actief_op_team": "2025-07-01"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 0)
@@ -723,10 +723,10 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team,
-            period=DateRange(date(2025, 1, 1), None),
+            periode=DateRange(date(2025, 1, 1), None),
         )
 
-        response = self.client.get(url, {"actief_op": "2030-01-01"})
+        response = self.client.get(url, {"actief_op_team": "2030-01-01"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -745,16 +745,16 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie1,
             team=team,
-            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         FunctieTeamFactory(
             functie=functie2,
             team=team,
-            period=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
+            periode=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
         )
 
-        response = self.client.get(url, {"actief_op": "2025-03-01"})
+        response = self.client.get(url, {"actief_op_team": "2025-03-01"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
@@ -773,16 +773,16 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie1,
             team=team,
-            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         FunctieTeamFactory(
             functie=functie2,
             team=team,
-            period=DateRange(date(2025, 1, 1), date(2026, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2026, 6, 1)),
         )
 
-        response = self.client.get(url, {"actief_op": "2025-03-01"})
+        response = self.client.get(url, {"actief_op_team": "2025-03-01"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
@@ -801,16 +801,16 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team1,
-            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         FunctieTeamFactory(
             functie=functie,
             team=team2,
-            period=DateRange(date(2025, 2, 1), date(2025, 5, 1)),
+            periode=DateRange(date(2025, 2, 1), date(2025, 5, 1)),
         )
 
-        response = self.client.get(url, {"actief_op": "2025-03-01"})
+        response = self.client.get(url, {"actief_op_team": "2025-03-01"})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
