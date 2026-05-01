@@ -3,14 +3,21 @@ from datetime import date, datetime
 from django.urls import reverse
 from django.utils.timezone import make_aware
 
+from psycopg.types.range import DateRange
 from rest_framework import status
 from rest_framework.test import APIClient
 from reversion.models import Version
 
 from openorganisatie.organisatie.models.factories.functie import (
     FunctieFactory,
+    FunctieTeamFactory,
     FunctieTypeFactory,
+    OrganisatorischeEenheidFunctieFactory,
 )
+from openorganisatie.organisatie.models.factories.organisatorische_eenheid import (
+    OrganisatorischeEenheidFactory,
+)
+from openorganisatie.organisatie.models.factories.team import TeamFactory
 
 from ...models import Functie
 from .api_testcase import APITestCase
@@ -35,9 +42,292 @@ class FunctieAPITests(APITestCase):
         self.assertEqual(functie.functie_omschrijving, data["functieOmschrijving"])
         self.assertEqual(functie.startdatum.isoformat(), data["startdatum"])
 
+    def test_create_functie_with_team(self):
+        url = reverse("organisatie_api:functie-list")
+        team = TeamFactory()
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-11-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "periode": {
+                        "startdatum": "2025-01-01",
+                        "einddatum": "2025-12-31",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(len(response.data["teams"]), 1)
+        self.assertEqual(
+            response.data["teams"][0]["team"]["uuid"],
+            str(team.uuid),
+        )
+
+    def test_create_functie_with_organisatorische_eenheid(self):
+        url = reverse("organisatie_api:functie-list")
+
+        oe = OrganisatorischeEenheidFactory()
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-11-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "organisatorischeEenhedenInput": [
+                {
+                    "organisatorischeEenheidUuid": str(oe.uuid),
+                    "periode": {
+                        "startdatum": "2025-01-01",
+                        "einddatum": "2025-12-31",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(len(response.data["organisatorische_eenheden"]), 1)
+        self.assertEqual(
+            response.data["organisatorische_eenheden"][0]["organisatorische_eenheid"][
+                "uuid"
+            ],
+            str(oe.uuid),
+        )
+
+    def test_create_functie_with_multiple_teams_and_oe(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team1 = TeamFactory()
+        team2 = TeamFactory()
+        oe1 = OrganisatorischeEenheidFactory()
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-01-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team1.uuid),
+                    "periode": {
+                        "startdatum": "2025-01-01",
+                        "einddatum": "2025-06-01",
+                    },
+                },
+                {
+                    "teamUuid": str(team2.uuid),
+                    "periode": {
+                        "startdatum": "2025-06-02",
+                        "einddatum": "2025-06-05",
+                    },
+                },
+                {
+                    "teamUuid": str(team2.uuid),
+                    "periode": {
+                        "startdatum": "2025-07-02",
+                        "einddatum": None,
+                    },
+                },
+            ],
+            "organisatorischeEenhedenInput": [
+                {
+                    "organisatorischeEenheidUuid": str(oe1.uuid),
+                    "periode": {
+                        "startdatum": "2025-01-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(len(response.data["teams"]), 2)
+        self.assertEqual(len(response.data["organisatorische_eenheden"]), 1)
+
+    def test_create_functie_with_open_ended_team(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-01-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "periode": {
+                        "startdatum": "2025-01-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.assertIsNone(response.data["teams"][0]["periodes"][0]["einddatum"])
+
+    def test_create_functie_team_overlap_should_fail(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        FunctieTeamFactory(
+            team=team,
+            period=DateRange(date(2025, 1, 1), None),
+        )
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-01-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "periode": {
+                        "startdatum": "2025-06-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_functie_team_overlap_exact_same_period_should_fail(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        FunctieTeamFactory(
+            team=team,
+            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-01-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "periode": {
+                        "startdatum": "2025-01-01",
+                        "einddatum": "2025-06-01",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_functie_team_partial_overlap_should_fail(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        FunctieTeamFactory(
+            team=team,
+            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-01-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "periode": {
+                        "startdatum": "2025-05-01",
+                        "einddatum": "2025-07-01",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_functie_team_open_ended_overlap_should_fail(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        FunctieTeamFactory(
+            team=team,
+            period=DateRange(date(2025, 1, 1), None),
+        )
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-01-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "periode": {
+                        "startdatum": "2025-02-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_functie_oe_overlap_should_fail(self):
+        url = reverse("organisatie_api:functie-list")
+
+        oe = OrganisatorischeEenheidFactory()
+
+        # existing assignment
+        OrganisatorischeEenheidFunctieFactory(
+            organisatorische_eenheid=oe,
+            period=DateRange(date(2025, 1, 1), None),
+        )
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-01-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "organisatorischeEenhedenInput": [
+                {
+                    "organisatorischeEenheidUuid": str(oe.uuid),
+                    "periode": {
+                        "startdatum": "2025-02-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_list_functies(self):
         url = reverse("organisatie_api:functie-list")
-        FunctieFactory.create_batch(3)
+        team = TeamFactory()
+        oe = OrganisatorischeEenheidFactory()
+        FunctieFactory.create_batch(
+            3,
+            teams=[team],
+            organisatorische_eenheden=[oe],
+        )
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -151,6 +441,76 @@ class FunctieAPITests(APITestCase):
         self.assertEqual(
             response.data["results"][0]["external_id"], str(functie1.external_id)
         )
+
+    def test_filter_team_uuid(self):
+        team1 = TeamFactory()
+        team2 = TeamFactory()
+
+        functie1 = FunctieFactory(teams=[team1])
+        FunctieFactory(teams=[team2])
+
+        url = reverse("organisatie_api:functie-list")
+        response = self.client.get(url, {"team_uuid": str(team1.uuid)})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(functie1.uuid))
+
+    def test_filter_multiple_team_uuids(self):
+        team1 = TeamFactory()
+        team2 = TeamFactory()
+        team3 = TeamFactory()
+
+        FunctieFactory(teams=[team1])
+        FunctieFactory(teams=[team2])
+        FunctieFactory(teams=[team3])
+
+        url = reverse("organisatie_api:functie-list")
+        response = self.client.get(
+            url,
+            {
+                "team_uuid": f"{team1.uuid},{team2.uuid}",
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 2)
+
+    def test_filter_organisatorische_eenheid_uuid(self):
+        oe1 = OrganisatorischeEenheidFactory()
+        oe2 = OrganisatorischeEenheidFactory()
+
+        functie1 = FunctieFactory(organisatorische_eenheden=[oe1])
+        FunctieFactory(organisatorische_eenheden=[oe2])
+
+        url = reverse("organisatie_api:functie-list")
+        response = self.client.get(
+            url, {"organisatorische_eenheid_uuid": str(oe1.uuid)}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]["uuid"], str(functie1.uuid))
+
+    def test_filter_multiple_organisatorische_eenheid_uuids(self):
+        oe1 = OrganisatorischeEenheidFactory()
+        oe2 = OrganisatorischeEenheidFactory()
+        oe3 = OrganisatorischeEenheidFactory()
+
+        FunctieFactory(organisatorische_eenheden=[oe1])
+        FunctieFactory(organisatorische_eenheden=[oe2])
+        FunctieFactory(organisatorische_eenheden=[oe3])
+
+        url = reverse("organisatie_api:functie-list")
+        response = self.client.get(
+            url,
+            {
+                "organisatorische_eenheid_uuid": f"{oe1.uuid},{oe2.uuid}",
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 2)
 
     def test_history(self):
         url = reverse("organisatie_api:functie-list")
@@ -311,3 +671,148 @@ class FunctieAPITests(APITestCase):
             response.data["results"][0]["wijzigingsdatum"],
             f1.wijzigingsdatum.isoformat(),
         )
+
+    def test_filter_active_on_team_date(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        functie = FunctieFactory()
+
+        FunctieTeamFactory(
+            functie=functie,
+            team=team,
+            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+        FunctieTeamFactory(
+            period=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
+        )
+
+        response = self.client.get(url, {"actief_op": "2025-03-01"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+        self.assertEqual(response.data["results"][0]["uuid"], str(functie.uuid))
+
+    def test_filter_active_on_team_date_outside_range(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        functie = FunctieFactory()
+
+        FunctieTeamFactory(
+            functie=functie,
+            team=team,
+            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+
+        response = self.client.get(url, {"actief_op": "2025-07-01"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 0)
+
+    def test_filter_active_on_team_date_open_ended(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        functie = FunctieFactory()
+
+        FunctieTeamFactory(
+            functie=functie,
+            team=team,
+            period=DateRange(date(2025, 1, 1), None),
+        )
+
+        response = self.client.get(url, {"actief_op": "2030-01-01"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+        uuids = {f["uuid"] for f in response.data["results"]}
+        self.assertIn(str(functie.uuid), uuids)
+
+    def test_filter_active_on_team_date_multiple_functions(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        functie1 = FunctieFactory()
+        functie2 = FunctieFactory()
+
+        FunctieTeamFactory(
+            functie=functie1,
+            team=team,
+            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+
+        FunctieTeamFactory(
+            functie=functie2,
+            team=team,
+            period=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
+        )
+
+        response = self.client.get(url, {"actief_op": "2025-03-01"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+        uuids = {f["uuid"] for f in response.data["results"]}
+        self.assertIn(str(functie1.uuid), uuids)
+
+    def test_filter_active_on_team_date_multiple_functions_same_team(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team = TeamFactory()
+
+        functie1 = FunctieFactory()
+        functie2 = FunctieFactory()
+
+        FunctieTeamFactory(
+            functie=functie1,
+            team=team,
+            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+
+        FunctieTeamFactory(
+            functie=functie2,
+            team=team,
+            period=DateRange(date(2025, 1, 1), date(2026, 6, 1)),
+        )
+
+        response = self.client.get(url, {"actief_op": "2025-03-01"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 2)
+
+        uuids = {f["uuid"] for f in response.data["results"]}
+        self.assertIn(str(functie1.uuid), uuids)
+
+    def test_filter_active_on_team_date_multiple_teams_same_functie(self):
+        url = reverse("organisatie_api:functie-list")
+
+        team1 = TeamFactory()
+        team2 = TeamFactory()
+
+        functie = FunctieFactory()
+
+        FunctieTeamFactory(
+            functie=functie,
+            team=team1,
+            period=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+
+        FunctieTeamFactory(
+            functie=functie,
+            team=team2,
+            period=DateRange(date(2025, 2, 1), date(2025, 5, 1)),
+        )
+
+        response = self.client.get(url, {"actief_op": "2025-03-01"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+        self.assertEqual(response.data["results"][0]["uuid"], str(functie.uuid))
