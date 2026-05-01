@@ -9,10 +9,24 @@ class TeamFunctieInline(admin.StackedInline):
     model = FunctieTeam
     extra = 1
 
+    def get_formset(self, request, obj=None, **kwargs):
+        from openorganisatie.organisatie.admin.forms import FunctieTeamInlineForm
+
+        kwargs["form"] = FunctieTeamInlineForm
+        return super().get_formset(request, obj, **kwargs)
+
 
 class OrganisatorischeEenheidFunctieInline(admin.StackedInline):
     model = OrganisatorischeEenheidFunctie
     extra = 1
+
+    def get_formset(self, request, obj=None, **kwargs):
+        from openorganisatie.organisatie.admin.forms import (
+            FunctieOrganisatorischeEenheidInlineForm,
+        )
+
+        kwargs["form"] = FunctieOrganisatorischeEenheidInlineForm
+        return super().get_formset(request, obj, **kwargs)
 
 
 @admin.register(Functie)
