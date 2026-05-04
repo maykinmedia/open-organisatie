@@ -387,6 +387,136 @@ class FunctieAPITests(APITestCase):
             functie.functie_omschrijving, patch_data["functieOmschrijving"]
         )
 
+    def test_update_functie_replaces_teams(self):
+        team1 = TeamFactory()
+        team2 = TeamFactory()
+
+        functie = FunctieFactory(teams=[team1])
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": functie.uuid})
+
+        data = {
+            "functieOmschrijving": functie.functie_omschrijving,
+            "startdatum": functie.startdatum.isoformat(),
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team2.uuid),
+                    "periode": {
+                        "startdatum": "2025-02-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie.refresh_from_db()
+
+        rels = functie.functieteam_set.all()
+        self.assertEqual(rels.count(), 1)
+        self.assertEqual(rels.first().team_id, team2.id)
+
+    def test_patch_functie_patch_teams(self):
+        team1 = TeamFactory()
+        team2 = TeamFactory()
+
+        functie = FunctieFactory(teams=[team1])
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": functie.uuid})
+
+        data = {
+            "functieOmschrijving": functie.functie_omschrijving,
+            "startdatum": functie.startdatum.isoformat(),
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team2.uuid),
+                    "periode": {
+                        "startdatum": "2025-02-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.patch(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie.refresh_from_db()
+        rels = functie.functieteam_set.all()
+
+        self.assertEqual(rels.count(), 1)
+        self.assertEqual(rels.first().team_id, team2.id)
+
+    def test_update_functie_replaces_organisatorische_eenheden(self):
+        oe1 = OrganisatorischeEenheidFactory()
+        oe2 = OrganisatorischeEenheidFactory()
+
+        functie = FunctieFactory(organisatorische_eenheden=[oe1])
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": functie.uuid})
+
+        data = {
+            "functieOmschrijving": functie.functie_omschrijving,
+            "startdatum": functie.startdatum.isoformat(),
+            "functietypeUuid": str(self.functie_type.uuid),
+            "organisatorischeEenhedenInput": [
+                {
+                    "organisatorischeEenheidUuid": str(oe2.uuid),
+                    "periode": {
+                        "startdatum": "2025-02-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie.refresh_from_db()
+
+        rels = functie.organisatorischeeenheidfunctie_set.all()
+        self.assertEqual(rels.count(), 1)
+        self.assertEqual(rels.first().organisatorische_eenheid_id, oe2.id)
+
+    def test_patch_functie_patch_organisatorische_eenheden(self):
+        oe1 = OrganisatorischeEenheidFactory()
+        oe2 = OrganisatorischeEenheidFactory()
+
+        functie = FunctieFactory(organisatorische_eenheden=[oe1])
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": functie.uuid})
+
+        data = {
+            "functieOmschrijving": functie.functie_omschrijving,
+            "startdatum": functie.startdatum.isoformat(),
+            "functietypeUuid": str(self.functie_type.uuid),
+            "organisatorischeEenhedenInput": [
+                {
+                    "organisatorischeEenheidUuid": str(oe2.uuid),
+                    "periode": {
+                        "startdatum": "2025-02-01",
+                        "einddatum": None,
+                    },
+                }
+            ],
+        }
+
+        response = self.client.patch(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie.refresh_from_db()
+
+        rels = functie.organisatorischeeenheidfunctie_set.all()
+        self.assertEqual(rels.count(), 1)
+        self.assertEqual(rels.first().organisatorische_eenheid_id, oe2.id)
+
     def test_delete_functie(self):
         functie = FunctieFactory(functie_type=self.functie_type)
         detail_url = reverse(

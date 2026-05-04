@@ -235,6 +235,29 @@ class FunctieSerializer(serializers.ModelSerializer):
             grouped.values(), many=True
         ).data
 
+    def _build_period(self, data):
+        period_data = data.pop("periode")
+        return DateRange(
+            period_data["startdatum"],
+            period_data.get("einddatum"),
+        )
+
+    def _create_functieteam(self, instance, data):
+        periode = self._build_period(data)
+        return FunctieTeam.objects.create(
+            functie=instance,
+            periode=periode,
+            **data,
+        )
+
+    def _create_oe(self, instance, data):
+        periode = self._build_period(data)
+        return OrganisatorischeEenheidFunctie.objects.create(
+            functie=instance,
+            periode=periode,
+            **data,
+        )
+
     def create(self, validated_data):
         teams_data = validated_data.pop("teams_input", [])
         oe_data = validated_data.pop("organisatorische_eenheden_input", [])
@@ -243,31 +266,28 @@ class FunctieSerializer(serializers.ModelSerializer):
             functie = super().create(validated_data)
 
             for team in teams_data:
-                period_data = team.pop("periode")
-                start = period_data["startdatum"]
-                end = period_data.get("einddatum")
-
-                FunctieTeam.objects.create(
-                    functie=functie,
-                    periode=DateRange(start, end),
-                    **team,
-                )
+                self._create_functieteam(functie, team)
 
             for oe in oe_data:
-                period_data = oe.pop("periode")
-                start = period_data["startdatum"]
-                end = period_data.get("einddatum")
-
-                OrganisatorischeEenheidFunctie.objects.create(
-                    functie=functie,
-                    periode=DateRange(start, end),
-                    **oe,
-                )
+                self._create_oe(functie, oe)
 
         return functie
 
-    # def update(self, instance, validated_data):
-    #     teams_data = validated_data.pop("teams_input", None)
-    #     oe_data = validated_data.pop("organisatorische_eenheden_input", None)
+    def update(self, instance, validated_data):
+        teams_data = validated_data.pop("teams_input", None)
+        oe_data = validated_data.pop("organisatorische_eenheden_input", None)
 
-    #     return super().update(instance, validated_data)
+        with transaction.atomic():
+            instance = super().update(instance, validated_data)
+
+            if teams_data is not None:
+                instance.functieteam_set.all().delete()
+                for team in teams_data:
+                    self._create_functieteam(instance, team)
+
+            if oe_data is not None:
+                instance.organisatorischeeenheidfunctie_set.all().delete()
+                for oe in oe_data:
+                    self._create_oe(instance, oe)
+
+        return instance
