@@ -17,7 +17,6 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
     )
     readonly_fields = ("uuid", "startdatum", "einddatum")
     search_fields = ("voornaam", "achternaam", "emailadres", "external_id")
-    filter_horizontal = ("teams", "functies")
 
     fieldsets = (
         (

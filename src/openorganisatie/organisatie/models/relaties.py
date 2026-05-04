@@ -40,10 +40,10 @@ class FunctieTeam(models.Model):
         super().clean()
 
         if not self.periode:
-            raise ValidationError({"period": "Periode is verplicht."})
+            raise ValidationError({"periode": "Periode is verplicht."})
 
         if not self.periode.lower:
-            raise ValidationError({"period": "Startdatum is verplicht."})
+            raise ValidationError({"periode": "Startdatum is verplicht."})
 
         qs = FunctieTeam.objects.filter(
             functie_id=self.functie_id,

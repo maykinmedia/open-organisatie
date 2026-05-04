@@ -295,7 +295,6 @@ class FunctieAPITests(APITestCase):
 
         oe = OrganisatorischeEenheidFactory()
 
-        # existing assignment
         OrganisatorischeEenheidFunctieFactory(
             organisatorische_eenheid=oe,
             periode=DateRange(date(2025, 1, 1), None),
