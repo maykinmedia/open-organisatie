@@ -10,6 +10,7 @@ from openorganisatie.organisatie.models.functietype import (
 
 
 class FunctieTypeFactory(factory.django.DjangoModelFactory):
+    external_id = factory.LazyFunction(uuid.uuid4)
     naam = Faker("word")
     slug = Faker("slug")
 
@@ -18,6 +19,7 @@ class FunctieTypeFactory(factory.django.DjangoModelFactory):
 
 
 class FunctieFactory(factory.django.DjangoModelFactory):
+    external_id = factory.LazyFunction(uuid.uuid4)
     uuid = LazyFunction(uuid.uuid4)
     functie_omschrijving = Faker("job")
     startdatum = Faker("date_this_decade")

@@ -18,6 +18,7 @@ class FunctieFilter(FilterSet):
     class Meta:
         model = Functie
         fields = {
+            "external_id": ["exact"],
             "functie_omschrijving": ["exact", "icontains"],
             "startdatum": ["exact", "gte", "lte"],
             "einddatum": ["exact", "gte", "lte"],

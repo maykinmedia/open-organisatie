@@ -140,6 +140,18 @@ class TeamAPITests(APITestCase):
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["uuid"], str(team1.uuid))
 
+    def test_filter_external_id(self):
+        team1 = TeamFactory()
+        TeamFactory()
+
+        url = reverse("organisatie_api:team-list")
+        response = self.client.get(url, {"external_id": str(team1.external_id)})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["externalId"], str(team1.external_id))
+
     def test_create_team_with_contactpersoon(self):
         url = reverse("organisatie_api:team-list")
 

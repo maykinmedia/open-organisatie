@@ -6,6 +6,7 @@ from openorganisatie.organisatie.models import Vestiging
 
 
 class VestigingFactory(factory.django.DjangoModelFactory):
+    external_id = factory.LazyFunction(uuid.uuid4)
     uuid = factory.LazyFunction(uuid.uuid4)
     vestigingsnummer = factory.Faker("bothify", text="B###")
     naam = factory.Faker("company")

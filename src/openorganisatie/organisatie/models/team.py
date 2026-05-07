@@ -10,6 +10,11 @@ class Team(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4)"),
     )
+    external_id = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=_("Externe identifier voor dit team."),
+    )
     naam = models.CharField(
         max_length=100,
         unique=True,

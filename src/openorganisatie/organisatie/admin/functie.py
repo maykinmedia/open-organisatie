@@ -7,13 +7,14 @@ from ..models.functie import Functie
 @admin.register(Functie)
 class FunctieAdmin(ReadOnlyCompareVersionAdmin):
     list_display = (
+        "external_id",
         "functie_omschrijving",
         "functie_type",
         "startdatum",
         "einddatum",
     )
     list_filter = ("functie_type", "startdatum", "einddatum")
-    search_fields = ("functie_omschrijving", "functie_type__naam")
+    search_fields = ("functie_omschrijving", "functie_type__naam", "external_id")
     ordering = ("-startdatum",)
     readonly_fields = ("uuid",)
 
@@ -23,6 +24,7 @@ class FunctieAdmin(ReadOnlyCompareVersionAdmin):
             {
                 "fields": (
                     "uuid",
+                    "external_id",
                     "functie_omschrijving",
                     "functie_type",
                 )

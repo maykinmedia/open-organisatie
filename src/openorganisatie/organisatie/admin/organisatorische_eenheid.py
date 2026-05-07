@@ -6,8 +6,20 @@ from ..models.organisatorische_eenheid import OrganisatorischeEenheid
 
 @admin.register(OrganisatorischeEenheid)
 class OrganisatorischeEenheidAdmin(ReadOnlyCompareVersionAdmin):
-    list_display = ("naam", "soort_organisatie", "verkorte_naam", "contactpersoon")
-    search_fields = ("naam", "omschrijving", "verkorte_naam", "soort_organisatie")
+    list_display = (
+        "external_id",
+        "naam",
+        "soort_organisatie",
+        "verkorte_naam",
+        "contactpersoon",
+    )
+    search_fields = (
+        "naam",
+        "omschrijving",
+        "verkorte_naam",
+        "soort_organisatie",
+        "external_id",
+    )
     list_filter = ("soort_organisatie",)
     readonly_fields = ("uuid",)
     filter_horizontal = ("vestigingen", "functies")
@@ -18,6 +30,7 @@ class OrganisatorischeEenheidAdmin(ReadOnlyCompareVersionAdmin):
             {
                 "fields": (
                     "uuid",
+                    "external_id",
                     "identificatie",
                     "naam",
                     "verkorte_naam",

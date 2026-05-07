@@ -10,6 +10,11 @@ class FunctieType(models.Model):
         default=uuid.uuid4,
         help_text=_("Unieke resource identifier (UUID4) voor dit functietype."),
     )
+    external_id = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=_("Externe identifier voor deze functietype."),
+    )
     naam = models.CharField(
         max_length=50,
         help_text=_("De naam van het functietype (bijv. Manager, Medewerker)."),

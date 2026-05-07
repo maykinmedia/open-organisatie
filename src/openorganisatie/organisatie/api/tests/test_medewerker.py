@@ -143,6 +143,19 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
 
+    def test_filter_external_id(self):
+        m1 = MedewerkerFactory()
+        MedewerkerFactory()
+
+        url = reverse("organisatie_api:medewerker-list")
+        response = self.client.get(url, {"external_id": str(m1.external_id)})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["external_id"], str(m1.external_id)
+        )
+
     def test_history(self):
         url = reverse("organisatie_api:medewerker-list")
         data = {

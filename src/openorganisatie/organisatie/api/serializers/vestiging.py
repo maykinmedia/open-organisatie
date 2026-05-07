@@ -8,6 +8,7 @@ class VestigingSerializer(serializers.ModelSerializer):
         model = Vestiging
         fields = [
             "uuid",
+            "external_id",
             "vestigingsnummer",
             "naam",
             "adres",

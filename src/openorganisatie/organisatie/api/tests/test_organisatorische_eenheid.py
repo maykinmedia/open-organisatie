@@ -193,6 +193,19 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(org1.uuid))
 
+    def test_filter_functie_external_id(self):
+        org1 = OrganisatorischeEenheidFactory()
+        OrganisatorischeEenheidFactory()
+
+        url = reverse("organisatie_api:organisatorischeeenheid-list")
+        response = self.client.get(url, {"external_id": str(org1.external_id)})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["external_id"], str(org1.external_id)
+        )
+
     def test_create_organisatorische_eenheid_with_contactpersoon(self):
         url = reverse("organisatie_api:organisatorischeeenheid-list")
 

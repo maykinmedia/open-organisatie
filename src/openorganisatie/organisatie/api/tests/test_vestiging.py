@@ -93,6 +93,18 @@ class VestigingAPITests(APITestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_external_id_filter(self):
+        v1 = VestigingFactory()
+        VestigingFactory()
+
+        url = reverse("organisatie_api:vestiging-list")
+        response = self.client.get(url, {"external_id": str(v1.external_id)})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["external_id"], str(v1.external_id)
+        )
+
     def test_vestigingsnummer_filter(self):
         v1 = VestigingFactory(vestigingsnummer="123")
         VestigingFactory(vestigingsnummer="456")

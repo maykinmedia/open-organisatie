@@ -115,6 +115,19 @@ class FunctieTypeAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data["results"][0]["uuid"], str(ft1.uuid))
 
+    def test_filter_external_id(self):
+        ft1 = FunctieTypeFactory()
+        FunctieTypeFactory()
+
+        url = reverse("organisatie_api:functietype-list")
+        response = self.client.get(url, {"external_id": ft1.external_id})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(
+            response.data["results"][0]["external_id"], str(ft1.external_id)
+        )
+
     def test_history(self):
         url = reverse("organisatie_api:functietype-list")
         data = {"naam": "abc", "slug": "abc"}

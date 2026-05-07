@@ -17,6 +17,7 @@ class NestedTeamSerializer(serializers.ModelSerializer):
         model = Team
         fields = [
             "uuid",
+            "external_id",
             "naam",
             "omschrijving",
             "soort_team",
@@ -74,6 +75,7 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
         fields = [
             "uuid",
+            "external_id",
             "naam",
             "omschrijving",
             "soort_team",

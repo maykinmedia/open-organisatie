@@ -8,6 +8,7 @@ from .medewerker import MedewerkerFactory
 
 
 class TeamFactory(factory.django.DjangoModelFactory):
+    external_id = factory.LazyFunction(uuid.uuid4)
     uuid = factory.LazyFunction(uuid.uuid4)
     naam = factory.Sequence(lambda n: f"Team {n}")
     omschrijving = factory.Faker("sentence")

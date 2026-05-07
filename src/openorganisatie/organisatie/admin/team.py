@@ -6,8 +6,12 @@ from ..models.team import Team
 
 @admin.register(Team)
 class TeamAdmin(ReadOnlyCompareVersionAdmin):
-    list_display = ("naam", "display_medewerkers", "contactpersoon")
-    search_fields = ("naam", "omschrijving")
+    list_display = ("external_id", "naam", "display_medewerkers", "contactpersoon")
+    search_fields = (
+        "naam",
+        "omschrijving",
+        "external_id",
+    )
     readonly_fields = ("display_medewerkers", "uuid")
     filter_horizontal = ("vestigingen", "functies")
 
@@ -17,6 +21,7 @@ class TeamAdmin(ReadOnlyCompareVersionAdmin):
             {
                 "fields": (
                     "uuid",
+                    "external_id",
                     "naam",
                     "omschrijving",
                     "contactpersoon",
