@@ -12,7 +12,6 @@ class FunctieType(models.Model):
     )
     external_id = models.CharField(
         max_length=255,
-        unique=True,
         blank=True,
         help_text=_("Externe identifier voor deze functietype."),
     )
