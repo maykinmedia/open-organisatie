@@ -1,11 +1,16 @@
 import uuid
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from django.utils import timezone
 
+from psycopg.types.range import DateRange
 from rest_framework.authtoken.models import Token
 from reversion.models import Version
+
+from openorganisatie.identiteit.models.relaties import UserGroup
 
 from ..adapters import GroupAdapter, UserAdapter
 from ..models.group import Group
@@ -84,7 +89,11 @@ class GroepenAdapterTest(TestCase):
         self.team = Group.objects.create(
             name="Test Team", scim_external_id=uuid.uuid4()
         )
-        self.team.user_set.add(self.user1)
+        UserGroup.objects.create(
+            user=self.user1,
+            group=self.team,
+            periode=DateRange(timezone.now().date() - timedelta(days=5), None),
+        )
 
         factory = RequestFactory()
         self.request = factory.get(
@@ -113,7 +122,13 @@ class GroepenAdapterTest(TestCase):
         path = Path(("members", None, None))
 
         self.adapter.handle_remove(path, member_data, operation=None)
-        self.assertNotIn(self.user1, self.team.user_set.all())
+
+        membership = UserGroup.objects.get(
+            user=self.user1,
+            group=self.team,
+        )
+
+        self.assertIsNotNone(membership.periode.upper)
 
     def test_handle_remove_invalid_members(self):
         member_data = [{"value": str(uuid.uuid4())}]
@@ -121,3 +136,86 @@ class GroepenAdapterTest(TestCase):
 
         self.adapter.handle_remove(path, member_data, operation=None)
         self.assertIn(self.user1, self.team.user_set.all())
+
+    def test_overlapping_membership_same_user_same_group_fails(self):
+        today = timezone.now().date()
+
+        overlapping = UserGroup(
+            user=self.user1,
+            group=self.team,
+            periode=DateRange(
+                today - timedelta(days=1),
+                today + timedelta(days=5),
+            ),
+        )
+
+        with self.assertRaises(Exception):
+            overlapping.full_clean()
+
+    def test_non_overlapping_membership_same_user_same_group_succeeds(self):
+        today = timezone.now().date()
+
+        membership = UserGroup(
+            user=self.user1,
+            group=self.team,
+            periode=DateRange(
+                today + timedelta(days=5),
+                today + timedelta(days=10),
+            ),
+        )
+
+        membership.full_clean()
+        membership.save()
+
+        self.assertEqual(
+            UserGroup.objects.filter(
+                user=self.user1,
+                group=self.team,
+            ).count(),
+            2,
+        )
+
+    def test_overlapping_membership_different_group_succeeds(self):
+        today = timezone.now().date()
+
+        other_group = Group.objects.create(
+            name="Other Team",
+            scim_external_id=uuid.uuid4(),
+        )
+
+        membership = UserGroup(
+            user=self.user1,
+            group=other_group,
+            periode=DateRange(
+                today - timedelta(days=1),
+                today + timedelta(days=5),
+            ),
+        )
+
+        membership.full_clean()
+        membership.save()
+
+        self.assertEqual(
+            UserGroup.objects.filter(user=self.user1).count(),
+            2,
+        )
+
+    def test_overlapping_membership_different_user_succeeds(self):
+        today = timezone.now().date()
+
+        membership = UserGroup(
+            user=self.user2,
+            group=self.team,
+            periode=DateRange(
+                today - timedelta(days=1),
+                today + timedelta(days=5),
+            ),
+        )
+
+        membership.full_clean()
+        membership.save()
+
+        self.assertEqual(
+            UserGroup.objects.filter(group=self.team).count(),
+            2,
+        )

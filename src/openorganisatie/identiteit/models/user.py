@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 import structlog
 from django_scim.models import AbstractSCIMUserMixin
 
+from openorganisatie.identiteit.models.relaties import UserGroup
 from openorganisatie.organisatie.models.attr_mapping_config import (
     AttribuutMappingConfig,
 )
@@ -39,6 +40,7 @@ class User(AbstractSCIMUserMixin, models.Model):
     )
     groups = models.ManyToManyField(
         "identiteit.Group",
+        through=UserGroup,
         related_name="user_set",
         blank=True,
         verbose_name=_("Groups"),

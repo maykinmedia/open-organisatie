@@ -1,15 +1,18 @@
 from urllib.parse import urljoin
 
 from django.urls import reverse
+from django.utils import timezone
 
 import structlog
 from django_scim.adapters import SCIMGroup, SCIMUser
 from notifications_api_common.viewsets import NotificationMixin
+from psycopg.types.range import DateRange
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 from reversion import create_revision, set_comment
 
 from openorganisatie.identiteit.kanalen import KANAAL_IDENTITEIT
+from openorganisatie.identiteit.models.relaties import UserGroup
 
 from ..identiteit.api.serializers.user import UserSerializer
 from .models.group import Group
@@ -180,56 +183,90 @@ class GroupAdapter(ReversionSCIMMixin, SCIMGroup):
     url_name = "scim:group-detail"
     id_field = "scim_external_id"
 
+    def delete(self):
+        logger.info("scim_group_deleted", group=self.id)
+
+        # IMPORTANT: use SCIM ID field, NOT Django PK
+        self.model.objects.filter(scim_external_id=self.id).delete()
+
     @property
     def members(self):
+        memberships = UserGroup.objects.filter(group=self.obj)
+
         return [
             {
-                "value": str(user.username),
-                "$ref": UserAdapter(user, request=self.request).location,
-                "display": f"{user.username}".strip(),
+                "value": str(m.user.scim_external_id),
+                "$ref": UserAdapter(m.user, request=self.request).location,
+                "display": m.user.username,
+                "startDate": m.periode.lower.isoformat()
+                if m.periode and m.periode.lower
+                else None,
+                "endDate": m.periode.upper.isoformat()
+                if m.periode and m.periode.upper
+                else None,
             }
-            for user in self.obj.user_set.all()
+            for m in memberships.select_related("user")
         ]
 
     def handle_add(self, path, value, operation):
-        if path.first_path == ("members", None, None):
-            members = value or []
-            ids = [member.get("value") for member in members]
-
-            users = User.objects.filter(scim_external_id__in=ids)
-            if len(ids) != users.count():
-                return
-
-            for user in users:
-                self.obj.user_set.add(user)
-
-            logger.info(
-                "scim_group_members_added",
-                team=str(self.obj.name),
-                team_id=str(self.obj.scim_external_id),
-                added_members=[str(user.scim_external_id) for user in users],
-            )
-        else:
+        if path.first_path != ("members", None, None):
             raise NotImplementedError
+
+        members = value or []
+        ids = [m.get("value") for m in members]
+
+        users = User.objects.filter(scim_external_id__in=ids)
+        if len(ids) != users.count():
+            return
+
+        today = timezone.now().date()
+
+        for user in users:
+            exists = UserGroup.objects.filter(
+                user=user, group=self.obj, periode__upper_inf=True
+            ).exists()
+
+            if exists:
+                continue
+
+            UserGroup.objects.create(
+                user=user,
+                group=self.obj,
+                periode=DateRange(lower=today, upper=None),
+            )
+
+        logger.info(
+            "scim_group_members_added",
+            team=str(self.obj.name),
+            added_members=[str(u.scim_external_id) for u in users],
+        )
 
     def handle_remove(self, path, value, operation):
-        if path.first_path == ("members", None, None):
-            members = value or []
-
-            ids = [member.get("value") for member in members]
-
-            users = User.objects.filter(scim_external_id__in=ids)
-            if len(ids) != users.count():
-                return
-
-            for user in users:
-                self.obj.user_set.remove(user)
-
-            logger.info(
-                "scim_group_members_removed",
-                team=str(self.obj.name),
-                team_id=str(self.obj.scim_external_id),
-                removed_members=[str(user.scim_external_id) for user in users],
-            )
-        else:
+        if path.first_path != ("members", None, None):
             raise NotImplementedError
+
+        members = value or []
+        ids = [m.get("value") for m in members]
+
+        users = User.objects.filter(scim_external_id__in=ids)
+        today = timezone.now().date()
+
+        for user in users:
+            membership = (
+                UserGroup.objects.filter(
+                    user=user,
+                    group=self.obj,
+                    periode__contains=today,
+                )
+                .order_by("-wijzigingsdatum")
+                .first()
+            )
+
+            if not membership:
+                continue
+
+            membership.periode = DateRange(
+                lower=membership.periode.lower,
+                upper=today,
+            )
+            membership.save(update_fields=["periode"])
