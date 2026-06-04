@@ -148,8 +148,8 @@ REST_FRAMEWORK["EXCEPTION_HANDLER"] = "vng_api_common.views.exception_handler"
 SPECTACULAR_SETTINGS = {
     "CONTACT": {
         "url": "https://github.com/maykinmedia/open-organisatie",
-        "name": "Maykin Media",
-        "email": "support@maykinmedia.nl",
+        "name": "Maykin",
+        "email": "support@maykin.nl",
     },
     "SERVE_INCLUDE_SCHEMA": False,
     "SWAGGER_UI_DIST": "SIDECAR",

@@ -30,8 +30,8 @@ info:
 
   contact:
     url: https://github.com/maykinmedia/open-organisatie
-    name: Maykin Media
-    email: support@maykinmedia.nl
+    name: Maykin
+    email: support@maykin.nl
 paths:
   /functie:
     get:
