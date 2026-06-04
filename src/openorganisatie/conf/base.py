@@ -309,6 +309,7 @@ X_FRAME_OPTIONS = "DENY"
 #
 # Custom settings
 #
+SITE_TITLE = "API dashboard"
 PROJECT_NAME = "Open Organisatie"
 ENVIRONMENT = config("ENVIRONMENT", "")
 

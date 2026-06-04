@@ -2,6 +2,10 @@
 Open Organisatie
 ================
 
+.. image:: https://raw.githubusercontent.com/maykinmedia/open-organisatie/refs/heads/main/.github/assets/open-organisatie-logo.svg
+    :height: 100px
+    :alt: Open Organisatie
+
 :Version: 0.2.0
 :Source: https://github.com/maykinmedia/open-organisatie
 :Keywords: ``organisation``
@@ -17,13 +21,13 @@ Developed by `Maykin B.V.`_.
 Introduction
 ============
 
-Open Organisatie is an application for managing employees and teams.  
-Other applications can integrate with Open Organisatie via a REST API to retrieve employee data  
-or manage teams.  
-Employee and team data is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management),  
+Open Organisatie is an application for managing employees and teams.
+Other applications can integrate with Open Organisatie via a REST API to retrieve employee data
+or manage teams.
+Employee and team data is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management),
 from Azure Entra ID or other applications.
 
-In Open Organisatie, employees and teams are stored. An employee contains data such as name, email address,  
+In Open Organisatie, employees and teams are stored. An employee contains data such as name, email address,
 job title, and contact information. A team is a group of employees who together form a specific role or department within the organisation.
 
 Information model
@@ -77,7 +81,7 @@ Developers
 
 This repository contains the source code for openorganisatie. To quickly
 get started, we recommend using the Docker image. You can also build the
-project from the source code. For this, please look at 
+project from the source code. For this, please look at
 `INSTALL.rst <INSTALL.rst>`_.
 
 Quickstart

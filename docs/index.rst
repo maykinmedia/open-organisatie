@@ -1,10 +1,16 @@
+.. image:: https://raw.githubusercontent.com/maykinmedia/open-organisatie/refs/heads/main/.github/assets/open-organisatie-logo.svg
+    :height: 100px
+    :alt: Open Organisatie
+    :class: no-scaled-link product-logo
+
+==============================
 Open Organisatie Documentation
 ==============================
 
-**Open Organisatie** is an application for managing employees and teams.  
-Other applications can integrate with Open Organisatie via a REST API to retrieve employee data  
-or manage teams.  
-Employee and team data is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management),  
+**Open Organisatie** is an application for managing employees and teams.
+Other applications can integrate with Open Organisatie via a REST API to retrieve employee data
+or manage teams.
+Employee and team data is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management),
 from Azure Entra ID or other applications.
 
 
@@ -23,7 +29,7 @@ To get you started, you might find some of these links relevant:
    :maxdepth: 2
    :hidden:
 
-   introduction/index   
+   introduction/index
    installation/index
    manual/index
    development/index

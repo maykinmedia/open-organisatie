@@ -2,13 +2,17 @@
 Open Organisatie
 ==================
 
+.. image:: https://raw.githubusercontent.com/maykinmedia/open-organisatie/refs/heads/main/.github/assets/open-organisatie-logo.svg
+    :height: 100px
+    :alt: Open Organisatie
+
 :Version: 0.2.0
 :Source: https://github.com/maykinmedia/open-organisatie
 :Keywords: ``organisatie``
 
 |docs| |docker|
 
-Plek voor gemeenten om medewerkers en teams te beheren. 
+Plek voor gemeenten om medewerkers en teams te beheren.
 (`English version`_)
 
 Ontwikkeld door `Maykin B.V.`_.
@@ -17,13 +21,13 @@ Ontwikkeld door `Maykin B.V.`_.
 Introductie
 ===========
 
-Open Organisatie is een applicatie waarin medewerkers en teams centraal beheerd kunnen worden. 
-Andere applicaties kunnen via een REST API integreren met Open Organisatie om bijvoorbeeld medewerkergegevens op te halen of 
+Open Organisatie is een applicatie waarin medewerkers en teams centraal beheerd kunnen worden.
+Andere applicaties kunnen via een REST API integreren met Open Organisatie om bijvoorbeeld medewerkergegevens op te halen of
 teams te beheren.
-De gegevens van medewerkers en teams worden opgehaald en gesynchroniseerd via het SCIM-protocol (System for Cross-domain Identity Management) 
+De gegevens van medewerkers en teams worden opgehaald en gesynchroniseerd via het SCIM-protocol (System for Cross-domain Identity Management)
 vanuit Azure Entra ID of andere applicaties.
 
-In Open Organisatie worden medewerkers en teams opgeslagen. Een medewerker bevat gegevens zoals naam, e-mailadres, 
+In Open Organisatie worden medewerkers en teams opgeslagen. Een medewerker bevat gegevens zoals naam, e-mailadres,
 functie en contactinformatie. Een team is een groep medewerkers die samen een bepaalde rol of afdeling vormen binnen de organisatie.
 
 Informatiemodel
@@ -62,7 +66,7 @@ latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=htt
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/open-organisatie/0.1.0/src/organisatie-openapi.yaml>`_
 ==============  ==============  =============================
 
-Vorige versies worden nog 6 maanden ondersteund nadat de volgende versie is 
+Vorige versies worden nog 6 maanden ondersteund nadat de volgende versie is
 uitgebracht.
 
 Er is één manier om te authenticeren met de API:
