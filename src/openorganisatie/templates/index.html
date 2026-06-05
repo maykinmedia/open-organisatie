@@ -2,7 +2,7 @@
 {% load i18n %}
 
 
-{% block page_title %}{{ settings.PROJECT_NAME }} API{% endblock %}
+{% block page_title %}{{ settings.PROJECT_NAME }}{% endblock %}
 {% block page_subtitle %}{{ settings.SITE_TITLE }}{% endblock page_subtitle %}
 
 
@@ -29,10 +29,10 @@
         Other systems can communicate with Open Organization via a REST API to for example retrieve employee data or manage teams.
     </p>
     <p>
-        In Open Organization, employees and teams are stored. An employee contains information such as name, email address, job position, 
-        and contact details. A team is a group of employees who together form a certain role or department within the organization. 
+        In Open Organization, employees and teams are stored. An employee contains information such as name, email address, job position,
+        and contact details. A team is a group of employees who together form a certain role or department within the organization.
         Teams are linked to one or more locations and organizational units.
-        The data of employees and teams is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management) 
+        The data of employees and teams is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management)
         from Azure Entra ID or other applications.
     </p>
 {% endblock content_en %}

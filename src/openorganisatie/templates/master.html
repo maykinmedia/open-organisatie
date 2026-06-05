@@ -23,7 +23,7 @@
             {% endblock %}
         </main>
 
-        {% include "includes/footer.html" %}
+        {% include "includes/footer.html" with logo='img/open-organisatie-logo.svg' %}
         {% block scripts %}
             <script src="{% static 'bundles/openorganisatie-js.js' %}" type="text/javascript"></script>
         {% endblock scripts %}

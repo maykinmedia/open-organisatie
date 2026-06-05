@@ -4,7 +4,9 @@ from django.conf import settings as django_settings
 def settings(request):
     public_settings = (
         "GOOGLE_ANALYTICS_ID",
+        "ENVIRONMENT",
         "PROJECT_NAME",
+        "SITE_TITLE",
     )
 
     context = {
