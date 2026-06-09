@@ -11,9 +11,9 @@ os.environ["_USE_STRUCTLOG"] = "True"
 
 from notifications_api_common.settings import *  # noqa
 from open_api_framework.conf.base import *  # noqa
-from open_api_framework.conf.utils import config
+from maykin_common.config import config, no_doc
 from vng_api_common.conf.api import BASE_REST_FRAMEWORK  # noqa: F401
-
+from maykin_common.config import DocumentationParams
 from .utils import get_sentry_integrations
 
 # Build paths inside the project, so further paths can be defined relative to
@@ -60,12 +60,12 @@ USE_THOUSAND_SEPARATOR = True
 #
 DATABASES = {
     "default": {
-        "ENGINE": config("DB_ENGINE", "django.db.backends.postgresql"),
-        "NAME": config("DB_NAME", "openorganisatie"),
-        "USER": config("DB_USER", "openorganisatie"),
-        "PASSWORD": config("DB_PASSWORD", "openorganisatie"),
-        "HOST": config("DB_HOST", "localhost"),
-        "PORT": config("DB_PORT", 5432, cast=lambda s: int(s) if s else ""),
+        "ENGINE": config("DB_ENGINE", default="django.db.backends.postgresql"),
+        "NAME": config("DB_NAME", default="openorganisatie"),
+        "USER": config("DB_USER", default="openorganisatie"),
+        "PASSWORD": config("DB_PASSWORD", default="openorganisatie"),
+        "HOST": config("DB_HOST", default="localhost"),
+        "PORT": config("DB_PORT", default="5432", cast=lambda s: int(s) if s else ""),
     }
 }
 
@@ -74,7 +74,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{config('CACHE_DEFAULT', 'localhost:6379/0')}",
+        "LOCATION": f"redis://{config('CACHE_DEFAULT', default='localhost:6379/0')}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "IGNORE_EXCEPTIONS": True,
@@ -82,7 +82,7 @@ CACHES = {
     },
     "axes": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{config('CACHE_AXES', 'localhost:6379/0')}",
+        "LOCATION": f"redis://{config('CACHE_AXES', default='localhost:6379/0')}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "IGNORE_EXCEPTIONS": True,
@@ -203,9 +203,11 @@ SETUP_CONFIGURATION_STEPS = (
 NOTIFICATIONS_DISABLED = config(
     "NOTIFICATIONS_DISABLED",
     default=True,
-    help_text=(
-        "Indicates whether or not notifications should be sent to the Notificaties API "
-        "for operations on the API endpoints."
+    documentation=DocumentationParams(
+        help_text=(
+            "Indicates whether or not notifications should be sent to the Notificaties API "
+            "for operations on the API endpoints."
+        ),
     ),
 )
 
@@ -311,12 +313,12 @@ X_FRAME_OPTIONS = "DENY"
 #
 SITE_TITLE = "API dashboard"
 PROJECT_NAME = "Open Organisatie"
-ENVIRONMENT = config("ENVIRONMENT", "")
+ENVIRONMENT = config("ENVIRONMENT", default="")
 
 # Displaying environment information
-ENVIRONMENT_LABEL = config("ENVIRONMENT_LABEL", ENVIRONMENT)
-ENVIRONMENT_BACKGROUND_COLOR = config("ENVIRONMENT_BACKGROUND_COLOR", "orange")
-ENVIRONMENT_FOREGROUND_COLOR = config("ENVIRONMENT_FOREGROUND_COLOR", "black")
+ENVIRONMENT_LABEL = config("ENVIRONMENT_LABEL", default=ENVIRONMENT)
+ENVIRONMENT_BACKGROUND_COLOR = config("ENVIRONMENT_BACKGROUND_COLOR", default="orange")
+ENVIRONMENT_FOREGROUND_COLOR = config("ENVIRONMENT_FOREGROUND_COLOR", default="black")
 SHOW_ENVIRONMENT = config("SHOW_ENVIRONMENT", default=True)
 
 # This setting is used by the csrf_failure view (accounts app).
@@ -326,7 +328,7 @@ SHOW_ENVIRONMENT = config("SHOW_ENVIRONMENT", default=True)
 LOGIN_URLS = [reverse_lazy("admin:login")]
 
 if "GIT_SHA" in os.environ:
-    GIT_SHA = config("GIT_SHA", "")
+    GIT_SHA = config("GIT_SHA", default="", documentation=no_doc)
 # in docker (build) context, there is no .git directory
 elif (BASE_DIR / ".git").exists():
     try:
@@ -343,7 +345,7 @@ elif (BASE_DIR / ".git").exists():
 else:
     GIT_SHA = None
 
-RELEASE = config("RELEASE", GIT_SHA)
+RELEASE = config("RELEASE", default=GIT_SHA)
 
 # Default (connection timeout, read timeout) for the requests library (in seconds)
 REQUESTS_DEFAULT_TIMEOUT = (10, 30)
@@ -427,7 +429,7 @@ HIJACK_INSERT_BEFORE = (
 #
 # SENTRY - error monitoring
 #
-SENTRY_DSN = config("SENTRY_DSN", None)
+SENTRY_DSN = config("SENTRY_DSN", default=None)
 
 if SENTRY_DSN:
     SENTRY_CONFIG = {
@@ -444,7 +446,7 @@ if SENTRY_DSN:
 ELASTIC_APM_SERVER_URL = os.getenv("ELASTIC_APM_SERVER_URL", None)
 ELASTIC_APM = {
     "SERVICE_NAME": f"openorganisatie {ENVIRONMENT}",
-    "SECRET_TOKEN": config("ELASTIC_APM_SECRET_TOKEN", "default"),
+    "SECRET_TOKEN": config("ELASTIC_APM_SECRET_TOKEN", default="default"),
     "SERVER_URL": ELASTIC_APM_SERVER_URL,
 }
 if not ELASTIC_APM_SERVER_URL:
@@ -459,6 +461,6 @@ REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
 
 # Subpath (optional)
 # This environment variable can be configured during deployment.
-SUBPATH = config("SUBPATH", None)
+SUBPATH = config("SUBPATH", default=None)
 if SUBPATH:
     SUBPATH = f"/{SUBPATH.strip('/')}"
