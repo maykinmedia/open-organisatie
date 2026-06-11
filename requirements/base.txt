@@ -151,7 +151,7 @@ django-jsonform==2.23.2
     # via
     #   mozilla-django-oidc-db
     #   open-api-framework
-django-log-outgoing-requests==0.6.1
+django-log-outgoing-requests==0.9.1
     # via open-api-framework
 django-markup==1.9.1
     # via open-api-framework
@@ -162,7 +162,9 @@ django-otp==1.6.0
 django-phonenumber-field==8.1.0
     # via django-two-factor-auth
 django-privates==3.1.0
-    # via django-simple-certmanager
+    # via
+    #   django-simple-certmanager
+    #   open-api-framework
 django-redis==6.0.0
     # via
     #   -r requirements/base.in
@@ -188,7 +190,9 @@ django-sessionprofile==3.0.0
 django-setup-configuration==0.11.0
     # via open-api-framework
 django-simple-certmanager==2.4.1
-    # via zgw-consumers
+    # via
+    #   open-api-framework
+    #   zgw-consumers
 django-solo==2.4.0
     # via
     #   commonground-api-common
@@ -278,8 +282,10 @@ maykin-2fa==1.0.2
     #   -r requirements/base.in
     #   maykin-common
     #   open-api-framework
-maykin-common==0.11.0
-    # via -r requirements/base.in
+maykin-common==0.19.0
+    # via
+    #   -r requirements/base.in
+    #   open-api-framework
 mdurl==0.1.2
     # via markdown-it-py
 mozilla-django-oidc==5.0.2
@@ -292,7 +298,7 @@ nh3==0.2.21
     # via textile
 notifications-api-common==0.9.0
     # via commonground-api-common
-open-api-framework==0.13.4
+open-api-framework==0.14.0
     # via -r requirements/base.in
 opentelemetry-api==1.38.0
     # via
@@ -300,7 +306,12 @@ opentelemetry-api==1.38.0
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
     #   opentelemetry-instrumentation
+    #   opentelemetry-instrumentation-celery
+    #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-django
+    #   opentelemetry-instrumentation-psycopg
+    #   opentelemetry-instrumentation-redis
+    #   opentelemetry-instrumentation-requests
     #   opentelemetry-instrumentation-wsgi
     #   opentelemetry-sdk
     #   opentelemetry-semantic-conventions
@@ -316,9 +327,24 @@ opentelemetry-exporter-otlp-proto-http==1.38.0
     # via opentelemetry-exporter-otlp
 opentelemetry-instrumentation==0.59b0
     # via
+    #   opentelemetry-instrumentation-celery
+    #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-django
+    #   opentelemetry-instrumentation-psycopg
+    #   opentelemetry-instrumentation-redis
+    #   opentelemetry-instrumentation-requests
     #   opentelemetry-instrumentation-wsgi
+opentelemetry-instrumentation-celery==0.59b0
+    # via maykin-common
+opentelemetry-instrumentation-dbapi==0.59b0
+    # via opentelemetry-instrumentation-psycopg
 opentelemetry-instrumentation-django==0.59b0
+    # via maykin-common
+opentelemetry-instrumentation-psycopg==0.59b0
+    # via maykin-common
+opentelemetry-instrumentation-redis==0.59b0
+    # via maykin-common
+opentelemetry-instrumentation-requests==0.59b0
     # via maykin-common
 opentelemetry-instrumentation-wsgi==0.59b0
     # via opentelemetry-instrumentation-django
@@ -338,12 +364,17 @@ opentelemetry-sdk==1.38.0
 opentelemetry-semantic-conventions==0.59b0
     # via
     #   opentelemetry-instrumentation
+    #   opentelemetry-instrumentation-celery
+    #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-django
+    #   opentelemetry-instrumentation-redis
+    #   opentelemetry-instrumentation-requests
     #   opentelemetry-instrumentation-wsgi
     #   opentelemetry-sdk
 opentelemetry-util-http==0.59b0
     # via
     #   opentelemetry-instrumentation-django
+    #   opentelemetry-instrumentation-requests
     #   opentelemetry-instrumentation-wsgi
 orderedmultidict==1.0.1
     # via furl
@@ -384,6 +415,7 @@ pydantic-settings==2.10.1
     # via django-setup-configuration
 pygments==2.20.0
     # via
+    #   django-log-outgoing-requests
     #   django-markup
     #   rich
 pyjwt==2.12.1
@@ -404,7 +436,7 @@ python-dateutil==2.9.0.post0
 python-decouple==3.8
     # via
     #   -r requirements/base.in
-    #   open-api-framework
+    #   maykin-common
 python-dotenv==1.2.2
     # via
     #   -r requirements/base.in
@@ -479,6 +511,7 @@ tornado==6.5.5
     # via flower
 typing-extensions==4.14.0
     # via
+    #   django-log-outgoing-requests
     #   grpcio
     #   mozilla-django-oidc-db
     #   opentelemetry-api
@@ -526,6 +559,8 @@ wrapt==1.17.2
     # via
     #   elastic-apm
     #   opentelemetry-instrumentation
+    #   opentelemetry-instrumentation-dbapi
+    #   opentelemetry-instrumentation-redis
 zgw-consumers==1.0.0
     # via
     #   commonground-api-common
