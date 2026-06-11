@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.postgres.forms import DateRangeField as FormDateRangeField
-
-from ..models.relaties import FunctieTeam, OrganisatorischeEenheidFunctie
+from django.utils.translation import gettext_lazy as _
 
 
 class DateRangeWidget(forms.MultiWidget):
@@ -10,12 +9,12 @@ class DateRangeWidget(forms.MultiWidget):
         widgets = (
             AdminDateWidget(
                 attrs={
-                    "placeholder": "Startdatum",
+                    "placeholder": _("Begin geldigheid"),
                 }
             ),
             AdminDateWidget(
                 attrs={
-                    "placeholder": "Einddatum",
+                    "placeholder": _("Einde geldigheid"),
                 }
             ),
         )
@@ -27,31 +26,11 @@ class DateRangeWidget(forms.MultiWidget):
         return [None, None]
 
 
-class FunctieTeamInlineForm(forms.ModelForm):
-    periode = FormDateRangeField(
+class TemporalModelForm(forms.ModelForm):
+    geldigheid = FormDateRangeField(
         widget=DateRangeWidget(),
-        label="Periode",
+        required=True,
     )
 
     class Meta:
-        model = FunctieTeam
-        fields = (
-            "functie",
-            "team",
-            "periode",
-        )
-
-
-class FunctieOrganisatorischeEenheidInlineForm(forms.ModelForm):
-    periode = FormDateRangeField(
-        widget=DateRangeWidget(),
-        label="Periode",
-    )
-
-    class Meta:
-        model = OrganisatorischeEenheidFunctie
-        fields = (
-            "functie",
-            "organisatorische_eenheid",
-            "periode",
-        )
+        abstract = True

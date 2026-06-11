@@ -1715,12 +1715,24 @@ components:
           type: string
           format: uuid
           writeOnly: true
-        periode:
-          allOf:
-          - $ref: '#/components/schemas/Period'
+        geldigheid:
+          type: object
+          required:
+          - beginGeldigheid
+          properties:
+            beginGeldigheid:
+              type: string
+              format: date
+            eindeGeldigheid:
+              type: string
+              format: date
+              nullable: true
+          example:
+            beginGeldigheid: '2025-01-01'
+            eindeGeldigheid: '2025-06-01'
           writeOnly: true
       required:
-      - periode
+      - geldigheid
       - teamUuid
     FunctieType:
       type: object
@@ -2106,29 +2118,54 @@ components:
           type: string
           format: uuid
           writeOnly: true
-        periode:
-          allOf:
-          - $ref: '#/components/schemas/Period'
+        geldigheid:
+          type: object
+          required:
+          - beginGeldigheid
+          properties:
+            beginGeldigheid:
+              type: string
+              format: date
+            eindeGeldigheid:
+              type: string
+              format: date
+              nullable: true
+          example:
+            beginGeldigheid: '2025-01-01'
+            eindeGeldigheid: '2025-06-01'
           writeOnly: true
       required:
+      - geldigheid
       - organisatorischeEenheidUuid
-      - periode
     OrganisatorischeEenheidGroupPeriods:
       type: object
       properties:
         organisatorischeEenheid:
           $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
-        periodes:
+        geldigheid:
           type: array
           items:
-            $ref: '#/components/schemas/Period'
+            type: object
+            required:
+            - beginGeldigheid
+            properties:
+              beginGeldigheid:
+                type: string
+                format: date
+              eindeGeldigheid:
+                type: string
+                format: date
+                nullable: true
+          example:
+          - beginGeldigheid: '2025-01-01'
+            eindeGeldigheid: '2025-06-01'
         wijzigingsdatum:
           type: string
           format: date-time
           readOnly: true
       required:
+      - geldigheid
       - organisatorischeEenheid
-      - periodes
       - wijzigingsdatum
     PaginatedFunctieList:
       type: object
@@ -2616,18 +2653,6 @@ components:
           type: string
           description: Telefoonnummer van de vestiging (optioneel).
           maxLength: 50
-    Period:
-      type: object
-      properties:
-        startdatum:
-          type: string
-          format: date
-        einddatum:
-          type: string
-          format: date
-          nullable: true
-      required:
-      - startdatum
     Team:
       type: object
       properties:
@@ -2709,16 +2734,29 @@ components:
       properties:
         team:
           $ref: '#/components/schemas/NestedTeam'
-        periodes:
+        geldigheid:
           type: array
           items:
-            $ref: '#/components/schemas/Period'
+            type: object
+            required:
+            - beginGeldigheid
+            properties:
+              beginGeldigheid:
+                type: string
+                format: date
+              eindeGeldigheid:
+                type: string
+                format: date
+                nullable: true
+          example:
+          - beginGeldigheid: '2025-01-01'
+            eindeGeldigheid: '2025-06-01'
         wijzigingsdatum:
           type: string
           format: date-time
           readOnly: true
       required:
-      - periodes
+      - geldigheid
       - team
       - wijzigingsdatum
     Vestiging:

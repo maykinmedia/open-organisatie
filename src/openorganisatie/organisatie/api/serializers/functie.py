@@ -2,7 +2,6 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema_field
-from psycopg.types.range import DateRange
 from rest_framework import serializers
 from vng_api_common.utils import get_help_text
 
@@ -19,65 +18,55 @@ from openorganisatie.organisatie.models.relaties import (
 from openorganisatie.organisatie.models.team import Team
 from openorganisatie.utils.fields import UUIDRelatedField
 
+from ..service import update_relations
 from ..validators import (
     validate_functie_oe,
     validate_functie_team,
 )
+from .fields import PeriodField, PeriodListField
 from .functietype import FunctieTypeSerializer
 from .medewerker import MedewerkerSerializer
 from .organisatorische_eenheid import NestedOrganisatorischeEenheidSerializer
 from .team import NestedTeamSerializer
 
 
-class PeriodSerializer(serializers.Serializer):
-    startdatum = serializers.DateField()
-    einddatum = serializers.DateField(required=False, allow_null=True)
-
-    def to_representation(self, instance):
-        return {
-            "startdatum": instance.lower,
-            "einddatum": instance.upper,
-        }
-
-
 class TeamGroupPeriodsSerializer(serializers.Serializer):
     team = NestedTeamSerializer()
-    periodes = PeriodSerializer(many=True)
+    geldigheid = PeriodListField()
     wijzigingsdatum = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = FunctieTeam
         fields = [
             "team",
-            "periode",
+            "geldigheid",
             "wijzigingsdatum",
         ]
 
 
 class OrganisatorischeEenheidGroupPeriodsSerializer(serializers.Serializer):
     organisatorische_eenheid = NestedOrganisatorischeEenheidSerializer()
-    periodes = PeriodSerializer(many=True)
+    geldigheid = PeriodListField()
     wijzigingsdatum = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = OrganisatorischeEenheidFunctie
         fields = [
-            "team",
-            "periode",
+            "organisatorische_eenheid",
+            "geldigheid",
             "wijzigingsdatum",
         ]
 
 
 class FunctieTeamSerializer(serializers.ModelSerializer):
     team = NestedTeamSerializer(read_only=True)
-    periode = PeriodSerializer(read_only=True)
+    geldigheid = PeriodField(read_only=True)
 
     class Meta:
         model = FunctieTeam
         fields = [
             "team",
-            "periode",
-            "wijzigingsdatum",
+            "geldigheid",
         ]
 
 
@@ -87,26 +76,25 @@ class FunctieTeamWriteSerializer(serializers.ModelSerializer):
         queryset=Team.objects.all(),
         write_only=True,
     )
-    periode = PeriodSerializer(write_only=True)
+    geldigheid = PeriodField(write_only=True)
 
     class Meta:
         model = FunctieTeam
         fields = [
             "team_uuid",
-            "periode",
+            "geldigheid",
         ]
 
 
 class OrganisatorischeEenheidFunctieSerializer(serializers.ModelSerializer):
     organisatorische_eenheid = NestedOrganisatorischeEenheidSerializer(read_only=True)
-    periode = PeriodSerializer(read_only=True)
+    geldigheid = PeriodField(read_only=True)
 
     class Meta:
         model = OrganisatorischeEenheidFunctie
         fields = [
             "organisatorische_eenheid",
-            "periode",
-            "wijzigingsdatum",
+            "geldigheid",
         ]
 
 
@@ -116,13 +104,13 @@ class OrganisatorischeEenheidFunctieWriteSerializer(serializers.ModelSerializer)
         queryset=OrganisatorischeEenheid.objects.all(),
         write_only=True,
     )
-    periode = PeriodSerializer(write_only=True)
+    geldigheid = PeriodField(write_only=True)
 
     class Meta:
         model = OrganisatorischeEenheidFunctie
         fields = [
             "organisatorische_eenheid_uuid",
-            "periode",
+            "geldigheid",
         ]
 
 
@@ -185,9 +173,11 @@ class FunctieSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         attrs = super().validate(attrs)
+        request = self.context["request"]
 
-        validate_functie_team(self, attrs)
-        validate_functie_oe(self, attrs)
+        if request.method in ["POST"]:
+            validate_functie_team(self, attrs)
+            validate_functie_oe(self, attrs)
 
         return attrs
 
@@ -203,11 +193,11 @@ class FunctieSerializer(serializers.ModelSerializer):
             if team_id not in grouped:
                 grouped[team_id] = {
                     "team": rel.team,
-                    "periodes": [],
+                    "geldigheid": [],
                     "wijzigingsdatum": rel.wijzigingsdatum,
                 }
 
-            grouped[team_id]["periodes"].append(rel.periode)
+            grouped[team_id]["geldigheid"].append(rel.geldigheid)
 
         return TeamGroupPeriodsSerializer(grouped.values(), many=True).data
 
@@ -225,36 +215,25 @@ class FunctieSerializer(serializers.ModelSerializer):
             if organisatorische_eenheid_id not in grouped:
                 grouped[organisatorische_eenheid_id] = {
                     "organisatorische_eenheid": rel.organisatorische_eenheid,
-                    "periodes": [],
+                    "geldigheid": [],
                     "wijzigingsdatum": rel.wijzigingsdatum,
                 }
 
-            grouped[organisatorische_eenheid_id]["periodes"].append(rel.periode)
+            grouped[organisatorische_eenheid_id]["geldigheid"].append(rel.geldigheid)
 
         return OrganisatorischeEenheidGroupPeriodsSerializer(
             grouped.values(), many=True
         ).data
 
-    def _build_period(self, data):
-        period_data = data.pop("periode")
-        return DateRange(
-            period_data["startdatum"],
-            period_data.get("einddatum"),
-        )
-
     def _create_functieteam(self, instance, data):
-        periode = self._build_period(data)
-        return FunctieTeam.objects.create(
+        return FunctieTeam.objects.get_or_create(
             functie=instance,
-            periode=periode,
             **data,
         )
 
     def _create_oe(self, instance, data):
-        periode = self._build_period(data)
-        return OrganisatorischeEenheidFunctie.objects.create(
+        return OrganisatorischeEenheidFunctie.objects.get_or_create(
             functie=instance,
-            periode=periode,
             **data,
         )
 
@@ -280,14 +259,10 @@ class FunctieSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             instance = super().update(instance, validated_data)
 
-            if teams_data is not None:
-                instance.functieteam_set.all().delete()
-                for team in teams_data:
-                    self._create_functieteam(instance, team)
-
-            if oe_data is not None:
-                instance.organisatorischeeenheidfunctie_set.all().delete()
-                for oe in oe_data:
-                    self._create_oe(instance, oe)
+            update_relations(
+                functie=instance,
+                teams_data=teams_data,
+                oe_data=oe_data,
+            )
 
         return instance

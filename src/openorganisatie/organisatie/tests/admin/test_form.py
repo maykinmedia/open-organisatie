@@ -7,7 +7,7 @@ from psycopg.types.range import DateRange
 from openorganisatie.organisatie.models.factories.functie import FunctieFactory
 from openorganisatie.organisatie.models.factories.team import TeamFactory
 
-from ...admin.forms import FunctieTeamInlineForm
+from ...admin.functie import TeamFunctieInlineForm
 
 
 class FunctieTeamInlineFormTests(TestCase):
@@ -15,74 +15,74 @@ class FunctieTeamInlineFormTests(TestCase):
         functie = FunctieFactory()
         team = TeamFactory()
 
-        form = FunctieTeamInlineForm(
+        form = TeamFunctieInlineForm(
             data={
                 "functie": functie.pk,
                 "team": team.pk,
-                "periode_0": "2025-01-01",
-                "periode_1": "2025-12-31",
+                "geldigheid_0": "2025-01-01",
+                "geldigheid_1": "2025-12-31",
             }
         )
 
         self.assertTrue(form.is_valid(), form.errors)
 
-        periode = form.cleaned_data["periode"]
+        geldigheid = form.cleaned_data["geldigheid"]
 
-        self.assertEqual(periode.lower, date(2025, 1, 1))
-        self.assertEqual(periode.upper, date(2025, 12, 31))
+        self.assertEqual(geldigheid.lower, date(2025, 1, 1))
+        self.assertEqual(geldigheid.upper, date(2025, 12, 31))
 
     def test_form_without_periode(self):
         functie = FunctieFactory()
         team = TeamFactory()
 
-        form = FunctieTeamInlineForm(
+        form = TeamFunctieInlineForm(
             data={
                 "functie": functie.pk,
                 "team": team.pk,
-                "periode_0": "",
-                "periode_1": "",
+                "geldigheid_0": "",
+                "geldigheid_1": "",
             }
         )
 
         self.assertFalse(form.is_valid())
 
         self.assertFalse(form.is_valid())
-        self.assertIn("periode", form.errors)
+        self.assertIn("geldigheid", form.errors)
 
     def test_form_invalid_startdatum(self):
         functie = FunctieFactory()
         team = TeamFactory()
 
-        form = FunctieTeamInlineForm(
+        form = TeamFunctieInlineForm(
             data={
                 "functie": functie.pk,
                 "team": team.pk,
-                "periode_0": "invalid-date",
-                "periode_1": "2025-12-31",
+                "geldigheid_0": "invalid-date",
+                "geldigheid_1": "2025-12-31",
             }
         )
 
         self.assertFalse(form.is_valid())
-        self.assertIn("periode", form.errors)
+        self.assertIn("geldigheid", form.errors)
 
     def test_form_invalid_einddatum(self):
         functie = FunctieFactory()
         team = TeamFactory()
 
-        form = FunctieTeamInlineForm(
+        form = TeamFunctieInlineForm(
             data={
                 "functie": functie.pk,
                 "team": team.pk,
-                "periode_0": "2025-01-01",
-                "periode_1": "invalid-date",
+                "geldigheid_0": "2025-01-01",
+                "geldigheid_1": "invalid-date",
             }
         )
 
         self.assertFalse(form.is_valid())
-        self.assertIn("periode", form.errors)
+        self.assertIn("geldigheid", form.errors)
 
     def test_widget_decompress(self):
-        widget = FunctieTeamInlineForm.base_fields["periode"].widget
+        widget = TeamFunctieInlineForm.base_fields["geldigheid"].widget
 
         value = DateRange(
             lower=date(2025, 1, 1),
@@ -100,23 +100,23 @@ class FunctieTeamInlineFormTests(TestCase):
         )
 
     def test_widget_decompress_empty_value(self):
-        widget = FunctieTeamInlineForm.base_fields["periode"].widget
+        widget = TeamFunctieInlineForm.base_fields["geldigheid"].widget
 
         decompressed = widget.decompress(None)
 
         self.assertEqual(decompressed, [None, None])
 
     def test_widget_contains_placeholders(self):
-        form = FunctieTeamInlineForm()
+        form = TeamFunctieInlineForm()
 
-        html = str(form["periode"])
+        html = str(form["geldigheid"])
 
-        self.assertIn("Startdatum", html)
-        self.assertIn("Einddatum", html)
+        self.assertIn("Begin geldigheid", html)
+        self.assertIn("Einde geldigheid", html)
 
     def test_widget_uses_admin_date_widget(self):
-        form = FunctieTeamInlineForm()
+        form = TeamFunctieInlineForm()
 
-        html = str(form["periode"])
+        html = str(form["geldigheid"])
 
         self.assertIn("vDateField", html)

@@ -29,13 +29,13 @@ class FunctieFilter(FilterSet):
         help_text=_("UUID's van de gekoppelde organisatorische eenheden."),
     )
     actief_op_team = DateFilter(
-        field_name="functieteam__periode",
+        field_name="functieteam__geldigheid",
         lookup_expr="contains",
         distinct=True,
         help_text="Functies actief via team op deze datum",
     )
     actief_op_organisatorische_eenheid = DateFilter(
-        field_name="organisatorischeeenheidfunctie__periode",
+        field_name="organisatorischeeenheidfunctie__geldigheid",
         lookup_expr="contains",
         distinct=True,
         help_text="Functies actief via organisatorische eenheid op deze datum",

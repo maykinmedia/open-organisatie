@@ -12,7 +12,9 @@ class FunctieTeam(models.Model):
 
     wijzigingsdatum = models.DateTimeField(auto_now=True)
 
-    periode = DateRangeField(blank=True, null=True)
+    geldigheid = DateRangeField(
+        help_text=_("Geldigheidsperiode van deze relatie."),
+    )
 
     class Meta:
         verbose_name = _("Functie Team")
@@ -20,11 +22,11 @@ class FunctieTeam(models.Model):
 
         constraints = [
             ExclusionConstraint(
-                name="no_overlapping_functie_team_period",
+                name="no_overlapping_functie_team_geldigheid",
                 expressions=[
                     ("functie", RangeOperators.EQUAL),
                     ("team", RangeOperators.EQUAL),
-                    ("periode", RangeOperators.OVERLAPS),
+                    ("geldigheid", RangeOperators.OVERLAPS),
                 ],
             ),
         ]
@@ -39,20 +41,17 @@ class FunctieTeam(models.Model):
     def clean(self):
         super().clean()
 
-        if not self.periode:
-            raise ValidationError({"periode": "Periode is verplicht."})
-
-        if not self.periode.lower:
-            raise ValidationError({"periode": "Startdatum is verplicht."})
+        if not self.geldigheid:
+            return
 
         qs = FunctieTeam.objects.filter(
             functie_id=self.functie_id,
             team_id=self.team_id,
         ).exclude(pk=self.pk)
 
-        if qs.filter(periode__overlap=self.periode).exists():
+        if qs.filter(geldigheid__overlap=self.geldigheid).exists():
             raise ValidationError(
-                {"periode": "Deze periode overlapt met een bestaande toewijzing."}
+                {"geldigheid": "Deze geldigheid overlapt met een bestaande toewijzing."}
             )
 
 
@@ -64,7 +63,9 @@ class OrganisatorischeEenheidFunctie(models.Model):
 
     wijzigingsdatum = models.DateTimeField(auto_now=True)
 
-    periode = DateRangeField(blank=True, null=True)
+    geldigheid = DateRangeField(
+        help_text=_("Geldigheidsperiode van deze relatie."),
+    )
 
     class Meta:
         verbose_name = _("Functie organisatorische eenheden")
@@ -72,11 +73,11 @@ class OrganisatorischeEenheidFunctie(models.Model):
 
         constraints = [
             ExclusionConstraint(
-                name="no_overlapping_organisatie_functie_period",
+                name="no_overlapping_organisatie_functie_geldigheid",
                 expressions=[
                     ("functie", RangeOperators.EQUAL),
                     ("organisatorische_eenheid", RangeOperators.EQUAL),
-                    ("periode", RangeOperators.OVERLAPS),
+                    ("geldigheid", RangeOperators.OVERLAPS),
                 ],
             ),
         ]
@@ -91,18 +92,15 @@ class OrganisatorischeEenheidFunctie(models.Model):
     def clean(self):
         super().clean()
 
-        if not self.periode:
-            raise ValidationError({"periode": "Periode is verplicht."})
-
-        if not self.periode.lower:
-            raise ValidationError({"periode": "Startdatum is verplicht."})
+        if not self.geldigheid:
+            return
 
         qs = OrganisatorischeEenheidFunctie.objects.filter(
             functie_id=self.functie_id,
             organisatorische_eenheid_id=self.organisatorische_eenheid_id,
         ).exclude(pk=self.pk)
 
-        if qs.filter(periode__overlap=self.periode).exists():
+        if qs.filter(geldigheid__overlap=self.geldigheid).exists():
             raise ValidationError(
-                {"periode": "Deze periode overlapt met een bestaande toewijzing."}
+                {"geldigheid": "Deze geldigheid overlapt met een bestaande toewijzing."}
             )

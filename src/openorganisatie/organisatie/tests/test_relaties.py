@@ -18,53 +18,14 @@ from ..models.relaties import (
 
 
 class FunctieTeamCleanTests(TestCase):
-    def test_clean_without_periode(self):
-        functie = FunctieFactory()
-        team = TeamFactory()
-
-        relatie = FunctieTeam(
-            functie=functie,
-            team=team,
-            periode=None,
-        )
-
-        with self.assertRaises(ValidationError) as cm:
-            relatie.clean()
-
-        self.assertEqual(
-            cm.exception.message_dict["periode"],
-            ["Periode is verplicht."],
-        )
-
-    def test_clean_without_startdatum(self):
-        functie = FunctieFactory()
-        team = TeamFactory()
-
-        relatie = FunctieTeam(
-            functie=functie,
-            team=team,
-            periode=DateRange(
-                lower=None,
-                upper=date(2025, 12, 31),
-            ),
-        )
-
-        with self.assertRaises(ValidationError) as cm:
-            relatie.clean()
-
-        self.assertEqual(
-            cm.exception.message_dict["periode"],
-            ["Startdatum is verplicht."],
-        )
-
-    def test_clean_overlapping_periode(self):
+    def test_clean_overlapping_geldigheid(self):
         functie = FunctieFactory()
         team = TeamFactory()
 
         FunctieTeam.objects.create(
             functie=functie,
             team=team,
-            periode=DateRange(
+            geldigheid=DateRange(
                 lower=date(2025, 1, 1),
                 upper=date(2025, 12, 31),
             ),
@@ -73,7 +34,7 @@ class FunctieTeamCleanTests(TestCase):
         relatie = FunctieTeam(
             functie=functie,
             team=team,
-            periode=DateRange(
+            geldigheid=DateRange(
                 lower=date(2025, 6, 1),
                 upper=date(2026, 1, 1),
             ),
@@ -83,59 +44,20 @@ class FunctieTeamCleanTests(TestCase):
             relatie.clean()
 
         self.assertEqual(
-            cm.exception.message_dict["periode"],
-            ["Deze periode overlapt met een bestaande toewijzing."],
+            cm.exception.message_dict["geldigheid"],
+            ["Deze geldigheid overlapt met een bestaande toewijzing."],
         )
 
 
 class OrganisatorischeEenheidFunctieCleanTests(TestCase):
-    def test_clean_without_periode(self):
-        functie = FunctieFactory()
-        organisatorische_eenheid = OrganisatorischeEenheidFactory()
-
-        relatie = OrganisatorischeEenheidFunctie(
-            functie=functie,
-            organisatorische_eenheid=organisatorische_eenheid,
-            periode=None,
-        )
-
-        with self.assertRaises(ValidationError) as cm:
-            relatie.clean()
-
-        self.assertEqual(
-            cm.exception.message_dict["periode"],
-            ["Periode is verplicht."],
-        )
-
-    def test_clean_without_startdatum(self):
-        functie = FunctieFactory()
-        organisatorische_eenheid = OrganisatorischeEenheidFactory()
-
-        relatie = OrganisatorischeEenheidFunctie(
-            functie=functie,
-            organisatorische_eenheid=organisatorische_eenheid,
-            periode=DateRange(
-                lower=None,
-                upper=date(2025, 12, 31),
-            ),
-        )
-
-        with self.assertRaises(ValidationError) as cm:
-            relatie.clean()
-
-        self.assertEqual(
-            cm.exception.message_dict["periode"],
-            ["Startdatum is verplicht."],
-        )
-
-    def test_clean_overlapping_periode(self):
+    def test_clean_overlapping_geldigheid(self):
         functie = FunctieFactory()
         organisatorische_eenheid = OrganisatorischeEenheidFactory()
 
         OrganisatorischeEenheidFunctie.objects.create(
             functie=functie,
             organisatorische_eenheid=organisatorische_eenheid,
-            periode=DateRange(
+            geldigheid=DateRange(
                 lower=date(2025, 1, 1),
                 upper=date(2025, 12, 31),
             ),
@@ -144,7 +66,7 @@ class OrganisatorischeEenheidFunctieCleanTests(TestCase):
         relatie = OrganisatorischeEenheidFunctie(
             functie=functie,
             organisatorische_eenheid=organisatorische_eenheid,
-            periode=DateRange(
+            geldigheid=DateRange(
                 lower=date(2025, 6, 1),
                 upper=date(2026, 1, 1),
             ),
@@ -154,6 +76,6 @@ class OrganisatorischeEenheidFunctieCleanTests(TestCase):
             relatie.clean()
 
         self.assertEqual(
-            cm.exception.message_dict["periode"],
-            ["Deze periode overlapt met een bestaande toewijzing."],
+            cm.exception.message_dict["geldigheid"],
+            ["Deze geldigheid overlapt met een bestaande toewijzing."],
         )

@@ -3,30 +3,40 @@ from django.contrib import admin
 from ...utils.reversion import ReadOnlyCompareVersionAdmin
 from ..models.functie import Functie
 from ..models.relaties import FunctieTeam, OrganisatorischeEenheidFunctie
+from .forms import TemporalModelForm
+
+
+class TeamFunctieInlineForm(TemporalModelForm):
+    class Meta:
+        model = FunctieTeam
+        fields = ("geldigheid",)
+
+
+class OrganisatorischeEenheidInlineForm(TemporalModelForm):
+    class Meta:
+        model = OrganisatorischeEenheidFunctie
+        fields = ("geldigheid",)
 
 
 class TeamFunctieInline(admin.StackedInline):
+    form = TeamFunctieInlineForm
     model = FunctieTeam
+    fields = (
+        "team",
+        "geldigheid",
+    )
+
     extra = 1
-
-    def get_formset(self, request, obj=None, **kwargs):
-        from openorganisatie.organisatie.admin.forms import FunctieTeamInlineForm
-
-        kwargs["form"] = FunctieTeamInlineForm
-        return super().get_formset(request, obj, **kwargs)
 
 
 class OrganisatorischeEenheidFunctieInline(admin.StackedInline):
+    form = OrganisatorischeEenheidInlineForm
     model = OrganisatorischeEenheidFunctie
+    fields = (
+        "organisatorische_eenheid",
+        "geldigheid",
+    )
     extra = 1
-
-    def get_formset(self, request, obj=None, **kwargs):
-        from openorganisatie.organisatie.admin.forms import (
-            FunctieOrganisatorischeEenheidInlineForm,
-        )
-
-        kwargs["form"] = FunctieOrganisatorischeEenheidInlineForm
-        return super().get_formset(request, obj, **kwargs)
 
 
 @admin.register(Functie)

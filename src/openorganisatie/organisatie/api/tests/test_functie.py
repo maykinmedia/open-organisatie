@@ -53,9 +53,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team.uuid),
-                    "periode": {
-                        "startdatum": "2025-01-01",
-                        "einddatum": "2025-12-31",
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": "2025-12-31",
                     },
                 }
             ],
@@ -82,9 +82,9 @@ class FunctieAPITests(APITestCase):
             "organisatorischeEenhedenInput": [
                 {
                     "organisatorischeEenheidUuid": str(oe.uuid),
-                    "periode": {
-                        "startdatum": "2025-01-01",
-                        "einddatum": "2025-12-31",
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": "2025-12-31",
                     },
                 }
             ],
@@ -115,32 +115,32 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team1.uuid),
-                    "periode": {
-                        "startdatum": "2025-01-01",
-                        "einddatum": "2025-06-01",
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": "2025-06-01",
                     },
                 },
                 {
                     "teamUuid": str(team2.uuid),
-                    "periode": {
-                        "startdatum": "2025-06-02",
-                        "einddatum": "2025-06-05",
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-06-02",
+                        "einde_geldigheid": "2025-06-05",
                     },
                 },
                 {
                     "teamUuid": str(team2.uuid),
-                    "periode": {
-                        "startdatum": "2025-07-02",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-07-02",
+                        "einde_geldigheid": None,
                     },
                 },
             ],
             "organisatorischeEenhedenInput": [
                 {
                     "organisatorischeEenheidUuid": str(oe1.uuid),
-                    "periode": {
-                        "startdatum": "2025-01-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -164,9 +164,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team.uuid),
-                    "periode": {
-                        "startdatum": "2025-01-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -175,7 +175,9 @@ class FunctieAPITests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        self.assertIsNone(response.data["teams"][0]["periodes"][0]["einddatum"])
+        self.assertIsNone(
+            response.data["teams"][0]["geldigheid"][0]["einde_geldigheid"]
+        )
 
     def test_create_functie_team_overlap_should_fail(self):
         url = reverse("organisatie_api:functie-list")
@@ -184,7 +186,7 @@ class FunctieAPITests(APITestCase):
 
         FunctieTeamFactory(
             team=team,
-            periode=DateRange(date(2025, 1, 1), None),
+            geldigheid=DateRange(date(2025, 1, 1), None),
         )
 
         data = {
@@ -194,9 +196,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team.uuid),
-                    "periode": {
-                        "startdatum": "2025-06-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-06-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -206,14 +208,14 @@ class FunctieAPITests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_functie_team_overlap_exact_same_period_should_fail(self):
+    def test_create_functie_team_overlap_exact_same_geldigheid_should_fail(self):
         url = reverse("organisatie_api:functie-list")
 
         team = TeamFactory()
 
         FunctieTeamFactory(
             team=team,
-            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         data = {
@@ -223,9 +225,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team.uuid),
-                    "periode": {
-                        "startdatum": "2025-01-01",
-                        "einddatum": "2025-06-01",
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": "2025-06-01",
                     },
                 }
             ],
@@ -241,7 +243,7 @@ class FunctieAPITests(APITestCase):
 
         FunctieTeamFactory(
             team=team,
-            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         data = {
@@ -251,9 +253,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team.uuid),
-                    "periode": {
-                        "startdatum": "2025-05-01",
-                        "einddatum": "2025-07-01",
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-05-01",
+                        "einde_geldigheid": "2025-07-01",
                     },
                 }
             ],
@@ -269,7 +271,7 @@ class FunctieAPITests(APITestCase):
 
         FunctieTeamFactory(
             team=team,
-            periode=DateRange(date(2025, 1, 1), None),
+            geldigheid=DateRange(date(2025, 1, 1), None),
         )
 
         data = {
@@ -279,9 +281,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team.uuid),
-                    "periode": {
-                        "startdatum": "2025-02-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-02-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -297,7 +299,7 @@ class FunctieAPITests(APITestCase):
 
         OrganisatorischeEenheidFunctieFactory(
             organisatorische_eenheid=oe,
-            periode=DateRange(date(2025, 1, 1), None),
+            geldigheid=DateRange(date(2025, 1, 1), None),
         )
 
         data = {
@@ -307,9 +309,9 @@ class FunctieAPITests(APITestCase):
             "organisatorischeEenhedenInput": [
                 {
                     "organisatorischeEenheidUuid": str(oe.uuid),
-                    "periode": {
-                        "startdatum": "2025-02-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-02-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -401,9 +403,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team2.uuid),
-                    "periode": {
-                        "startdatum": "2025-02-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-02-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -415,8 +417,8 @@ class FunctieAPITests(APITestCase):
         functie.refresh_from_db()
 
         rels = functie.functieteam_set.all()
-        self.assertEqual(rels.count(), 1)
-        self.assertEqual(rels.first().team_id, team2.id)
+        self.assertEqual(rels.count(), 2)
+        self.assertEqual(rels.first().team_id, team1.id)
 
     def test_patch_functie_patch_teams(self):
         team1 = TeamFactory()
@@ -433,9 +435,9 @@ class FunctieAPITests(APITestCase):
             "teamsInput": [
                 {
                     "teamUuid": str(team2.uuid),
-                    "periode": {
-                        "startdatum": "2025-02-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-02-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -448,8 +450,8 @@ class FunctieAPITests(APITestCase):
         functie.refresh_from_db()
         rels = functie.functieteam_set.all()
 
-        self.assertEqual(rels.count(), 1)
-        self.assertEqual(rels.first().team_id, team2.id)
+        self.assertEqual(rels.count(), 2)
+        self.assertEqual(rels.first().team_id, team1.id)
 
     def test_update_functie_replaces_organisatorische_eenheden(self):
         oe1 = OrganisatorischeEenheidFactory()
@@ -466,9 +468,9 @@ class FunctieAPITests(APITestCase):
             "organisatorischeEenhedenInput": [
                 {
                     "organisatorischeEenheidUuid": str(oe2.uuid),
-                    "periode": {
-                        "startdatum": "2025-02-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-02-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -480,8 +482,8 @@ class FunctieAPITests(APITestCase):
         functie.refresh_from_db()
 
         rels = functie.organisatorischeeenheidfunctie_set.all()
-        self.assertEqual(rels.count(), 1)
-        self.assertEqual(rels.first().organisatorische_eenheid_id, oe2.id)
+        self.assertEqual(rels.count(), 2)
+        self.assertEqual(rels.first().organisatorische_eenheid_id, oe1.id)
 
     def test_patch_functie_patch_organisatorische_eenheden(self):
         oe1 = OrganisatorischeEenheidFactory()
@@ -498,9 +500,9 @@ class FunctieAPITests(APITestCase):
             "organisatorischeEenhedenInput": [
                 {
                     "organisatorischeEenheidUuid": str(oe2.uuid),
-                    "periode": {
-                        "startdatum": "2025-02-01",
-                        "einddatum": None,
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-02-01",
+                        "einde_geldigheid": None,
                     },
                 }
             ],
@@ -513,8 +515,8 @@ class FunctieAPITests(APITestCase):
         functie.refresh_from_db()
 
         rels = functie.organisatorischeeenheidfunctie_set.all()
-        self.assertEqual(rels.count(), 1)
-        self.assertEqual(rels.first().organisatorische_eenheid_id, oe2.id)
+        self.assertEqual(rels.count(), 2)
+        self.assertEqual(rels.first().organisatorische_eenheid_id, oe1.id)
 
     def test_delete_functie(self):
         functie = FunctieFactory(functie_type=self.functie_type)
@@ -811,10 +813,10 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team,
-            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
         FunctieTeamFactory(
-            periode=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
+            geldigheid=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
         )
 
         response = self.client.get(url, {"actief_op_team": "2025-03-01"})
@@ -834,7 +836,7 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team,
-            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         response = self.client.get(url, {"actief_op_team": "2025-07-01"})
@@ -852,7 +854,7 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team,
-            periode=DateRange(date(2025, 1, 1), None),
+            geldigheid=DateRange(date(2025, 1, 1), None),
         )
 
         response = self.client.get(url, {"actief_op_team": "2030-01-01"})
@@ -874,13 +876,13 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie1,
             team=team,
-            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         FunctieTeamFactory(
             functie=functie2,
             team=team,
-            periode=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
+            geldigheid=DateRange(date(2026, 1, 1), date(2026, 6, 1)),
         )
 
         response = self.client.get(url, {"actief_op_team": "2025-03-01"})
@@ -902,13 +904,13 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie1,
             team=team,
-            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         FunctieTeamFactory(
             functie=functie2,
             team=team,
-            periode=DateRange(date(2025, 1, 1), date(2026, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2026, 6, 1)),
         )
 
         response = self.client.get(url, {"actief_op_team": "2025-03-01"})
@@ -930,13 +932,13 @@ class FunctieAPITests(APITestCase):
         FunctieTeamFactory(
             functie=functie,
             team=team1,
-            periode=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
         )
 
         FunctieTeamFactory(
             functie=functie,
             team=team2,
-            periode=DateRange(date(2025, 2, 1), date(2025, 5, 1)),
+            geldigheid=DateRange(date(2025, 2, 1), date(2025, 5, 1)),
         )
 
         response = self.client.get(url, {"actief_op_team": "2025-03-01"})
@@ -945,3 +947,146 @@ class FunctieAPITests(APITestCase):
         self.assertEqual(response.data["count"], 1)
 
         self.assertEqual(response.data["results"][0]["uuid"], str(functie.uuid))
+
+    def test_put_team_geldigheid_(self):
+        url = reverse("organisatie_api:functie-list")
+        team = TeamFactory()
+        team2 = TeamFactory()
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-11-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        # "einde_geldigheid": "2025-12-31",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+
+        uuid = response.data["uuid"]
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": uuid})
+
+        data = {
+            "functieOmschrijving": "update",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": "2025-06-01",
+                    },
+                },
+                {
+                    "teamUuid": str(team.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-06-01",
+                        "einde_geldigheid": "2025-08-01",
+                    },
+                },
+                {
+                    "teamUuid": str(team2.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": "2025-06-01",
+                    },
+                },
+                {
+                    "teamUuid": str(team2.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-06-01",
+                        "einde_geldigheid": "2025-08-01",
+                    },
+                },
+            ],
+        }
+
+        response = self.client.patch(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie = Functie.objects.get(uuid=uuid)
+        self.assertEqual(functie.functie_omschrijving, "update")
+        self.assertEqual(functie.functieteam_set.count(), 4)
+
+    def test_close_team_geldigheid(self):
+        team = TeamFactory()
+        functie = FunctieFactory()
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": functie.uuid})
+
+        rel = FunctieTeamFactory(
+            functie=functie,
+            team=team,
+            geldigheid=DateRange(date(2025, 1, 1), None),
+        )
+
+        data = {
+            "functieOmschrijving": functie.functie_omschrijving,
+            "startdatum": functie.startdatum.isoformat(),
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        "einde_geldigheid": "2025-06-01",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.patch(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        rel.refresh_from_db()
+        self.assertEqual(rel.geldigheid.upper, date(2025, 6, 1))
+
+    def test_update_empty_list_team_geldigheid(self):
+        url = reverse("organisatie_api:functie-list")
+        team = TeamFactory()
+
+        data = {
+            "functieOmschrijving": "Test functie",
+            "startdatum": "2025-11-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-01-01",
+                        # "einde_geldigheid": "2025-12-31",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.post(url, data)
+
+        uuid = response.data["uuid"]
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": uuid})
+
+        data = {
+            "functieOmschrijving": "update",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [],
+        }
+
+        response = self.client.put(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie = Functie.objects.get(uuid=uuid)
+        self.assertEqual(functie.functie_omschrijving, "update")
+
+        self.assertEqual(functie.functieteam_set.count(), 1)
+
+        relation = functie.functieteam_set.first()
+        self.assertEqual(str(relation.team.uuid), str(team.uuid))

@@ -1,22 +1,8 @@
-from psycopg.types.range import DateRange
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
 
 from ..models.relaties import FunctieTeam, OrganisatorischeEenheidFunctie
-
-
-def build_period_range(period):
-    start = period.get("startdatum")
-    end = period.get("einddatum")
-
-    if not start:
-        raise serializers.ValidationError({"teams_input": "Startdatum is verplicht."})
-
-    if end and start > end:
-        raise serializers.ValidationError(
-            {"teams_input": "Einddatum moet na startdatum liggen."}
-        )
-
-    return DateRange(start, end)
 
 
 def validate_functie_team(serializer, attrs):
@@ -25,24 +11,21 @@ def validate_functie_team(serializer, attrs):
 
     for item in teams:
         team = item.get("team")
-        period = item.get("periode")
+        geldigheid = item.get("geldigheid")
 
-        if not team or not period:
+        if not team or not geldigheid:
             continue
 
-        period_range = build_period_range(period)
-
         qs = FunctieTeam.objects.filter(
-            # functie=functie,
             team=team,
         )
 
         if functie:
             qs = qs.filter(functie=functie)
 
-        if qs.filter(periode__overlap=period_range).exists():
+        if qs.filter(geldigheid__overlap=geldigheid).exists():
             raise serializers.ValidationError(
-                {"teams_input": "Deze periode overlapt met een bestaand team."}
+                {"teams_input": _("Deze geldigheid overlapt met een bestaand team.")}
             )
 
 
@@ -52,12 +35,10 @@ def validate_functie_oe(serializer, attrs):
 
     for item in organisatorische_eenheden:
         organisatorische_eenheid = item.get("organisatorische_eenheid")
-        period = item.get("periode")
+        geldigheid = item.get("geldigheid")
 
-        if not organisatorische_eenheid or not period:
+        if not organisatorische_eenheid or not geldigheid:
             continue
-
-        period_range = build_period_range(period)
 
         qs = OrganisatorischeEenheidFunctie.objects.filter(
             organisatorische_eenheid=organisatorische_eenheid,
@@ -66,9 +47,11 @@ def validate_functie_oe(serializer, attrs):
         if functie:
             qs = qs.filter(functie=functie)
 
-        if qs.filter(periode__overlap=period_range).exists():
+        if qs.filter(geldigheid__overlap=geldigheid).exists():
             raise serializers.ValidationError(
                 {
-                    "organisatorische_eenheden_input": "Deze periode overlapt met een bestaande relatie."
+                    "organisatorische_eenheden_input": _(
+                        "Deze geldigheid overlapt met een bestaande relatie."
+                    )
                 }
             )
