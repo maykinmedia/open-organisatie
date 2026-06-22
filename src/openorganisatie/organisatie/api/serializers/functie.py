@@ -1,8 +1,10 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError as DRFValidationError
 from vng_api_common.utils import get_help_text
 
 from openorganisatie.organisatie.models.functie import Functie
@@ -23,7 +25,7 @@ from ..validators import (
     validate_functie_oe,
     validate_functie_team,
 )
-from .fields import PeriodField, PeriodListField
+from .fields import PeriodField
 from .functietype import FunctieTypeSerializer
 from .medewerker import MedewerkerSerializer
 from .organisatorische_eenheid import NestedOrganisatorischeEenheidSerializer
@@ -32,7 +34,7 @@ from .team import NestedTeamSerializer
 
 class TeamGroupPeriodsSerializer(serializers.Serializer):
     team = NestedTeamSerializer()
-    geldigheid = PeriodListField()
+    geldigheid = serializers.ListField(child=PeriodField())
     wijzigingsdatum = serializers.DateTimeField(read_only=True)
 
     class Meta:
@@ -46,7 +48,7 @@ class TeamGroupPeriodsSerializer(serializers.Serializer):
 
 class OrganisatorischeEenheidGroupPeriodsSerializer(serializers.Serializer):
     organisatorische_eenheid = NestedOrganisatorischeEenheidSerializer()
-    geldigheid = PeriodListField()
+    geldigheid = serializers.ListField(child=PeriodField())
     wijzigingsdatum = serializers.DateTimeField(read_only=True)
 
     class Meta:
@@ -173,9 +175,8 @@ class FunctieSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         attrs = super().validate(attrs)
-        request = self.context["request"]
 
-        if request.method in ["POST"]:
+        if self.instance is None:
             validate_functie_team(self, attrs)
             validate_functie_oe(self, attrs)
 
@@ -226,13 +227,13 @@ class FunctieSerializer(serializers.ModelSerializer):
         ).data
 
     def _create_functieteam(self, instance, data):
-        return FunctieTeam.objects.get_or_create(
+        return FunctieTeam.objects.create(
             functie=instance,
             **data,
         )
 
     def _create_oe(self, instance, data):
-        return OrganisatorischeEenheidFunctie.objects.get_or_create(
+        return OrganisatorischeEenheidFunctie.objects.create(
             functie=instance,
             **data,
         )
@@ -241,16 +242,19 @@ class FunctieSerializer(serializers.ModelSerializer):
         teams_data = validated_data.pop("teams_input", [])
         oe_data = validated_data.pop("organisatorische_eenheden_input", [])
 
-        with transaction.atomic():
-            functie = super().create(validated_data)
+        try:
+            with transaction.atomic():
+                functie = super().create(validated_data)
 
-            for team in teams_data:
-                self._create_functieteam(functie, team)
+                for team in teams_data:
+                    self._create_functieteam(functie, team)
 
-            for oe in oe_data:
-                self._create_oe(functie, oe)
+                for oe in oe_data:
+                    self._create_oe(functie, oe)
 
-        return functie
+            return functie
+        except DjangoValidationError as e:
+            raise DRFValidationError(e.message_dict)
 
     def update(self, instance, validated_data):
         teams_data = validated_data.pop("teams_input", None)

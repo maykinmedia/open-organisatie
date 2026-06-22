@@ -2156,9 +2156,9 @@ components:
                 type: string
                 format: date
                 nullable: true
-          example:
-          - beginGeldigheid: '2025-01-01'
-            eindeGeldigheid: '2025-06-01'
+            example:
+              beginGeldigheid: '2025-01-01'
+              eindeGeldigheid: '2025-06-01'
         wijzigingsdatum:
           type: string
           format: date-time
@@ -2748,9 +2748,9 @@ components:
                 type: string
                 format: date
                 nullable: true
-          example:
-          - beginGeldigheid: '2025-01-01'
-            eindeGeldigheid: '2025-06-01'
+            example:
+              beginGeldigheid: '2025-01-01'
+              eindeGeldigheid: '2025-06-01'
         wijzigingsdatum:
           type: string
           format: date-time

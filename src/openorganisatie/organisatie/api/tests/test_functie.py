@@ -1090,3 +1090,34 @@ class FunctieAPITests(APITestCase):
 
         relation = functie.functieteam_set.first()
         self.assertEqual(str(relation.team.uuid), str(team.uuid))
+
+    def test_patch_cannot_introduce_overlap(self):
+        team = TeamFactory()
+
+        functie = FunctieFactory()
+
+        FunctieTeamFactory(
+            functie=functie,
+            team=team,
+            geldigheid=DateRange(date(2025, 1, 1), date(2025, 6, 1)),
+        )
+
+        url = reverse("organisatie_api:functie-detail", kwargs={"uuid": functie.uuid})
+
+        data = {
+            "functieOmschrijving": functie.functie_omschrijving,
+            "functietypeUuid": str(self.functie_type.uuid),
+            "teamsInput": [
+                {
+                    "teamUuid": str(team.uuid),
+                    "geldigheid": {
+                        "begin_geldigheid": "2025-05-01",
+                        "einde_geldigheid": "2025-07-01",
+                    },
+                }
+            ],
+        }
+
+        response = self.client.patch(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
