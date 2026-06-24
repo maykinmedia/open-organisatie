@@ -1,21 +1,25 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.contrib.auth.models import AbstractBaseUser
 
 from rest_framework.authtoken.models import Token
-from rest_framework.test import APIClient
+from rest_framework.test import APITestCase as _APITestCase
 
 User = get_user_model()
 
 
-class APITestCase(TestCase):
+class APITestCase(_APITestCase):
     auth_type = "Token"
+    user: AbstractBaseUser
+    token: Token
 
-    def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create_user(
-            username="testuser", password="password123"
-        )
-        self.token = Token.objects.create(user=self.user)
+    @classmethod
+    def setUpTestData(cls) -> None:
+        super().setUpTestData()
+        cls.user = User.objects.create_user(username="testuser", password="password123")  # type: ignore[attr-defined]
+        cls.token = Token.objects.create(user=cls.user)
+
+    def setUp(self) -> None:
+        super().setUp()
         self.client.credentials(HTTP_AUTHORIZATION=f"{self.auth_type} {self.token.key}")
 
 

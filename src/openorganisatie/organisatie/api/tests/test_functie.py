@@ -24,9 +24,10 @@ from .api_testcase import APITestCase
 
 
 class FunctieAPITests(APITestCase):
-    def setUp(self):
-        super().setUp()
-        self.functie_type = FunctieTypeFactory()
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.functie_type = FunctieTypeFactory()
 
     def test_create_functie(self):
         url = reverse("organisatie_api:functie-list")
