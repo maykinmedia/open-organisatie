@@ -56,6 +56,7 @@ class OrganisatorischeEenheidViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         organisatie = serializer.instance
+        assert organisatie is not None
         logger.info(
             "organisatorische_eenheid_created",
             uuid=str(organisatie.uuid),
@@ -67,6 +68,7 @@ class OrganisatorischeEenheidViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         super().perform_update(serializer)
         organisatie = serializer.instance
+        assert organisatie is not None
         logger.info(
             "organisatorische_eenheid_updated",
             uuid=str(organisatie.uuid),

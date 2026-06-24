@@ -59,6 +59,7 @@ class VestigingViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         vestiging = serializer.instance
+        assert vestiging is not None
         logger.info(
             "vestiging_created",
             uuid=str(vestiging.uuid),
@@ -70,6 +71,7 @@ class VestigingViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         super().perform_update(serializer)
         vestiging = serializer.instance
+        assert vestiging is not None
         logger.info(
             "vestiging_updated",
             uuid=str(vestiging.uuid),

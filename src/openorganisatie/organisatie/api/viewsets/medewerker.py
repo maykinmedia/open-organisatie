@@ -62,6 +62,7 @@ class MedewerkerViewSet(RevisionMixin, NotificationViewSetMixin, viewsets.ModelV
     def perform_create(self, serializer):
         super().perform_create(serializer)
         medewerker = serializer.instance
+        assert medewerker is not None
         logger.info(
             "medewerker_created",
             uuid=str(medewerker.uuid),
@@ -74,6 +75,7 @@ class MedewerkerViewSet(RevisionMixin, NotificationViewSetMixin, viewsets.ModelV
     def perform_update(self, serializer):
         super().perform_update(serializer)
         medewerker = serializer.instance
+        assert medewerker is not None
         logger.info(
             "medewerker_updated",
             uuid=str(medewerker.uuid),
