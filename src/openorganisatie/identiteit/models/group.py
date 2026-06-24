@@ -22,7 +22,7 @@ class Group(AbstractSCIMGroupMixin, models.Model):
         help_text=_("Geeft aan of het team momenteel actief is."),
     )
 
-    class Meta:
+    class Meta:  # type: ignore
         verbose_name = "Group"
         verbose_name_plural = "Groups"
 
