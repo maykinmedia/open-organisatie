@@ -40,6 +40,18 @@ paths:
       summary: Alle functies opvragen.
       parameters:
       - in: query
+        name: actiefOpOrganisatorischeEenheid
+        schema:
+          type: string
+          format: date
+        description: Functies actief via organisatorische eenheid op deze datum
+      - in: query
+        name: actiefOpTeam
+        schema:
+          type: string
+          format: date
+        description: Functies actief via team op deze datum
+      - in: query
         name: einddatum
         schema:
           type: string
@@ -82,6 +94,16 @@ paths:
         description: UUID's van de gekoppelde functietypen.
         explode: false
         style: form
+      - in: query
+        name: organisatorischeEenheidUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUID's van de gekoppelde organisatorische eenheden.
+        explode: false
+        style: form
       - name: page
         required: false
         in: query
@@ -113,6 +135,16 @@ paths:
           type: string
           format: date
         description: De datum waarop de functie ingaat.
+      - in: query
+        name: teamUuid
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUID's van de gekoppelde teams.
+        explode: false
+        style: form
       - in: query
         name: wijzigingsdatum
         schema:
@@ -556,16 +588,6 @@ paths:
         name: externalId
         schema:
           type: string
-      - in: query
-        name: functiesUuid
-        schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: UUID's van de gekoppelde functies.
-        explode: false
-        style: form
       - name: page
         required: false
         in: query
@@ -594,16 +616,6 @@ paths:
         schema:
           type: string
           format: date
-      - in: query
-        name: teamsUuid
-        schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: UUID's van de gekoppelde teams.
-        explode: false
-        style: form
       - in: query
         name: wijzigingsdatum
         schema:
@@ -831,16 +843,6 @@ paths:
         schema:
           type: string
         description: Externe identifier voor deze organisatorische eenheid.
-      - in: query
-        name: functiesUuid
-        schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: UUID's van de gekoppelde functies.
-        explode: false
-        style: form
       - in: query
         name: hoofdOrganisatorischeEenheid
         schema:
@@ -1144,16 +1146,6 @@ paths:
         schema:
           type: string
         description: Externe identifier voor dit team.
-      - in: query
-        name: functiesUuid
-        schema:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description: UUID's van de gekoppelde functies.
-        explode: false
-        style: form
       - in: query
         name: naam
         schema:
@@ -1678,12 +1670,70 @@ components:
           type: string
           format: uuid
           writeOnly: true
+          description: UUID van de gekoppelde functietype.
+        medewerker:
+          allOf:
+          - $ref: '#/components/schemas/Medewerker'
+          readOnly: true
+        medewerkerUuid:
+          type: string
+          format: uuid
+          writeOnly: true
           description: UUID van de gekoppelde medewerker.
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamGroupPeriods'
+          readOnly: true
+        teamsInput:
+          type: array
+          items:
+            $ref: '#/components/schemas/FunctieTeamWrite'
+          writeOnly: true
+        organisatorischeEenheden:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisatorischeEenheidGroupPeriods'
+          readOnly: true
+        organisatorischeEenhedenInput:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisatorischeEenheidFunctieWrite'
+          writeOnly: true
       required:
       - functieOmschrijving
       - functieType
       - functietypeUuid
+      - medewerker
+      - organisatorischeEenheden
+      - teams
       - uuid
+    FunctieTeamWrite:
+      type: object
+      properties:
+        teamUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+        geldigheid:
+          type: object
+          required:
+          - beginGeldigheid
+          properties:
+            beginGeldigheid:
+              type: string
+              format: date
+            eindeGeldigheid:
+              type: string
+              format: date
+              nullable: true
+          example:
+            beginGeldigheid: '2025-01-01'
+            eindeGeldigheid: '2025-06-01'
+          writeOnly: true
+      required:
+      - geldigheid
+      - teamUuid
     FunctieType:
       type: object
       properties:
@@ -1785,75 +1835,13 @@ components:
           format: date-time
           nullable: true
           description: De datum waarop de medewerker gewijzigd is.
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedTeam'
-          readOnly: true
-          description: Teams van de medewerker.
-        teamsUuids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde teams.
-        functies:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedFunctie'
-          readOnly: true
-          description: Functies van de medewerker.
-        functiesUuids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde functies.
       required:
       - achternaam
       - emailadres
-      - functies
       - medewerkerId
-      - teams
       - url
       - uuid
       - voornaam
-    NestedFunctie:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          description: Unieke resource identifier (UUID4) voor deze functie.
-        externalId:
-          type: string
-          description: Externe identifier voor deze functie.
-          maxLength: 255
-        functieOmschrijving:
-          type: string
-          description: Korte omschrijving of titel van de functie.
-          maxLength: 255
-        startdatum:
-          type: string
-          format: date
-          nullable: true
-          description: De datum waarop de functie ingaat.
-        einddatum:
-          type: string
-          format: date
-          nullable: true
-          description: De datum waarop de functie eindigt.
-        wijzigingsdatum:
-          type: string
-          format: date-time
-          nullable: true
-          description: De datum waarop de functie gewijzigd is.
-      required:
-      - functieOmschrijving
     NestedMedewerker:
       type: object
       properties:
@@ -1916,6 +1904,74 @@ components:
       - emailadres
       - medewerkerId
       - voornaam
+    NestedOrganisatorischeEenheid:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Unieke resource identifier (UUID4)
+        externalId:
+          type: string
+          description: Externe identifier voor deze organisatorische eenheid.
+          maxLength: 255
+        identificatie:
+          type: string
+          description: Unieke interne identificatie van de organisatorische eenheid.
+          maxLength: 50
+        naam:
+          type: string
+          description: Volledige naam van de organisatorische eenheid.
+          maxLength: 100
+        soortOrganisatie:
+          type: string
+          description: Soort organisatorische eenheid.
+          maxLength: 50
+        verkorteNaam:
+          type: string
+          description: Afkorting of verkorte naam van de organisatorische eenheid.
+          maxLength: 50
+        omschrijving:
+          type: string
+          description: Optionele omschrijving van de organisatorische eenheid.
+        emailadres:
+          type: string
+          format: email
+          description: E-mailadres van de organisatorische eenheid.
+          maxLength: 254
+        telefoonnummer:
+          type: string
+          description: Telefoonnummer van de organisatorische eenheid.
+          maxLength: 50
+        startdatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de organisatorische eenheid start.
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum waarop de organisatorische eenheid eindigt.
+        wijzigingsdatum:
+          type: string
+          format: date-time
+          nullable: true
+          description: De datum waarop de organisatorische eenheid gewijzigd is.
+        contactpersoon:
+          type: integer
+          nullable: true
+          description: De medewerker die contactpersoon is voor deze organisatorische
+            eenheid.
+        hoofdOrganisatorischeEenheid:
+          type: string
+          format: uuid
+          nullable: true
+          description: UUID van de bovenliggende organisatorische eenheid (optioneel).
+      required:
+      - identificatie
+      - naam
+      - soortOrganisatie
     NestedTeam:
       type: object
       properties:
@@ -2043,20 +2099,6 @@ components:
             writeOnly: true
           writeOnly: true
           description: UUID’s van gekoppelde vestigingen.
-        functies:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedFunctie'
-          readOnly: true
-          description: Functies binnen deze organisatorische eenheid.
-        functiesUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde functies.
         hoofdOrganisatorischeEenheid:
           type: string
           format: uuid
@@ -2064,12 +2106,67 @@ components:
           description: UUID van de bovenliggende organisatorische eenheid (optioneel).
       required:
       - contactpersoon
-      - functies
       - identificatie
       - naam
       - soortOrganisatie
       - uuid
       - vestigingen
+    OrganisatorischeEenheidFunctieWrite:
+      type: object
+      properties:
+        organisatorischeEenheidUuid:
+          type: string
+          format: uuid
+          writeOnly: true
+        geldigheid:
+          type: object
+          required:
+          - beginGeldigheid
+          properties:
+            beginGeldigheid:
+              type: string
+              format: date
+            eindeGeldigheid:
+              type: string
+              format: date
+              nullable: true
+          example:
+            beginGeldigheid: '2025-01-01'
+            eindeGeldigheid: '2025-06-01'
+          writeOnly: true
+      required:
+      - geldigheid
+      - organisatorischeEenheidUuid
+    OrganisatorischeEenheidGroupPeriods:
+      type: object
+      properties:
+        organisatorischeEenheid:
+          $ref: '#/components/schemas/NestedOrganisatorischeEenheid'
+        geldigheid:
+          type: array
+          items:
+            type: object
+            required:
+            - beginGeldigheid
+            properties:
+              beginGeldigheid:
+                type: string
+                format: date
+              eindeGeldigheid:
+                type: string
+                format: date
+                nullable: true
+            example:
+              beginGeldigheid: '2025-01-01'
+              eindeGeldigheid: '2025-06-01'
+        wijzigingsdatum:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - geldigheid
+      - organisatorischeEenheid
+      - wijzigingsdatum
     PaginatedFunctieList:
       type: object
       required:
@@ -2248,7 +2345,36 @@ components:
           type: string
           format: uuid
           writeOnly: true
+          description: UUID van de gekoppelde functietype.
+        medewerker:
+          allOf:
+          - $ref: '#/components/schemas/Medewerker'
+          readOnly: true
+        medewerkerUuid:
+          type: string
+          format: uuid
+          writeOnly: true
           description: UUID van de gekoppelde medewerker.
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamGroupPeriods'
+          readOnly: true
+        teamsInput:
+          type: array
+          items:
+            $ref: '#/components/schemas/FunctieTeamWrite'
+          writeOnly: true
+        organisatorischeEenheden:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisatorischeEenheidGroupPeriods'
+          readOnly: true
+        organisatorischeEenhedenInput:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganisatorischeEenheidFunctieWrite'
+          writeOnly: true
     PatchedFunctieType:
       type: object
       properties:
@@ -2336,34 +2462,6 @@ components:
           format: date-time
           nullable: true
           description: De datum waarop de medewerker gewijzigd is.
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedTeam'
-          readOnly: true
-          description: Teams van de medewerker.
-        teamsUuids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde teams.
-        functies:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedFunctie'
-          readOnly: true
-          description: Functies van de medewerker.
-        functiesUuids:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde functies.
     PatchedOrganisatorischeEenheid:
       type: object
       properties:
@@ -2443,20 +2541,6 @@ components:
             writeOnly: true
           writeOnly: true
           description: UUID’s van gekoppelde vestigingen.
-        functies:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedFunctie'
-          readOnly: true
-          description: Functies binnen deze organisatorische eenheid.
-        functiesUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: UUID’s van gekoppelde functies.
         hoofdOrganisatorischeEenheid:
           type: string
           format: uuid
@@ -2533,20 +2617,6 @@ components:
             writeOnly: true
           writeOnly: true
           description: Vestigingen waaraan de medewerker gekoppeld is.
-        functies:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedFunctie'
-          readOnly: true
-          description: Functies die binnen dit team actief zijn.
-        functiesUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: Functies die binnen dit team actief zijn.
     PatchedVestiging:
       type: object
       properties:
@@ -2654,26 +2724,41 @@ components:
             writeOnly: true
           writeOnly: true
           description: Vestigingen waaraan de medewerker gekoppeld is.
-        functies:
-          type: array
-          items:
-            $ref: '#/components/schemas/NestedFunctie'
-          readOnly: true
-          description: Functies die binnen dit team actief zijn.
-        functiesUuid:
-          type: array
-          items:
-            type: string
-            format: uuid
-            writeOnly: true
-          writeOnly: true
-          description: Functies die binnen dit team actief zijn.
       required:
       - contactpersoon
-      - functies
       - naam
       - uuid
       - vestigingen
+    TeamGroupPeriods:
+      type: object
+      properties:
+        team:
+          $ref: '#/components/schemas/NestedTeam'
+        geldigheid:
+          type: array
+          items:
+            type: object
+            required:
+            - beginGeldigheid
+            properties:
+              beginGeldigheid:
+                type: string
+                format: date
+              eindeGeldigheid:
+                type: string
+                format: date
+                nullable: true
+            example:
+              beginGeldigheid: '2025-01-01'
+              eindeGeldigheid: '2025-06-01'
+        wijzigingsdatum:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - geldigheid
+      - team
+      - wijzigingsdatum
     Vestiging:
       type: object
       properties:

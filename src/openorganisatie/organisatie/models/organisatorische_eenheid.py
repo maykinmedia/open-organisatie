@@ -80,13 +80,6 @@ class OrganisatorischeEenheid(models.Model):
         blank=True,
         help_text=_("Vestigingen waaraan de medewerker gekoppeld is."),
     )
-    functies = models.ManyToManyField(
-        "organisatie.Functie",
-        related_name="organisatorische_eenheden",
-        blank=True,
-        verbose_name=_("Functies"),
-        help_text=_("Functies binnen deze organisatorische eenheid."),
-    )
     hoofd_organisatorische_eenheid = models.ForeignKey(
         "self",
         on_delete=models.PROTECT,

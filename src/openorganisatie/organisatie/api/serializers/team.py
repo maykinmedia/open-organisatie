@@ -1,13 +1,11 @@
 from rest_framework import serializers
 from vng_api_common.utils import get_help_text
 
-from openorganisatie.organisatie.models.functie import Functie
 from openorganisatie.organisatie.models.medewerker import Medewerker
 from openorganisatie.organisatie.models.team import Team
 from openorganisatie.organisatie.models.vestiging import Vestiging
 from openorganisatie.utils.fields import UUIDRelatedField
 
-from .functie import NestedFunctieSerializer
 from .organisatorische_eenheid import NestedMedewerkerSerializer
 from .vestiging import VestigingSerializer
 
@@ -56,20 +54,6 @@ class TeamSerializer(serializers.ModelSerializer):
         help_text=get_help_text("organisatie.Team", "vestigingen"),
         source="vestigingen",
     )
-    functies = NestedFunctieSerializer(
-        many=True,
-        required=False,
-        read_only=True,
-        help_text=get_help_text("organisatie.Team", "functies"),
-    )
-    functies_uuid = UUIDRelatedField(
-        queryset=Functie.objects.all(),
-        write_only=True,
-        source="functies",
-        many=True,
-        required=False,
-        help_text=get_help_text("organisatie.Team", "functies"),
-    )
 
     class Meta:
         model = Team
@@ -88,8 +72,6 @@ class TeamSerializer(serializers.ModelSerializer):
             "contactpersoon_uuid",
             "vestigingen",
             "vestigingen_uuid",
-            "functies",
-            "functies_uuid",
         ]
         extra_kwargs = {
             "uuid": {"read_only": True},

@@ -22,7 +22,7 @@ class OrganisatorischeEenheidAdmin(ReadOnlyCompareVersionAdmin):
     )
     list_filter = ("soort_organisatie",)
     readonly_fields = ("uuid",)
-    filter_horizontal = ("vestigingen", "functies")
+    filter_horizontal = ("vestigingen",)
 
     fieldsets = (
         (
@@ -51,9 +51,9 @@ class OrganisatorischeEenheidAdmin(ReadOnlyCompareVersionAdmin):
         ),
         (
             "Relaties",
-            {"fields": ("vestigingen", "functies")},
+            {"fields": ("vestigingen",)},
         ),
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related("vestigingen", "functies")
+        return super().get_queryset(request).prefetch_related("vestigingen")

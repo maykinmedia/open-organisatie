@@ -7,7 +7,6 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from reversion.models import Version
 
-from openorganisatie.organisatie.models.factories.functie import FunctieFactory
 from openorganisatie.organisatie.models.factories.medewerker import MedewerkerFactory
 from openorganisatie.organisatie.models.factories.team import TeamFactory
 from openorganisatie.organisatie.models.factories.vestiging import VestigingFactory
@@ -45,9 +44,8 @@ class TeamAPITests(APITestCase):
 
     def test_team_detail(self):
         vest1 = VestigingFactory()
-        func = FunctieFactory()
 
-        team = TeamFactory(vestigingen=[vest1], functies=[func])
+        team = TeamFactory(vestigingen=[vest1])
 
         detail_url = reverse("organisatie_api:team-detail", kwargs={"uuid": team.uuid})
         response = self.client.get(detail_url)
@@ -59,7 +57,6 @@ class TeamAPITests(APITestCase):
         self.assertEqual(data["omschrijving"], team.omschrijving)
 
         self.assertIn("vestigingen", data)
-        self.assertIn("functies", data)
 
     def test_update_team(self):
         team = TeamFactory()
@@ -118,22 +115,6 @@ class TeamAPITests(APITestCase):
 
         url = reverse("organisatie_api:team-list")
         response = self.client.get(url, {"vestigingenUuid": str(vest1.uuid)})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        data = response.json()
-        self.assertEqual(data["count"], 1)
-        self.assertEqual(data["results"][0]["uuid"], str(team1.uuid))
-
-    def test_filter_functies_uuid(self):
-        functie1 = FunctieFactory()
-        functie2 = FunctieFactory()
-        team1 = TeamFactory()
-        team2 = TeamFactory()
-        team1.functies.add(functie1)
-        team2.functies.add(functie2)
-
-        url = reverse("organisatie_api:team-list")
-        response = self.client.get(url, {"functiesUuid": str(functie1.uuid)})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()

@@ -7,9 +7,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from reversion.models import Version
 
-from openorganisatie.organisatie.models.factories.functie import FunctieFactory
 from openorganisatie.organisatie.models.factories.medewerker import MedewerkerFactory
-from openorganisatie.organisatie.models.factories.team import TeamFactory
 
 from ...models import Medewerker
 from .api_testcase import APITestCase
@@ -44,9 +42,7 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(len(data["results"]), 2)
 
     def test_read_medewerker_detail(self):
-        team = TeamFactory()
-        functie = FunctieFactory()
-        medewerker = MedewerkerFactory(teams=[team], functies=[functie])
+        medewerker = MedewerkerFactory()
 
         detail_url = reverse(
             "organisatie_api:medewerker-detail", kwargs={"uuid": str(medewerker.uuid)}
@@ -62,9 +58,6 @@ class MedewerkerAPITests(APITestCase):
         self.assertEqual(data["voornaam"], medewerker.voornaam)
         self.assertEqual(data["achternaam"], medewerker.achternaam)
         self.assertEqual(data["emailadres"], medewerker.emailadres)
-
-        self.assertIn("teams", data)
-        self.assertIn("functies", data)
 
     def test_update_medewerker(self):
         medewerker = MedewerkerFactory()
@@ -116,32 +109,6 @@ class MedewerkerAPITests(APITestCase):
         response = client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_filter_teams_uuid(self):
-        team1 = TeamFactory()
-        team2 = TeamFactory()
-        m1 = MedewerkerFactory()
-        m1.teams.add(team1)
-        MedewerkerFactory().teams.add(team2)
-
-        url = reverse("organisatie_api:medewerker-list")
-        response = self.client.get(url, {"teams_uuid": str(team1.uuid)})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
-
-    def test_filter_functies_uuid(self):
-        functie1 = FunctieFactory()
-        functie2 = FunctieFactory()
-        m1 = MedewerkerFactory()
-        m1.functies.add(functie1)
-        MedewerkerFactory().functies.add(functie2)
-
-        url = reverse("organisatie_api:medewerker-list")
-        response = self.client.get(url, {"functiesUuid": str(functie1.uuid)})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["uuid"], str(m1.uuid))
 
     def test_filter_external_id(self):
         m1 = MedewerkerFactory()

@@ -8,7 +8,6 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from reversion.models import Version
 
-from openorganisatie.organisatie.models.factories.functie import FunctieFactory
 from openorganisatie.organisatie.models.factories.medewerker import MedewerkerFactory
 from openorganisatie.organisatie.models.factories.organisatorische_eenheid import (
     OrganisatorischeEenheidFactory,
@@ -52,8 +51,7 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
     def test_read_organisatorische_eenheid_detail(self):
         vest = VestigingFactory()
-        func = FunctieFactory()
-        org = OrganisatorischeEenheidFactory(vestigingen=[vest], functies=[func])
+        org = OrganisatorischeEenheidFactory(vestigingen=[vest])
 
         detail_url = reverse(
             "organisatie_api:organisatorischeeenheid-detail",
@@ -69,7 +67,6 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertEqual(data["naam"], org.naam)
         self.assertEqual(data["soortOrganisatie"], org.soort_organisatie)
 
-        self.assertIn("functies", data)
         self.assertIn("vestigingen", data)
 
     def test_update_organisatorische_eenheid(self):
@@ -173,21 +170,6 @@ class OrganisatorischeEenheidAPITests(APITestCase):
 
         url = reverse("organisatie_api:organisatorischeeenheid-list")
         response = self.client.get(url, {"vestigingen_uuid": str(vest1.uuid)})
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]["uuid"], str(org1.uuid))
-
-    def test_filter_functie_uuids(self):
-        functie1 = FunctieFactory()
-        functie2 = FunctieFactory()
-        org1 = OrganisatorischeEenheidFactory()
-        org1.functies.add(functie1)
-
-        OrganisatorischeEenheidFactory().functies.add(functie2)
-
-        url = reverse("organisatie_api:organisatorischeeenheid-list")
-        response = self.client.get(url, {"functies_uuid": str(functie1.uuid)})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)

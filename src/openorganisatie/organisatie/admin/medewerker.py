@@ -17,7 +17,6 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
     )
     readonly_fields = ("uuid", "startdatum", "einddatum")
     search_fields = ("voornaam", "achternaam", "emailadres", "external_id")
-    filter_horizontal = ("teams", "functies")
 
     fieldsets = (
         (
@@ -36,19 +35,7 @@ class MedewerkerAdmin(ReadOnlyCompareVersionAdmin):
             },
         ),
         (
-            "Relaties",
-            {
-                "fields": (
-                    "teams",
-                    "functies",
-                )
-            },
-        ),
-        (
             "Status",
             {"fields": ("startdatum", "einddatum", "wijzigingsdatum")},
         ),
     )
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related("teams", "functies")

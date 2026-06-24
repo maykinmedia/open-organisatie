@@ -3,6 +3,8 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from .relaties import FunctieTeam, OrganisatorischeEenheidFunctie
+
 
 class Functie(models.Model):
     uuid = models.UUIDField(
@@ -39,6 +41,28 @@ class Functie(models.Model):
         on_delete=models.CASCADE,
         related_name="functies",
         help_text=_("Het type functie dat hieraan gekoppeld is."),
+    )
+    medewerker = models.ForeignKey(
+        "organisatie.Medewerker",
+        on_delete=models.CASCADE,
+        related_name="functies",
+        blank=True,
+        null=True,
+        help_text=_("De medewerker die aan deze functie gekoppeld is."),
+    )
+    teams = models.ManyToManyField(
+        "organisatie.Team",
+        through=FunctieTeam,
+        related_name="functies",
+        blank=True,
+        help_text=_("Teams van de functie."),
+    )
+    organisatorische_eenheid = models.ManyToManyField(
+        "organisatie.OrganisatorischeEenheid",
+        through=OrganisatorischeEenheidFunctie,
+        related_name="functies",
+        blank=True,
+        help_text=_("Organisatorische eenheden van de functie."),
     )
 
     class Meta:
