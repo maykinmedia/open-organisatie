@@ -8,7 +8,7 @@ class MedewerkerSerializer(serializers.ModelSerializer):
         view_name="organisatie_api:medewerker-detail", lookup_field="uuid"
     )
 
-    class Meta:
+    class Meta:  # type: ignore
         model = Medewerker
         fields = [
             "url",

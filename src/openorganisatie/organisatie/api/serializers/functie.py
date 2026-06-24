@@ -64,7 +64,7 @@ class FunctieTeamSerializer(serializers.ModelSerializer):
     team = NestedTeamSerializer(read_only=True)
     geldigheid = PeriodField(read_only=True)
 
-    class Meta:
+    class Meta:  # type: ignore
         model = FunctieTeam
         fields = [
             "team",
@@ -80,7 +80,7 @@ class FunctieTeamWriteSerializer(serializers.ModelSerializer):
     )
     geldigheid = PeriodField(write_only=True)
 
-    class Meta:
+    class Meta:  # type: ignore
         model = FunctieTeam
         fields = [
             "team_uuid",
@@ -92,7 +92,7 @@ class OrganisatorischeEenheidFunctieSerializer(serializers.ModelSerializer):
     organisatorische_eenheid = NestedOrganisatorischeEenheidSerializer(read_only=True)
     geldigheid = PeriodField(read_only=True)
 
-    class Meta:
+    class Meta:  # type: ignore
         model = OrganisatorischeEenheidFunctie
         fields = [
             "organisatorische_eenheid",
@@ -108,7 +108,7 @@ class OrganisatorischeEenheidFunctieWriteSerializer(serializers.ModelSerializer)
     )
     geldigheid = PeriodField(write_only=True)
 
-    class Meta:
+    class Meta:  # type: ignore
         model = OrganisatorischeEenheidFunctie
         fields = [
             "organisatorische_eenheid_uuid",
@@ -151,7 +151,7 @@ class FunctieSerializer(serializers.ModelSerializer):
         required=False,
     )
 
-    class Meta:
+    class Meta:  # type: ignore
         model = Functie
         fields = [
             "uuid",
