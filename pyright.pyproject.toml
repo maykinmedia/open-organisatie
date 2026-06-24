@@ -1,0 +1,9 @@
+[tool.pyright]
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+reportUnnecessaryTypeIgnoreComment = "error"
+include = ["src"]
+exclude = [
+    "src/openorganisatie/conf", 
+    "src/openorganisatie/accounts",  # inherited from default-project  
+]

@@ -9,11 +9,13 @@ amqp==5.3.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   kombu
 annotated-types==0.7.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   pydantic
 anyio==4.9.0
     # via httpx
@@ -21,6 +23,7 @@ ape-pie==0.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   notifications-api-common
     #   zgw-consumers
@@ -28,6 +31,7 @@ asgiref==3.8.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django
     #   django-axes
     #   django-cors-headers
@@ -36,11 +40,13 @@ asn1crypto==1.5.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   webauthn
 attrs==25.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   glom
     #   jsonschema
     #   referencing
@@ -58,16 +64,19 @@ billiard==4.2.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   celery
 bleach==6.4.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-markup
 boltons==25.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   face
     #   glom
 bracex==2.6
@@ -78,17 +87,20 @@ cbor2==5.9.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   webauthn
 celery==5.5.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   flower
     #   notifications-api-common
 certifi==2025.6.15
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   elastic-apm
     #   httpcore
     #   httpx
@@ -98,16 +110,19 @@ cffi==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   cryptography
 charset-normalizer==3.4.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   requests
 click==8.2.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   bump-my-version
     #   celery
     #   click-didyoumean
@@ -118,21 +133,25 @@ click-didyoumean==0.3.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   celery
 click-plugins==1.1.1.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   celery
 click-repl==0.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   celery
 commonground-api-common==2.10.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 commonmark==0.9.1
     # via
     #   -c requirements/ci.txt
@@ -146,6 +165,7 @@ cryptography==49.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-simple-certmanager
     #   mozilla-django-oidc
     #   pyopenssl
@@ -159,11 +179,13 @@ diff-match-patch==20241021
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-reversion-compare
 django==5.2.15
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   django-admin-index
     #   django-appconf
@@ -194,6 +216,8 @@ django==5.2.15
     #   django-simple-certmanager
     #   django-solo
     #   django-structlog
+    #   django-stubs
+    #   django-stubs-ext
     #   django-two-factor-auth
     #   django-upgrade-check
     #   djangorestframework
@@ -213,29 +237,35 @@ django-admin-index==4.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 django-appconf==1.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-log-outgoing-requests
 django-axes==8.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 django-capture-tag==1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-cors-headers==4.7.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-csp==4.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-debug-toolbar==5.2.0
     # via -r requirements/dev.in
 django-extensions==4.1
@@ -244,6 +274,7 @@ django-filter==25.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   djangorestframework-gis
     #   open-api-framework
@@ -251,108 +282,130 @@ django-formtools==2.5.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-two-factor-auth
 django-hijack==3.7.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-ipware==7.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-structlog
 django-jsonform==2.23.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   mozilla-django-oidc-db
     #   open-api-framework
 django-log-outgoing-requests==0.9.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 django-markup==1.9.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-ordered-model==3.7.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-admin-index
 django-otp==1.6.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-two-factor-auth
 django-phonenumber-field==8.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-two-factor-auth
 django-privates==3.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-simple-certmanager
     #   open-api-framework
 django-redis==6.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-relativedelta==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   zgw-consumers
 django-rest-framework-condition==0.1.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
 django-reversion==6.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-reversion-compare
 django-reversion-compare==0.19.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-rosetta==0.10.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-scim2==0.19.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 django-sendfile2==0.7.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-privates
 django-sessionprofile==3.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 django-setup-configuration==0.11.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 django-simple-certmanager==2.4.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
     #   zgw-consumers
 django-solo==2.4.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   django-log-outgoing-requests
     #   notifications-api-common
@@ -361,15 +414,30 @@ django-structlog==9.1.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
+django-stubs==6.0.6
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
+    #   djangorestframework-stubs
+django-stubs-ext==6.0.6
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
+    #   django-stubs
 django-two-factor-auth==1.17.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   maykin-2fa
 django-upgrade-check==1.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 django-webtest==1.9.13
     # via
@@ -379,6 +447,7 @@ djangorestframework==3.16.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   djangorestframework-gis
     #   djangorestframework-inclusions
@@ -390,20 +459,29 @@ djangorestframework-camel-case==1.4.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   notifications-api-common
 djangorestframework-gis==1.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 djangorestframework-inclusions==1.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
+djangorestframework-stubs==3.17.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 docutils==0.21.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-markup
     #   django-setup-configuration
     #   python-creole
@@ -415,32 +493,38 @@ drf-nested-routers==0.94.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
 drf-spectacular==0.28.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   open-api-framework
 drf-spectacular-sidecar==2025.7.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   drf-spectacular
 ecs-logging==2.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   elastic-apm
 elastic-apm==6.23.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 face==24.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   glom
 factory-boy==3.3.3
     # via
@@ -455,6 +539,7 @@ flower==2.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 freezegun==1.5.2
     # via
     #   -c requirements/ci.txt
@@ -463,6 +548,7 @@ furl==2.1.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   ape-pie
 gitdb==4.0.12
     # via gitpython
@@ -472,17 +558,20 @@ glom==24.11.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   mozilla-django-oidc-db
 googleapis-common-protos==1.72.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
 grpcio==1.76.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp-proto-grpc
 h11==0.16.0
     # via httpcore
@@ -494,11 +583,13 @@ humanize==4.14.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   flower
 idna==3.18
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   anyio
     #   httpx
     #   requests
@@ -512,16 +603,19 @@ importlib-metadata==8.7.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-api
 inflection==0.5.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   drf-spectacular
 iso639-lang==2.6.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
 jinja2==3.1.6
     # via
@@ -532,16 +626,19 @@ jsonschema==4.24.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   drf-spectacular
 jsonschema-specifications==2025.4.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   jsonschema
 kombu==5.5.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   celery
 lxml==6.1.0
     # via
@@ -552,11 +649,13 @@ markdown==3.8.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-markup
 markdown-it-py==4.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   rich
 markupsafe==3.0.2
     # via
@@ -567,26 +666,31 @@ maykin-2fa==1.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 maykin-common==0.19.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 mdurl==0.1.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   markdown-it-py
 mozilla-django-oidc==5.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   mozilla-django-oidc-db
 mozilla-django-oidc-db==2.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 multidict==6.7.0
     # via
@@ -597,20 +701,24 @@ nh3==0.2.21
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   textile
 notifications-api-common==0.9.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
 open-api-framework==0.14.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-api==1.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
     #   opentelemetry-instrumentation
@@ -627,26 +735,31 @@ opentelemetry-exporter-otlp==1.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-exporter-otlp-proto-common==1.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
 opentelemetry-exporter-otlp-proto-grpc==1.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp
 opentelemetry-exporter-otlp-proto-http==1.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp
 opentelemetry-instrumentation==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-instrumentation-celery
     #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-django
@@ -658,36 +771,44 @@ opentelemetry-instrumentation-celery==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-instrumentation-dbapi==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-instrumentation-psycopg
 opentelemetry-instrumentation-django==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-instrumentation-psycopg==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-instrumentation-redis==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-instrumentation-requests==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-instrumentation-wsgi==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-instrumentation-django
 opentelemetry-proto==1.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp-proto-common
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
@@ -695,10 +816,12 @@ opentelemetry-resource-detector-containerid==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 opentelemetry-sdk==1.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-exporter-otlp-proto-grpc
     #   opentelemetry-exporter-otlp-proto-http
     #   opentelemetry-resource-detector-containerid
@@ -706,6 +829,7 @@ opentelemetry-semantic-conventions==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-instrumentation
     #   opentelemetry-instrumentation-celery
     #   opentelemetry-instrumentation-dbapi
@@ -718,6 +842,7 @@ opentelemetry-util-http==0.59b0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   opentelemetry-instrumentation-django
     #   opentelemetry-instrumentation-requests
     #   opentelemetry-instrumentation-wsgi
@@ -725,16 +850,19 @@ orderedmultidict==1.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   furl
 oyaml==1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
 packaging==25.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-csp
     #   kombu
     #   opentelemetry-instrumentation
@@ -743,21 +871,25 @@ phonenumberslite==8.13.55
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-two-factor-auth
 polib==1.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-rosetta
 prometheus-client==0.23.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   flower
 prompt-toolkit==3.0.51
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   click-repl
     #   questionary
 propcache==0.4.1
@@ -769,27 +901,32 @@ protobuf==6.33.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   googleapis-common-protos
     #   opentelemetry-proto
 psycopg==3.2.9
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
 psycopg-binary==3.2.9
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   psycopg
 pycparser==2.22
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   cffi
 pydantic==2.11.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   bump-my-version
     #   django-setup-configuration
     #   pydantic-settings
@@ -797,17 +934,20 @@ pydantic-core==2.33.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   pydantic
 pydantic-settings==2.10.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   bump-my-version
     #   django-setup-configuration
 pygments==2.20.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-log-outgoing-requests
     #   django-markup
     #   rich
@@ -819,6 +959,7 @@ pyjwt==2.13.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
@@ -826,11 +967,13 @@ pyopenssl==26.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   webauthn
 pypng==0.20220715.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   qrcode
 pyquery==2.0.1
     # via
@@ -840,11 +983,13 @@ python-creole==1.4.10
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-markup
 python-dateutil==2.9.0.post0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   celery
     #   django-relativedelta
     #   freezegun
@@ -852,27 +997,32 @@ python-decouple==3.8
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   maykin-common
 python-dotenv==1.2.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   open-api-framework
     #   pydantic-settings
 python-ipware==3.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-ipware
 pytz==2025.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   flower
 pyyaml==6.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
@@ -881,6 +1031,7 @@ qrcode==7.4.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-two-factor-auth
 questionary==2.1.0
     # via bump-my-version
@@ -892,22 +1043,26 @@ redis==6.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-redis
 referencing==0.36.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   jsonschema
     #   jsonschema-specifications
 regex==2024.11.6
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   textile
 requests==2.33.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   ape-pie
     #   commonground-api-common
     #   django-log-outgoing-requests
@@ -921,6 +1076,7 @@ rich==14.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   bump-my-version
     #   django-reversion-compare
     #   rich-click
@@ -935,17 +1091,20 @@ rpds-py==0.26.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   jsonschema
     #   referencing
 ruamel-yaml==0.18.14
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-setup-configuration
 ruamel-yaml-clib==0.2.12
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   ruamel-yaml
 ruff==0.12.1
     # via
@@ -956,22 +1115,26 @@ scim2-filter-parser==0.7.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-scim2
 semantic-version==2.10.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-upgrade-check
 sentry-sdk==2.30.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   open-api-framework
 six==1.17.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   furl
     #   orderedmultidict
     #   python-dateutil
@@ -979,11 +1142,13 @@ sly==0.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   scim2-filter-parser
 smartypants==2.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-markup
 smmap==5.0.2
     # via gitdb
@@ -1056,12 +1221,14 @@ sqlparse==0.5.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django
     #   django-debug-toolbar
 structlog==25.4.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-structlog
 tblib==3.1.0
     # via
@@ -1071,6 +1238,7 @@ textile==4.0.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-markup
 tomlkit==0.13.3
     # via bump-my-version
@@ -1078,14 +1246,26 @@ tornado==6.5.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   flower
+types-pyyaml==6.0.12.20260518
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
+    #   django-stubs
+    #   djangorestframework-stubs
 typing-extensions==4.14.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   anyio
     #   beautifulsoup4
     #   django-log-outgoing-requests
+    #   django-stubs
+    #   django-stubs-ext
+    #   djangorestframework-stubs
     #   grpcio
     #   mozilla-django-oidc-db
     #   opentelemetry-api
@@ -1106,23 +1286,27 @@ typing-inspection==0.4.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   pydantic
     #   pydantic-settings
 tzdata==2025.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   faker
     #   kombu
 uritemplate==4.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   drf-spectacular
 urllib3==2.7.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   elastic-apm
     #   requests
     #   sentry-sdk
@@ -1131,6 +1315,7 @@ uwsgi==2.0.30
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 vcrpy==7.0.0
     # via
     #   -c requirements/ci.txt
@@ -1139,6 +1324,7 @@ vine==5.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   amqp
     #   celery
     #   kombu
@@ -1153,16 +1339,19 @@ wcwidth==0.2.13
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   prompt-toolkit
 webauthn==2.6.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-two-factor-auth
 webencodings==0.5.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   bleach
 webob==1.8.10
     # via
@@ -1178,6 +1367,7 @@ wrapt==1.17.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   elastic-apm
     #   opentelemetry-instrumentation
     #   opentelemetry-instrumentation-dbapi
@@ -1192,10 +1382,12 @@ zgw-consumers==1.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   commonground-api-common
     #   notifications-api-common
 zipp==3.23.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   importlib-metadata
