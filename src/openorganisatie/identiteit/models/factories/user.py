@@ -2,18 +2,20 @@ import uuid
 
 from django.utils import timezone
 
-import factory
+from factory.declarations import LazyAttribute, LazyFunction
+from factory.django import DjangoModelFactory
+from factory.faker import Faker
 
 from openorganisatie.identiteit.models.user import User
 
 
-class UserFactory(factory.django.DjangoModelFactory):
-    scim_external_id = factory.LazyFunction(uuid.uuid4)
-    username = factory.Faker("first_name")
-    email = factory.LazyAttribute(lambda obj: f"{obj.username.lower()}@example.com")
+class UserFactory(DjangoModelFactory):
+    scim_external_id = LazyFunction(uuid.uuid4)
+    username = Faker("first_name")
+    email = LazyAttribute(lambda obj: f"{obj.username.lower()}@example.com")
     is_active = True
-    date_joined = factory.LazyFunction(timezone.now)
-    last_modified = factory.LazyFunction(timezone.now)
+    date_joined = LazyFunction(timezone.now)
+    last_modified = LazyFunction(timezone.now)
 
-    class Meta:
+    class Meta:  # type: ignore
         model = User
