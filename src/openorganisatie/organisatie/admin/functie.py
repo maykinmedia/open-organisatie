@@ -7,13 +7,13 @@ from .forms import TemporalModelForm
 
 
 class TeamFunctieInlineForm(TemporalModelForm):
-    class Meta:
+    class Meta:  # type: ignore
         model = FunctieTeam
         fields = ("geldigheid",)
 
 
 class OrganisatorischeEenheidInlineForm(TemporalModelForm):
-    class Meta:
+    class Meta:  # type: ignore
         model = OrganisatorischeEenheidFunctie
         fields = ("geldigheid",)
 

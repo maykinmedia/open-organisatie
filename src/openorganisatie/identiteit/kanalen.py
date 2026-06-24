@@ -4,7 +4,7 @@ from .models.user import User
 
 KANAAL_IDENTITEIT = Kanaal(
     "users",
-    main_resource=User,
+    main_resource=User,  # type: ignore[attr-defined]
     kenmerken=(
         "scim_external_id",
         "username",

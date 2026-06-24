@@ -4,7 +4,7 @@ from openorganisatie.organisatie.models.vestiging import Vestiging
 
 
 class VestigingSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta:  # type: ignore
         model = Vestiging
         fields = [
             "uuid",

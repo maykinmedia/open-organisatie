@@ -7,5 +7,8 @@ exclude = [
     "src/openorganisatie/conf", 
     "src/openorganisatie/accounts",  # inherited from default-project  
     "src/openorganisatie/organisatie/api/tests",
-    "src/openorganisatie/celery.py"
+    "src/openorganisatie/utils",
+    "src/openorganisatie/celery.py",
+    "src/openorganisatie/setup.py",
+    "src/openorganisatie/urls.py",
 ]

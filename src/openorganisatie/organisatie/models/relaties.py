@@ -45,8 +45,8 @@ class FunctieTeam(models.Model):
             return
 
         qs = FunctieTeam.objects.filter(
-            functie_id=self.functie_id,
-            team_id=self.team_id,
+            functie_id=self.functie_id,  # pyright: ignore[reportAttributeAccessIssue]
+            team_id=self.team_id,  # pyright: ignore[reportAttributeAccessIssue]
         ).exclude(pk=self.pk)
 
         if qs.filter(geldigheid__overlap=self.geldigheid).exists():
@@ -96,8 +96,8 @@ class OrganisatorischeEenheidFunctie(models.Model):
             return
 
         qs = OrganisatorischeEenheidFunctie.objects.filter(
-            functie_id=self.functie_id,
-            organisatorische_eenheid_id=self.organisatorische_eenheid_id,
+            functie_id=self.functie_id,  # pyright: ignore[reportAttributeAccessIssue]
+            organisatorische_eenheid_id=self.organisatorische_eenheid_id,  # pyright: ignore[reportAttributeAccessIssue]
         ).exclude(pk=self.pk)
 
         if qs.filter(geldigheid__overlap=self.geldigheid).exists():

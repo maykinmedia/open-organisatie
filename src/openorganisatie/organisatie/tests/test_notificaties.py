@@ -1,7 +1,7 @@
 import uuid
 from unittest.mock import patch
 
-from django.test import override_settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from freezegun import freeze_time
@@ -17,7 +17,7 @@ from openorganisatie.organisatie.models.factories.medewerker import (
 from ..api.tests.api_testcase import APITestCase
 
 
-class NotificationsConfigTestCase:
+class NotificationsConfigTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()

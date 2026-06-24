@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from factory.declarations import LazyFunction, SubFactory
 from factory.django import DjangoModelFactory
 from factory.faker import Faker
+from factory.helpers import post_generation
 from psycopg.types.range import DateRange
 
 from openorganisatie.organisatie.models.functie import Functie
