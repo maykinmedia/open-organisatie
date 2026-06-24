@@ -530,7 +530,7 @@ factory-boy==3.3.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-faker==37.4.0
+faker==40.23.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -540,7 +540,7 @@ flower==2.0.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   -r requirements/type-checking.txt
-freezegun==1.5.2
+freezegun==1.5.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -1294,7 +1294,6 @@ tzdata==2025.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   -r requirements/type-checking.txt
-    #   faker
     #   kombu
 uritemplate==4.2.0
     # via

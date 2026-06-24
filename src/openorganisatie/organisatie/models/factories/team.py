@@ -22,4 +22,4 @@ class TeamFactory(factory.django.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            self.vestigingen.set(extracted)
+            self.vestigingen.set(extracted)  # type: ignore[attr-defined]

@@ -1,4 +1,6 @@
+import random
 import uuid
+from datetime import timedelta
 
 from django.utils import timezone
 
@@ -21,8 +23,10 @@ class MedewerkerFactory(factory.django.DjangoModelFactory):
     geslachtsaanduiding = factory.Iterator(
         [choice[0] for choice in GenderIndicator.choices]
     )
-    einddatum = None
     startdatum = factory.LazyFunction(timezone.now)
+    einddatum = factory.LazyAttribute(
+        lambda obj: obj.startdatum + timedelta(days=random.randint(1, 30))
+    )
 
     class Meta:
         model = Medewerker

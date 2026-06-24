@@ -486,14 +486,14 @@ face==24.0.0
     #   glom
 factory-boy==3.3.3
     # via -r requirements/test-tools.in
-faker==37.4.0
+faker==40.23.0
     # via factory-boy
 flower==2.0.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
-freezegun==1.5.2
+freezegun==1.5.5
     # via -r requirements/test-tools.in
 furl==2.1.4
     # via
@@ -1147,7 +1147,6 @@ tzdata==2025.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
-    #   faker
     #   kombu
 uritemplate==4.2.0
     # via

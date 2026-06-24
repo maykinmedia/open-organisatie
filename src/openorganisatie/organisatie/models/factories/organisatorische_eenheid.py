@@ -1,4 +1,8 @@
+import random
 import uuid
+from datetime import timedelta
+
+from django.utils import timezone
 
 import factory
 from faker import Faker
@@ -22,7 +26,10 @@ class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
     omschrijving = factory.Faker("text", max_nb_chars=50)
     emailadres = factory.Faker("email")
     telefoonnummer = factory.Faker("phone_number")
-    einddatum = None
+    startdatum = factory.LazyFunction(timezone.now)
+    einddatum = factory.LazyAttribute(
+        lambda obj: obj.startdatum + timedelta(days=random.randint(1, 30))
+    )
     hoofd_organisatorische_eenheid = None
     contactpersoon = factory.SubFactory(MedewerkerFactory)
 
@@ -34,4 +41,4 @@ class OrganisatorischeEenheidFactory(factory.django.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            self.vestigingen.set(extracted)
+            self.vestigingen.set(extracted)  # type: ignore[attr-defined]
