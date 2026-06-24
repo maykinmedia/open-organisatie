@@ -4,6 +4,7 @@ alabaster==1.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 amqp==5.3.1
     # via
@@ -54,11 +55,13 @@ babel==2.17.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 beautifulsoup4==4.13.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   webtest
 billiard==4.2.1
     # via
@@ -156,11 +159,13 @@ commonmark==0.9.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   recommonmark
 coverage==7.9.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 cryptography==49.0.0
     # via
     #   -c requirements/ci.txt
@@ -174,6 +179,7 @@ cssselect==1.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   pyquery
 diff-match-patch==20241021
     # via
@@ -443,6 +449,7 @@ django-webtest==1.9.13
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 djangorestframework==3.16.0
     # via
     #   -c requirements/ci.txt
@@ -530,10 +537,12 @@ factory-boy==3.3.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 faker==40.23.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   factory-boy
 flower==2.0.1
     # via
@@ -544,6 +553,7 @@ freezegun==1.5.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 furl==2.1.4
     # via
     #   -c requirements/ci.txt
@@ -598,6 +608,7 @@ imagesize==1.4.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 importlib-metadata==8.7.0
     # via
@@ -621,6 +632,7 @@ jinja2==3.1.6
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 jsonschema==4.24.0
     # via
@@ -644,6 +656,7 @@ lxml==6.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   pyquery
 markdown==3.8.2
     # via
@@ -661,6 +674,7 @@ markupsafe==3.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   jinja2
 maykin-2fa==1.0.2
     # via
@@ -696,6 +710,7 @@ multidict==6.7.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   yarl
 nh3==0.2.21
     # via
@@ -896,6 +911,7 @@ propcache==0.4.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   yarl
 protobuf==6.33.5
     # via
@@ -979,6 +995,7 @@ pyquery==2.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 python-creole==1.4.10
     # via
     #   -c requirements/ci.txt
@@ -1039,6 +1056,7 @@ recommonmark==0.7.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 redis==6.2.0
     # via
     #   -c requirements/ci.txt
@@ -1086,6 +1104,7 @@ roman-numerals==4.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 rpds-py==0.26.0
     # via
@@ -1111,6 +1130,7 @@ ruff==0.12.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   -r requirements/dev.in
+    #   -r requirements/type-checking.txt
 scim2-filter-parser==0.7.0
     # via
     #   -c requirements/ci.txt
@@ -1158,17 +1178,20 @@ snowballstemmer==3.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 soupsieve==2.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   beautifulsoup4
 sphinx==9.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   -r requirements/dev.in
+    #   -r requirements/type-checking.txt
     #   recommonmark
     #   sphinx-rtd-theme
     #   sphinx-tabs
@@ -1178,44 +1201,53 @@ sphinx-rtd-theme==3.1.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   -r requirements/dev.in
+    #   -r requirements/type-checking.txt
 sphinx-tabs==3.4.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 sphinxcontrib-applehelp==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 sphinxcontrib-devhelp==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 sphinxcontrib-htmlhelp==2.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 sphinxcontrib-jquery==4.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx-rtd-theme
 sphinxcontrib-jsmath==1.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 sphinxcontrib-qthelp==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   sphinx
 sqlparse==0.5.5
     # via
@@ -1234,6 +1266,7 @@ tblib==3.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 textile==4.0.3
     # via
     #   -c requirements/ci.txt
@@ -1319,6 +1352,7 @@ vcrpy==7.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
 vine==5.1.0
     # via
     #   -c requirements/ci.txt
@@ -1331,6 +1365,7 @@ waitress==3.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   webtest
 wcmatch==10.1
     # via bump-my-version
@@ -1356,11 +1391,13 @@ webob==1.8.10
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   webtest
 webtest==3.0.6
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   django-webtest
 wrapt==1.17.2
     # via
@@ -1376,6 +1413,7 @@ yarl==1.22.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   -r requirements/type-checking.txt
     #   vcrpy
 zgw-consumers==1.0.0
     # via
