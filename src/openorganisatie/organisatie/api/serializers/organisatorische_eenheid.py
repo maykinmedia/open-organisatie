@@ -59,6 +59,21 @@ class NestedOrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         ]
 
 
+def _creates_cycle(instance, parent):
+    visited = set()
+    current = parent
+
+    while current:
+        if current.pk == instance.pk:
+            return True
+        if current.pk in visited:
+            break
+        visited.add(current.pk)
+        current = current.hoofd_organisatorische_eenheid
+
+    return False
+
+
 class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
     contactpersoon = NestedMedewerkerSerializer(
         read_only=True,
@@ -116,6 +131,23 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "uuid": {"read_only": True},
         }
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+
+        parent = attrs.get("hoofd_organisatorische_eenheid")
+        instance = self.instance
+
+        if instance and parent and _creates_cycle(instance, parent):
+            raise serializers.ValidationError(
+                {
+                    "hoofd_organisatorische_eenheid": _(
+                        "Een organisatorische eenheid kan niet zichzelf als bovenliggende eenheid hebben."
+                    )
+                }
+            )
+
+        return attrs
 
     def to_representation(self, instance):
         """Ensure hoofd_organisatorische_eenheid is serialized as a string UUID."""

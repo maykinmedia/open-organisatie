@@ -275,6 +275,41 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertIn(str(child1b.uuid), children_root1)
         self.assertIn(str(child2a.uuid), children_root2)
 
+    def test_api_prevent_self_parenting(self):
+        oe = OrganisatorischeEenheidFactory()
+
+        url = reverse(
+            "organisatie_api:organisatorischeeenheid-detail",
+            kwargs={"uuid": oe.uuid},
+        )
+
+        response = self.client.patch(
+            url,
+            {
+                "hoofd_organisatorische_eenheid": str(oe.uuid),
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_api_prevent_cycle_in_parent(self):
+        parent = OrganisatorischeEenheidFactory()
+        child = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
+
+        url = reverse(
+            "organisatie_api:organisatorischeeenheid-detail",
+            kwargs={"uuid": parent.uuid},
+        )
+
+        response = self.client.patch(
+            url,
+            {
+                "hoofd_organisatorische_eenheid": str(child.uuid),
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_prevent_cycle_in_parent(self):
         parent = OrganisatorischeEenheidFactory()
         child = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
