@@ -1,5 +1,6 @@
 import uuid
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -50,6 +51,16 @@ class Functie(models.Model):
         null=True,
         help_text=_("De medewerker die aan deze functie gekoppeld is."),
     )
+    vervanger = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="vervangen_functies",
+        help_text=_(
+            "Verwijzing naar de functie die deze functie vervangt bij afwezigheid."
+        ),
+    )
     teams = models.ManyToManyField(
         "organisatie.Team",
         through=FunctieTeam,
@@ -71,3 +82,9 @@ class Functie(models.Model):
 
     def __str__(self):
         return self.functie_omschrijving
+
+    def clean(self):
+        if self.vervanger and self.vervanger == self:
+            raise ValidationError(
+                {"vervanger": _("Een vervanger kan niet naar zichzelf verwijzen.")}
+            )

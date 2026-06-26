@@ -68,6 +68,7 @@ class FunctieAdmin(ReadOnlyCompareVersionAdmin):
                     "functie_omschrijving",
                     "functie_type",
                     "medewerker",
+                    "vervanger",
                 )
             },
         ),
