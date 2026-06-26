@@ -23,10 +23,10 @@ class ReversionSCIMMixin:
         with create_revision():
             result = super().save()  # type: ignore[reportAttributeAccessIssue]
 
-            try:
-                comment_location = self.location  # type: ignore[attr-defined]
-                set_comment(f"Updated via SCIM - {comment_location}")
-            except Exception:
+            location = getattr(self, "location", None)
+            if location:
+                set_comment(f"Updated via SCIM - {location}")
+            else:
                 set_comment("Updated via SCIM")
 
         return result
