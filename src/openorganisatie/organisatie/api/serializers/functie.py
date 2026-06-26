@@ -150,6 +150,12 @@ class FunctieSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False,
     )
+    vervanger = UUIDRelatedField(
+        queryset=Functie.objects.all(),
+        required=False,
+        allow_null=True,
+        help_text=_("UUID van de vervanger (optioneel)."),
+    )
 
     class Meta:
         model = Functie
@@ -164,6 +170,7 @@ class FunctieSerializer(serializers.ModelSerializer):
             "functietype_uuid",
             "medewerker",
             "medewerker_uuid",
+            "vervanger",
             "teams",
             "teams_input",
             "organisatorische_eenheden",

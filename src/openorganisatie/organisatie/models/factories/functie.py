@@ -67,6 +67,7 @@ class FunctieFactory(factory.django.DjangoModelFactory):
     einddatum = Faker("date_this_decade")
     medewerker = SubFactory(MedewerkerFactory)
     functie_type = SubFactory(FunctieTypeFactory)
+    vervanger = None
 
     class Meta:
         model = Functie
