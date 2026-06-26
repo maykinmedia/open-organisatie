@@ -183,7 +183,15 @@ class FunctieSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
 
-        if self.instance is None:
+        vervanger = attrs.get("vervanger")
+        instance = self.instance
+
+        if instance and vervanger and vervanger.pk == instance.pk:
+            raise serializers.ValidationError(
+                {"vervanger": _("Een functie kan zichzelf niet vervangen.")}
+            )
+
+        if instance is None:
             validate_functie_team(self, attrs)
             validate_functie_oe(self, attrs)
 
