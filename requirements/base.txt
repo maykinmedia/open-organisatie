@@ -282,7 +282,7 @@ maykin-2fa==1.0.2
     #   -r requirements/base.in
     #   maykin-common
     #   open-api-framework
-maykin-common==0.19.0
+maykin-common==0.19.1
     # via
     #   -r requirements/base.in
     #   open-api-framework
