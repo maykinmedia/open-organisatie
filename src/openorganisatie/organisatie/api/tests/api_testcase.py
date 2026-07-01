@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractBaseUser
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase as _APITestCase
 
+from openorganisatie.accounts.tests.factories import UserFactory
+
 User = get_user_model()
 
 
@@ -15,7 +17,7 @@ class APITestCase(_APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         super().setUpTestData()
-        cls.user = User.objects.create_user(username="testuser", password="password123")  # type: ignore[attr-defined]
+        cls.user = UserFactory()
         cls.token = Token.objects.create(user=cls.user)
 
     def setUp(self) -> None:

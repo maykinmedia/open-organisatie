@@ -17,5 +17,5 @@ class VestigingFactory(DjangoModelFactory):
     post_adres = Faker("postcode")
     telefoonnummer = Faker("phone_number")
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Vestiging

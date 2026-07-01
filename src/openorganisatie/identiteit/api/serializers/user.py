@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
         many=True, read_only=True, help_text=get_help_text("identiteit.User", "groups")
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = User
         fields = [
             "url",

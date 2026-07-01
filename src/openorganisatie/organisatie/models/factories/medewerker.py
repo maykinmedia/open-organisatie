@@ -28,5 +28,5 @@ class MedewerkerFactory(DjangoModelFactory):
         lambda obj: obj.startdatum + timedelta(days=random.randint(1, 30))
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Medewerker

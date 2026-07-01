@@ -66,7 +66,7 @@ class User(AbstractSCIMUserMixin, models.Model):
         ),
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         verbose_name = "User"
         verbose_name_plural = "Users"
 

@@ -17,5 +17,5 @@ class UserFactory(DjangoModelFactory):
     date_joined = LazyFunction(timezone.now)
     last_modified = LazyFunction(timezone.now)
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = User

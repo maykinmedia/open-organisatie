@@ -17,7 +17,7 @@ class TeamFactory(DjangoModelFactory):
     omschrijving = Faker("sentence")
     contactpersoon = SubFactory(MedewerkerFactory)
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Team
 
     @post_generation

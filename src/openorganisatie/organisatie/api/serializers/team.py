@@ -11,7 +11,7 @@ from .vestiging import VestigingSerializer
 
 
 class NestedTeamSerializer(serializers.ModelSerializer):
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Team
         fields = [
             "uuid",
@@ -55,7 +55,7 @@ class TeamSerializer(serializers.ModelSerializer):
         source="vestigingen",
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Team
         fields = [
             "uuid",

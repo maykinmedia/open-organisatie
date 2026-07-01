@@ -13,5 +13,5 @@ class GroupFactory(DjangoModelFactory):
     description = Faker("sentence")
     active = True
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Group

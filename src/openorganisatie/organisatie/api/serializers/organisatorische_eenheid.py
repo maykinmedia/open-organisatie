@@ -14,7 +14,7 @@ from ..serializers.vestiging import VestigingSerializer
 
 
 class NestedMedewerkerSerializer(serializers.ModelSerializer):
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Medewerker
         fields = [
             "uuid",
@@ -39,7 +39,7 @@ class NestedOrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         help_text=_("UUID van de bovenliggende organisatorische eenheid (optioneel)."),
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = OrganisatorischeEenheid
         fields = [
             "uuid",
@@ -92,7 +92,7 @@ class OrganisatorischeEenheidSerializer(serializers.ModelSerializer):
         help_text=_("UUID van de bovenliggende organisatorische eenheid (optioneel)."),
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = OrganisatorischeEenheid
         fields = [
             "uuid",

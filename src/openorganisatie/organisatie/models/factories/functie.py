@@ -23,7 +23,7 @@ class FunctieTypeFactory(DjangoModelFactory):
     naam = Faker("word")
     slug = Faker("slug")
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = FunctieType
 
 
@@ -40,7 +40,7 @@ class FunctieTeamFactory(DjangoModelFactory):
         )
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = FunctieTeam
 
 
@@ -57,7 +57,7 @@ class OrganisatorischeEenheidFunctieFactory(DjangoModelFactory):
         )
     )
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = OrganisatorischeEenheidFunctie
 
 
@@ -70,7 +70,7 @@ class FunctieFactory(DjangoModelFactory):
     medewerker = SubFactory(MedewerkerFactory)
     functie_type = SubFactory(FunctieTypeFactory)
 
-    class Meta:  # type: ignore
+    class Meta:  # type: ignore[override]
         model = Functie
 
     @post_generation

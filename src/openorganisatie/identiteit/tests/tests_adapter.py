@@ -1,11 +1,12 @@
 import uuid
 
-from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
 from reversion.models import Version
+
+from openorganisatie.accounts.tests.factories import UserFactory
 
 from ..adapters import GroupAdapter, UserAdapter
 from ..models.group import Group
@@ -14,9 +15,7 @@ from ..models.user import User
 
 class MedewerkerAdapterTest(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(  # type: ignore[attr-defined]
-            username="admin", email="admin@example.com", password="adminpass"
-        )
+        self.user = UserFactory()
         self.token = Token.objects.create(user=self.user)
 
         self.medewerker = User.objects.create(
@@ -84,7 +83,7 @@ class GroepenAdapterTest(TestCase):
         self.team = Group.objects.create(
             name="Test Team", scim_external_id=uuid.uuid4()
         )
-        self.team.user_set.add(self.user1)  # type: ignore[attr-defined]
+        self.team.user_set.add(self.user1)  # pyright: ignore[reportAttributeAccessIssue]
 
         factory = RequestFactory()
         self.request = factory.get(
@@ -99,25 +98,25 @@ class GroepenAdapterTest(TestCase):
         path = Path(("members", None, None))
 
         self.adapter.handle_add(path, member_data, operation=None)
-        self.assertIn(self.user2, self.team.user_set.all())  # type: ignore[attr-defined]
+        self.assertIn(self.user2, self.team.user_set.all())
 
     def test_handle_add_invalid_members(self):
         member_data = [{"value": str(uuid.uuid4())}]
         path = Path(("members", None, None))
 
         self.adapter.handle_add(path, member_data, operation=None)
-        self.assertEqual(self.team.user_set.count(), 1)  # type: ignore[attr-defined]
+        self.assertEqual(self.team.user_set.count(), 1)
 
     def test_handle_remove_valid_members(self):
         member_data = [{"value": str(self.user1.scim_external_id)}]
         path = Path(("members", None, None))
 
         self.adapter.handle_remove(path, member_data, operation=None)
-        self.assertNotIn(self.user1, self.team.user_set.all())  # type: ignore[attr-defined]
+        self.assertNotIn(self.user1, self.team.user_set.all())
 
     def test_handle_remove_invalid_members(self):
         member_data = [{"value": str(uuid.uuid4())}]
         path = Path(("members", None, None))
 
         self.adapter.handle_remove(path, member_data, operation=None)
-        self.assertIn(self.user1, self.team.user_set.all())  # type: ignore[attr-defined]
+        self.assertIn(self.user1, self.team.user_set.all())
