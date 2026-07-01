@@ -60,6 +60,15 @@ class NestedOrganisatorischeEenheidSerializer(serializers.ModelSerializer):
 
 
 def _creates_cycle(instance, parent):
+    """
+    Checks if assigning a `hoofd_organisatorische_eenheid`
+    would create a cycle in the organizational hierarchy.
+    Example:
+    A -> B -> C
+
+    Assigning C as the parent of A would create a cycle:
+    A -> B -> C -> A
+    """
     visited = set()
     current = parent
 

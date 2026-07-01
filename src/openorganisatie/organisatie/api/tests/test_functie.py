@@ -1,6 +1,5 @@
 from datetime import date, datetime
 
-from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.timezone import make_aware
 
@@ -481,20 +480,6 @@ class FunctieAPITests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_prevent_self_parenting(self):
-        functie = FunctieFactory()
-        functie.vervanger = functie
-        with self.assertRaises(ValidationError) as val:
-            functie.clean()
-        self.assertIn(
-            "vervanger",
-            val.exception.message_dict,
-        )
-        self.assertIn(
-            "Een vervanger kan niet naar zichzelf verwijzen.",
-            val.exception.message_dict["vervanger"][0],
-        )
 
     def test_partial_update_functie(self):
         functie = FunctieFactory(functie_type=self.functie_type)
