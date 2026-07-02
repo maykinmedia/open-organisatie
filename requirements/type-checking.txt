@@ -588,7 +588,7 @@ nh3==0.2.21
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   textile
-notifications-api-common==0.9.0
+notifications-api-common==0.11.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -1034,6 +1034,7 @@ structlog==25.4.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-structlog
+    #   notifications-api-common
 tblib==3.1.0
     # via
     #   -c requirements/ci.txt

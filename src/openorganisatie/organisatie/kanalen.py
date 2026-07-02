@@ -4,7 +4,7 @@ from .models.medewerker import Medewerker
 
 KANAAL_ORGANISATIE = Kanaal(
     "medewerkers",
-    main_resource=Medewerker,  # type: ignore[attr-defined]
+    main_resource=Medewerker,
     kenmerken=(
         "uuid",
         "medewerker_id",
