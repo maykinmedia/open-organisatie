@@ -20,11 +20,11 @@ class OrganisatorischeEenheidFactory(DjangoModelFactory):
     external_id = LazyFunction(uuid.uuid4)
     uuid = LazyFunction(uuid.uuid4)
     identificatie = Sequence(lambda n: f"OE{n:03d}")
-    naam = Faker("word")
+    naam = Sequence(lambda n: f"Organisatie {n}")
     soort_organisatie = Faker("word")
     verkorte_naam = Faker("word")
     omschrijving = Faker("text", max_nb_chars=50)
-    emailadres = Faker("email")
+    emailadres = Sequence(lambda n: f"user{n}@example.com")
     telefoonnummer = Faker("phone_number")
     startdatum = LazyFunction(timezone.now)
     einddatum = LazyAttribute(

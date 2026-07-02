@@ -18,9 +18,7 @@ class MedewerkerFactory(DjangoModelFactory):
     medewerker_id = Sequence(lambda n: f"medewerker_{n}")
     voornaam = Faker("first_name")
     achternaam = Faker("last_name")
-    emailadres = LazyAttribute(
-        lambda obj: f"{obj.voornaam.lower()}.{obj.achternaam.lower()}@example.com"
-    )
+    emailadres = Sequence(lambda n: f"user{n}@example.com")
     telefoonnummer = Faker("phone_number")
     geslachtsaanduiding = Iterator([choice[0] for choice in GenderIndicator.choices])
     startdatum = LazyFunction(timezone.now)
