@@ -150,6 +150,12 @@ class FunctieSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False,
     )
+    vervanger = UUIDRelatedField(
+        queryset=Functie.objects.all(),
+        required=False,
+        allow_null=True,
+        help_text=_("UUID van de vervanger (optioneel)."),
+    )
 
     class Meta:
         model = Functie
@@ -164,6 +170,7 @@ class FunctieSerializer(serializers.ModelSerializer):
             "functietype_uuid",
             "medewerker",
             "medewerker_uuid",
+            "vervanger",
             "teams",
             "teams_input",
             "organisatorische_eenheden",
@@ -176,7 +183,15 @@ class FunctieSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
 
-        if self.instance is None:
+        vervanger = attrs.get("vervanger")
+        instance = self.instance
+
+        if instance and vervanger and vervanger.pk == instance.pk:
+            raise serializers.ValidationError(
+                {"vervanger": _("Een functie kan zichzelf niet vervangen.")}
+            )
+
+        if instance is None:
             validate_functie_team(self, attrs)
             validate_functie_oe(self, attrs)
 

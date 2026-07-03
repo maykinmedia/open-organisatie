@@ -1,6 +1,5 @@
 from datetime import date, datetime
 
-from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.timezone import make_aware
 
@@ -275,35 +274,40 @@ class OrganisatorischeEenheidAPITests(APITestCase):
         self.assertIn(str(child1b.uuid), children_root1)
         self.assertIn(str(child2a.uuid), children_root2)
 
-    def test_prevent_cycle_in_parent(self):
+    def test_api_prevent_self_parenting(self):
+        oe = OrganisatorischeEenheidFactory()
+
+        url = reverse(
+            "organisatie_api:organisatorischeeenheid-detail",
+            kwargs={"uuid": oe.uuid},
+        )
+
+        response = self.client.patch(
+            url,
+            {
+                "hoofd_organisatorische_eenheid": str(oe.uuid),
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_api_prevent_cycle_in_parent(self):
         parent = OrganisatorischeEenheidFactory()
         child = OrganisatorischeEenheidFactory(hoofd_organisatorische_eenheid=parent)
 
-        parent.hoofd_organisatorische_eenheid = child
-        with self.assertRaises(ValidationError) as val:
-            parent.clean()
-        self.assertIn(
-            "hoofd_organisatorische_eenheid",
-            val.exception.message_dict,
-        )
-        self.assertIn(
-            "Een organisatorische eenheid kan geen kind als bovenliggende eenheid hebben.",
-            val.exception.message_dict["hoofd_organisatorische_eenheid"][0],
+        url = reverse(
+            "organisatie_api:organisatorischeeenheid-detail",
+            kwargs={"uuid": parent.uuid},
         )
 
-    def test_prevent_self_parenting(self):
-        org = OrganisatorischeEenheidFactory()
-        org.hoofd_organisatorische_eenheid = org
-        with self.assertRaises(ValidationError) as val:
-            org.clean()
-        self.assertIn(
-            "hoofd_organisatorische_eenheid",
-            val.exception.message_dict,
+        response = self.client.patch(
+            url,
+            {
+                "hoofd_organisatorische_eenheid": str(child.uuid),
+            },
         )
-        self.assertIn(
-            "Een organisatorische eenheid kan niet naar zichzelf verwijzen.",
-            val.exception.message_dict["hoofd_organisatorische_eenheid"][0],
-        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_history(self):
         url = reverse("organisatie_api:organisatorischeeenheid-list")

@@ -1680,6 +1680,11 @@ components:
           format: uuid
           writeOnly: true
           description: UUID van de gekoppelde medewerker.
+        vervanger:
+          type: string
+          format: uuid
+          nullable: true
+          description: UUID van de vervanger (optioneel).
         teams:
           type: array
           items:
@@ -2355,6 +2360,11 @@ components:
           format: uuid
           writeOnly: true
           description: UUID van de gekoppelde medewerker.
+        vervanger:
+          type: string
+          format: uuid
+          nullable: true
+          description: UUID van de vervanger (optioneel).
         teams:
           type: array
           items:

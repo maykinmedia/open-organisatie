@@ -320,6 +320,25 @@ class FunctieAPITests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_create_functie_with_vervanger(self):
+        vervanger = FunctieFactory()
+
+        url = reverse("organisatie_api:functie-list")
+
+        data = {
+            "functieOmschrijving": "Functie met vervanger",
+            "startdatum": "2025-11-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "vervanger": str(vervanger.uuid),
+        }
+
+        response = self.client.post(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        functie = Functie.objects.get(uuid=response.data["uuid"])
+        self.assertEqual(functie.vervanger, vervanger)
+
     def test_list_functies(self):
         url = reverse("organisatie_api:functie-list")
         team = TeamFactory()
@@ -372,6 +391,95 @@ class FunctieAPITests(APITestCase):
         functie.refresh_from_db()
         self.assertEqual(functie.functie_omschrijving, data["functieOmschrijving"])
         self.assertEqual(functie.startdatum.isoformat(), data["startdatum"])
+
+    def test_update_functie_vervanger(self):
+        functie = FunctieFactory()
+        vervanger = FunctieFactory()
+
+        url = reverse(
+            "organisatie_api:functie-detail",
+            kwargs={"uuid": functie.uuid},
+        )
+
+        data = {
+            "functieOmschrijving": "Updated Functie",
+            "startdatum": "2025-12-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+            "vervanger": str(vervanger.uuid),
+        }
+
+        response = self.client.put(url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie.refresh_from_db()
+        self.assertEqual(functie.functie_omschrijving, "Updated Functie")
+        self.assertEqual(functie.vervanger, vervanger)
+
+    def test_patch_functie_vervanger(self):
+        functie = FunctieFactory()
+        vervanger1 = FunctieFactory()
+        vervanger2 = FunctieFactory()
+
+        functie.vervanger = vervanger1
+        functie.save()
+
+        url = reverse(
+            "organisatie_api:functie-detail",
+            kwargs={"uuid": functie.uuid},
+        )
+
+        response = self.client.patch(
+            url,
+            {"vervanger": str(vervanger2.uuid)},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie.refresh_from_db()
+        self.assertEqual(functie.vervanger, vervanger2)
+
+    def test_patch_remove_vervanger(self):
+        functie = FunctieFactory()
+        vervanger = FunctieFactory()
+
+        functie.vervanger = vervanger
+        functie.save()
+
+        url = reverse(
+            "organisatie_api:functie-detail",
+            kwargs={"uuid": functie.uuid},
+        )
+
+        response = self.client.patch(
+            url,
+            {"vervanger": None},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        functie.refresh_from_db()
+        self.assertIsNone(functie.vervanger)
+
+    def test_create_functie_cannot_be_own_vervanger(self):
+        url = reverse("organisatie_api:functie-list")
+
+        data = {
+            "functieOmschrijving": "Self vervanger test",
+            "startdatum": "2025-11-01",
+            "functietypeUuid": str(self.functie_type.uuid),
+        }
+
+        response = self.client.post(url, data)
+
+        functie_uuid = response.data["uuid"]
+
+        response = self.client.patch(
+            reverse("organisatie_api:functie-detail", kwargs={"uuid": functie_uuid}),
+            {"vervanger": functie_uuid},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_partial_update_functie(self):
         functie = FunctieFactory(functie_type=self.functie_type)
