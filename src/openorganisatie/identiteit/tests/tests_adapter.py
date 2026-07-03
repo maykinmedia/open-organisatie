@@ -1,11 +1,12 @@
 import uuid
 
-from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from rest_framework.authtoken.models import Token
 from reversion.models import Version
+
+from openorganisatie.accounts.tests.factories import UserFactory
 
 from ..adapters import GroupAdapter, UserAdapter
 from ..models.group import Group
@@ -14,9 +15,7 @@ from ..models.user import User
 
 class MedewerkerAdapterTest(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            username="admin", email="admin@example.com", password="adminpass"
-        )
+        self.user = UserFactory()
         self.token = Token.objects.create(user=self.user)
 
         self.medewerker = User.objects.create(
@@ -53,7 +52,7 @@ class MedewerkerAdapterTest(TestCase):
         self.assertEqual(str(m.username), "Test@test.nl")
         self.assertEqual(m.email, "john.doe@example.com")
 
-        self.assertEqual(Version.objects.get_for_object(m).count(), 1)
+        self.assertEqual(Version.objects.get_for_object(m).count(), 1)  # type: ignore[attr-defined]
 
     def test_handle_operations_replace_active(self):
         ops = [{"op": "replace", "path": "active", "value": False}]
@@ -84,7 +83,7 @@ class GroepenAdapterTest(TestCase):
         self.team = Group.objects.create(
             name="Test Team", scim_external_id=uuid.uuid4()
         )
-        self.team.user_set.add(self.user1)
+        self.team.user_set.add(self.user1)  # pyright: ignore[reportAttributeAccessIssue]
 
         factory = RequestFactory()
         self.request = factory.get(

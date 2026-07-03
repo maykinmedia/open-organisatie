@@ -1,5 +1,7 @@
 [project]
-requires-python = "== 3.12"
+requires-python = "~= 3.12.0"
+name = "open-organisatie"
+version = "0.1.0"
 
 [tool.uv.pip]
 emit-index-url = false
@@ -142,3 +144,7 @@ msg = "Use `structlog.stdlib.get_logger(__name__)` instead."
 
 [format]
 line-ending = "lf"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"typing.cast".msg = "Casting is an anti-pattern, use `assert isinstance(...)` instead, or suppress the error."
+"typing.Any".msg = "Any is an anti-pattern, use a real type instead, or if that's not possible, use 'object'."

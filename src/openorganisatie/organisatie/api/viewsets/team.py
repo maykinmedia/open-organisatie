@@ -54,6 +54,7 @@ class TeamViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         team = serializer.instance
+        assert team is not None
         logger.info(
             "team_created",
             uuid=str(team.uuid),
@@ -64,6 +65,7 @@ class TeamViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         super().perform_update(serializer)
         team = serializer.instance
+        assert team is not None
         logger.info(
             "team_updated",
             uuid=str(team.uuid),

@@ -21,12 +21,12 @@ logger = structlog.stdlib.get_logger(__name__)
 class ReversionSCIMMixin:
     def save(self):
         with create_revision():
-            result = super().save()
+            result = super().save()  # type: ignore[reportAttributeAccessIssue]
 
-            try:
-                comment_location = self.location
-                set_comment(f"Updated via SCIM - {comment_location}")
-            except Exception:
+            location = getattr(self, "location", None)
+            if location:
+                set_comment(f"Updated via SCIM - {location}")
+            else:
                 set_comment("Updated via SCIM")
 
         return result

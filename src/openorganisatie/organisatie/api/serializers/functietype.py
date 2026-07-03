@@ -4,7 +4,7 @@ from openorganisatie.organisatie.models.functietype import FunctieType
 
 
 class FunctieTypeSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta:  # type: ignore[override]
         model = FunctieType
         fields = ["uuid", "external_id", "naam", "slug"]
 

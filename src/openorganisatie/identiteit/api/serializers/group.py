@@ -22,6 +22,6 @@ class GroupSerializer(serializers.ModelSerializer):
         help_text=get_help_text("identiteit.Group", "active"),
     )
 
-    class Meta:
+    class Meta:  # type: ignore[override]
         model = Group
         fields = ["scim_external_id", "naam", "beschrijving", "is_active"]

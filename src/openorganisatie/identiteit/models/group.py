@@ -1,7 +1,12 @@
+from typing import TYPE_CHECKING
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from django_scim.models import AbstractSCIMGroupMixin
+
+if TYPE_CHECKING:
+    from .user import User
 
 
 class Group(AbstractSCIMGroupMixin, models.Model):
@@ -22,7 +27,10 @@ class Group(AbstractSCIMGroupMixin, models.Model):
         help_text=_("Geeft aan of het team momenteel actief is."),
     )
 
-    class Meta:
+    if TYPE_CHECKING:
+        user_set: models.Manager["User"]
+
+    class Meta:  # type: ignore[override]
         verbose_name = "Group"
         verbose_name_plural = "Groups"
 

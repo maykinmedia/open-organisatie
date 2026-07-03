@@ -54,6 +54,7 @@ class FunctieViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         functie = serializer.instance
+        assert functie is not None
         logger.info(
             "functie_created",
             uuid=str(functie.uuid),
@@ -64,6 +65,7 @@ class FunctieViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         super().perform_update(serializer)
         functie = serializer.instance
+        assert functie is not None
         logger.info(
             "functie_updated",
             uuid=str(functie.uuid),

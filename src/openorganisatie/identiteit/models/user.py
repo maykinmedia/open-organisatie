@@ -66,7 +66,7 @@ class User(AbstractSCIMUserMixin, models.Model):
         ),
     )
 
-    class Meta:
+    class Meta:  # type: ignore[override]
         verbose_name = "User"
         verbose_name_plural = "Users"
 
@@ -106,6 +106,7 @@ class User(AbstractSCIMUserMixin, models.Model):
             )
         else:
             medewerker = medewerkers.first()
+            assert medewerker is not None
             if self.medewerker != medewerker:
                 self.medewerker = medewerker
                 self.save(update_fields=["medewerker"])

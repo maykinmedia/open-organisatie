@@ -57,6 +57,7 @@ class FunctieTypeViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         functietype = serializer.instance
+        assert functietype is not None
         logger.info(
             "functietype_created",
             uuid=str(functietype.uuid),
@@ -67,6 +68,7 @@ class FunctieTypeViewSet(RevisionMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         super().perform_update(serializer)
         functietype = serializer.instance
+        assert functietype is not None
         logger.info(
             "functietype_updated",
             uuid=str(functietype.uuid),
