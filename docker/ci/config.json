@@ -1,0 +1,15 @@
+{
+    "supportedTags": [
+        {
+            "gitRef": "main",
+            "tag": "latest"
+        }
+    ],
+    "dockerOrg": "maykinmedia",
+    "dockerRepo": "open-organisatie",
+    "githubOrg": "maykinmedia",
+    "githubRepo": "open-organisatie",
+    "projectName": "Open Organisatie",
+    "projectDocumentation": "https://open-organisatie.readthedocs.io/en/latest/",
+    "projectDescription": "Open Organisatie is an application for managing employees and teams. Other applications can integrate with Open Organisatie via a REST API to retrieve employee data or manage teams. Employee and team data is retrieved and synchronized via the SCIM protocol (System for Cross-domain Identity Management), from Azure Entra ID or other applications."
+}
