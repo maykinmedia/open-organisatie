@@ -349,15 +349,10 @@ django-structlog==9.1.1
     #   -r requirements/ci.txt
 django-stubs==6.0.6
     # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
     #   -r requirements/type-checking.in
     #   djangorestframework-stubs
 django-stubs-ext==6.0.6
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   django-stubs
+    # via django-stubs
 django-two-factor-auth==1.17.0
     # via
     #   -c requirements/ci.txt
@@ -398,10 +393,7 @@ djangorestframework-inclusions==1.2.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
 djangorestframework-stubs==3.17.0
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   -r requirements/type-checking.in
+    # via -r requirements/type-checking.in
 docutils==0.21.2
     # via
     #   -c requirements/ci.txt
@@ -558,7 +550,7 @@ maykin-2fa==1.0.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   open-api-framework
-maykin-common==0.19.0
+maykin-common==0.19.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -1051,8 +1043,6 @@ tornado==6.5.7
     #   flower
 types-pyyaml==6.0.12.20260518
     # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
     #   django-stubs
     #   djangorestframework-stubs
 typing-extensions==4.14.0
