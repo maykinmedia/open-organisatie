@@ -367,6 +367,23 @@ ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
 )
 
 #
+# Celery
+#
+
+CELERY_RESULT_EXPIRES = config(
+    "CELERY_RESULT_EXPIRES",
+    default=3600,
+    documentation=DocumentationParams(
+        help_text=(
+            "How long the results of tasks will be stored in Redis (in seconds),"
+            " this can be set to a lower duration to lower memory usage for Redis."
+        ),
+        group="Celery",
+    ),
+)
+
+
+#
 # DJANGO-AXES
 #
 AXES_CACHE = "axes"  # refers to CACHES setting
