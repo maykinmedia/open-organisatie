@@ -20,9 +20,9 @@
   "license": "UNLICENSED",
   "homepage": "https://maykin.nl",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.0.0",
     "microscope-sass": "latest",
-    "yargs": "^16.2.0",
-    "@fortawesome/fontawesome-free": "^7.0.0"
+    "yargs": "^16.2.0"
   },
   "devDependencies": {
     "@babel/core": "latest",
@@ -41,7 +41,7 @@
     "karma-spec-reporter": "latest",
     "karma-webpack": "latest",
     "mini-css-extract-plugin": "latest",
-    "mocha": "latest",
+    "mocha": "^8.1.3",
     "postcss-loader": "latest",
     "postcss-selector-lint": "latest",
     "sass": "latest",
