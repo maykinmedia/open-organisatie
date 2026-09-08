@@ -87,7 +87,8 @@ class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCaseBeare
                     "username": "Bob",
                     "email": "Bob@gmail.com",
                 },
-            }
+            },
+            None,
         )
 
     def test_send_notification_update_user(self, m):
@@ -126,5 +127,6 @@ class SendNotificationUserTestCase(NotificationsConfigTestCase, APITestCaseBeare
                     "username": data["userName"],
                     "email": data["emails"][0]["value"],
                 },
-            }
+            },
+            None,
         )

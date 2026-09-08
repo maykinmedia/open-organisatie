@@ -81,7 +81,8 @@ class SendNotificationMedewerkerTestCase(NotificationsConfigTestCase, APITestCas
                     "achternaam": "Jansen",
                     "emailadres": "pieter@gmail.com",
                 },
-            }
+            },
+            None,
         )
 
     def test_send_notification_update_medewerker(self, m):
@@ -116,7 +117,8 @@ class SendNotificationMedewerkerTestCase(NotificationsConfigTestCase, APITestCas
                     "achternaam": "Jansen",
                     "emailadres": "pieter@gmail.com",
                 },
-            }
+            },
+            None,
         )
 
         self.medewerker.refresh_from_db()
@@ -144,7 +146,8 @@ class SendNotificationMedewerkerTestCase(NotificationsConfigTestCase, APITestCas
                     "achternaam": self.medewerker.achternaam,
                     "emailadres": self.medewerker.emailadres,
                 },
-            }
+            },
+            None,
         )
 
     def test_send_notification_delete_medewerker(self, m):
@@ -168,5 +171,6 @@ class SendNotificationMedewerkerTestCase(NotificationsConfigTestCase, APITestCas
                     "achternaam": self.medewerker.achternaam,
                     "emailadres": self.medewerker.emailadres,
                 },
-            }
+            },
+            None,
         )
