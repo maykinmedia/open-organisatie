@@ -21,7 +21,7 @@ info:
     **Kenmerken**
 
     * `uuid`: Unieke resource identifier (UUID4)
-    * `medewerker_id`: ID van de medewerker.
+    * `medewerkerId`: ID van de medewerker.
     * `voornaam`: Voornaam van de medewerker.
     * `achternaam`: Achternaam van de medewerker.
     * `emailadres`: E-mailadres van de medewerker.

@@ -111,6 +111,7 @@ click==8.2.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   -r requirements/test-tools.in
     #   -r requirements/type-checking.txt
     #   celery
     #   click-didyoumean
@@ -134,7 +135,11 @@ click-repl==0.3.0
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   celery
-commonground-api-common==2.10.7
+codecov==2.1.13
+    # via
+    #   -r requirements/test-tools.in
+    #   -r requirements/type-checking.txt
+commonground-api-common==2.14.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -147,7 +152,8 @@ coverage==7.9.1
     # via
     #   -r requirements/test-tools.in
     #   -r requirements/type-checking.txt
-cryptography==49.0.0
+    #   codecov
+cryptography==50.0.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -166,7 +172,7 @@ diff-match-patch==20241021
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   django-reversion-compare
-django==5.2.15
+django==5.2.17
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -552,7 +558,6 @@ idna==3.18
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   requests
-    #   yarl
 imagesize==1.4.1
     # via
     #   -r requirements/type-checking.txt
@@ -579,6 +584,7 @@ jinja2==3.1.6
     # via
     #   -r requirements/type-checking.txt
     #   sphinx
+    #   sphinxcontrib-mermaid
 jsonschema==4.24.0
     # via
     #   -c requirements/base.txt
@@ -623,7 +629,7 @@ maykin-2fa==1.0.2
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   open-api-framework
-maykin-common==0.19.1
+maykin-common==0.20.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -647,23 +653,19 @@ mozilla-django-oidc-db==2.0.1
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   open-api-framework
-multidict==6.7.0
-    # via
-    #   -r requirements/type-checking.txt
-    #   yarl
 nh3==0.2.21
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   textile
-notifications-api-common==0.11.0
+notifications-api-common==0.13.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   commonground-api-common
-open-api-framework==0.14.0
+open-api-framework==0.14.2
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -845,10 +847,6 @@ prompt-toolkit==3.0.51
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   click-repl
-propcache==0.4.1
-    # via
-    #   -r requirements/type-checking.txt
-    #   yarl
 protobuf==6.33.5
     # via
     #   -c requirements/base.txt
@@ -911,7 +909,7 @@ pyjwt==2.13.0
     #   commonground-api-common
     #   mozilla-django-oidc
     #   zgw-consumers
-pyopenssl==26.3.0
+pyopenssl==26.4.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -974,6 +972,7 @@ pyyaml==6.0.2
     #   drf-spectacular
     #   oyaml
     #   pydantic-settings
+    #   sphinxcontrib-mermaid
     #   vcrpy
 qrcode==7.4.2
     # via
@@ -1010,14 +1009,20 @@ requests==2.33.1
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   ape-pie
+    #   codecov
     #   commonground-api-common
     #   django-log-outgoing-requests
     #   django-rosetta
     #   mozilla-django-oidc
     #   open-api-framework
     #   opentelemetry-exporter-otlp-proto-http
+    #   requests-mock
     #   sphinx
     #   zgw-consumers
+requests-mock==1.12.1
+    # via
+    #   -r requirements/test-tools.in
+    #   -r requirements/type-checking.txt
 rich==14.1.0
     # via
     #   -c requirements/base.txt
@@ -1094,7 +1099,7 @@ snowballstemmer==3.0.1
     # via
     #   -r requirements/type-checking.txt
     #   sphinx
-soupsieve==2.7
+soupsieve==2.9.2
     # via
     #   -r requirements/type-checking.txt
     #   beautifulsoup4
@@ -1106,6 +1111,7 @@ sphinx==9.1.0
     #   sphinx-rtd-theme
     #   sphinx-tabs
     #   sphinxcontrib-jquery
+    #   sphinxcontrib-mermaid
 sphinx-rtd-theme==3.1.0
     # via
     #   -r requirements/docs.in
@@ -1134,6 +1140,10 @@ sphinxcontrib-jsmath==1.0.1
     # via
     #   -r requirements/type-checking.txt
     #   sphinx
+sphinxcontrib-mermaid==2.1.1
+    # via
+    #   -r requirements/docs.in
+    #   -r requirements/type-checking.txt
 sphinxcontrib-qthelp==2.0.0
     # via
     #   -r requirements/type-checking.txt
@@ -1142,7 +1152,7 @@ sphinxcontrib-serializinghtml==2.0.0
     # via
     #   -r requirements/type-checking.txt
     #   sphinx
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -1153,6 +1163,7 @@ structlog==25.4.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
+    #   commonground-api-common
     #   django-structlog
     #   notifications-api-common
 tblib==3.1.0
@@ -1228,13 +1239,12 @@ urllib3==2.7.0
     #   elastic-apm
     #   requests
     #   sentry-sdk
-    #   vcrpy
 uwsgi==2.0.30
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
-vcrpy==7.0.0
+vcrpy==8.3.0
     # via
     #   -r requirements/test-tools.in
     #   -r requirements/type-checking.txt
@@ -1268,7 +1278,7 @@ webencodings==0.5.1
     #   -r requirements/base.txt
     #   -r requirements/type-checking.txt
     #   bleach
-webob==1.8.10
+webob==1.8.11
     # via
     #   -r requirements/type-checking.txt
     #   webtest
@@ -1285,10 +1295,6 @@ wrapt==1.17.2
     #   opentelemetry-instrumentation
     #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-redis
-    #   vcrpy
-yarl==1.22.0
-    # via
-    #   -r requirements/type-checking.txt
     #   vcrpy
 zgw-consumers==1.0.0
     # via

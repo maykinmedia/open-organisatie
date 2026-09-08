@@ -11,6 +11,7 @@ os.environ["_USE_STRUCTLOG"] = "True"
 
 from notifications_api_common.settings import *  # noqa
 from open_api_framework.conf.base import *  # noqa
+from maykin_common.branding import ProductDefinition
 from maykin_common.config import config, no_doc
 from vng_api_common.conf.api import BASE_REST_FRAMEWORK  # noqa: F401
 from maykin_common.config import DocumentationParams
@@ -142,7 +143,6 @@ REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "openorganisatie.utils.schema.AutoSchem
 REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"] = (
     "vng_api_common.pagination.DynamicPageSizePagination"
 )
-REST_FRAMEWORK["EXCEPTION_HANDLER"] = "vng_api_common.views.exception_handler"
 
 
 SPECTACULAR_SETTINGS = {
@@ -306,6 +306,66 @@ CSRF_COOKIE_SECURE = IS_HTTPS
 CSRF_FAILURE_VIEW = "openorganisatie.accounts.views.csrf_failure"
 
 X_FRAME_OPTIONS = "DENY"
+
+
+#
+# MAYKIN-COMMON branding
+#
+MKN_BRANDING_PRODUCT_DEFINITION = ProductDefinition(
+    name="Open Organisatie",
+    hyperlink="https://github.com/maykinmedia/open-organisatie",
+    logo_path="ico/open-organisatie-icon.svg",
+)
+
+custom_product_name: str = config(
+    "CUSTOM_PRODUCT_NAME",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Specify the custom product name when redistributing the application, e.g. "
+            "as part of your own software suite."
+        ),
+        group="Branding",
+    ),
+)
+custom_product_url: str = config(
+    "CUSTOM_PRODUCT_URL",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Optional link for the custom product when redistributing the "
+            "application. If provided, the product name will be clickable."
+        ),
+        group="Branding",
+    ),
+)
+custom_product_logo_path: str = config(
+    "CUSTOM_PRODUCT_LOGO_PATH",
+    default="",
+    documentation=DocumentationParams(group="Branding"),
+)
+custom_product_logo_url: str = config(
+    "CUSTOM_PRODUCT_LOGO_URL",
+    default="",
+    documentation=DocumentationParams(
+        help_text=(
+            "Optional link for the custom product logo when redistributing the "
+            "application. When using externally hosted assets, note that you may "
+            "need to tweak the Content-Security-Policy settings."
+        ),
+        group="Branding",
+    ),
+)
+MKN_BRANDING_DERIVED_PRODUCT_DEFINITION = (
+    ProductDefinition(
+        name=custom_product_name,
+        hyperlink=custom_product_url,
+        logo_path=custom_product_logo_path,
+        logo_url=custom_product_logo_url,
+    )
+    if custom_product_name
+    else None
+)
 
 
 #

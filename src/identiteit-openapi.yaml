@@ -23,7 +23,7 @@ info:
 
     **Kenmerken**
 
-    * `scim_external_id`: A string that is an identifier for the resource as defined by the provisioning client.
+    * `scimExternalId`: A string that is an identifier for the resource as defined by the provisioning client.
     * `username`: User principal name van de medewerker.
     * `email`: E-mailadres van de medewerker.
 
