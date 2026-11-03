@@ -24,12 +24,6 @@ uv pip compile \
     "$@" \
     "$root_dir/requirements/base.in"
 
-# Type checking stubs
-uv pip compile \
-    --output-file "$root_dir/requirements/type-checking.txt" \
-    "$@" \
-    "$root_dir/requirements/type-checking.in"
-
 # Dependencies for testing
 uv pip compile \
     --output-file "$root_dir/requirements/ci.txt" \
@@ -37,6 +31,11 @@ uv pip compile \
     "$root_dir/requirements/test-tools.in" \
     "$root_dir/requirements/docs.in"
 
+# Type checking stubs
+uv pip compile \
+    --output-file "$root_dir/requirements/type-checking.txt" \
+    "$@" \
+    "$root_dir/requirements/type-checking.in"
 
 # Dev depedencies - exact same set as CI + some extra tooling
 uv pip compile \
