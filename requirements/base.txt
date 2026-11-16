@@ -202,6 +202,7 @@ django-solo==2.4.0
 django-structlog==9.1.1
     # via
     #   -r requirements/base.in
+    #   maykin-common
     #   open-api-framework
 django-two-factor-auth==1.17.0
     # via maykin-2fa
@@ -280,7 +281,7 @@ maykin-2fa==1.0.2
     #   -r requirements/base.in
     #   maykin-common
     #   open-api-framework
-maykin-common==0.20.1
+maykin-common==0.22.0
     # via
     #   -r requirements/base.in
     #   open-api-framework
@@ -514,6 +515,7 @@ structlog==25.4.0
     # via
     #   commonground-api-common
     #   django-structlog
+    #   maykin-common
     #   notifications-api-common
     #   open-api-framework
 textile==4.0.3
